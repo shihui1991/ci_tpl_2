@@ -113,4 +113,59 @@ class MenuLogic extends LogicModel
 
         return $result;
     }
+
+    /** 获取导航菜单
+     * @param int $parentId
+     * @param array $ids
+     * @param bool $ctrl  是否限制
+     * @return array
+     */
+    public function getNavList($parentId=0, $ids=array(), $ctrl=false)
+    {
+        $where=array(
+            array('Display','eq',STATE_ON),
+            array('State','eq',STATE_ON),
+            array('ParentId','eq',$parentId),
+        );
+        $select=array(
+            'Id',
+            'ParentId',
+            'Url',
+            'Name',
+            'Icon',
+        );
+        $orderBy=array(
+            'Sort'=>ORDER_BY_ASC,
+            'Id'=>ORDER_BY_ASC,
+        );
+
+        if($ctrl){
+            if(empty($ids)){
+                $where[]=array('Ctrl','eq',STATE_OFF);
+                $list=$this->databaseModel->getMany($where,$select,$orderBy);
+            }else{
+                $where1=$where2=$where;
+                $where1[]=array('Id','in',$ids);
+                $list1=$this->databaseModel->getMany($where1,$select,$orderBy);
+
+                $where2[]=array('Ctrl','eq',STATE_OFF);
+                $list2=$this->databaseModel->getMany($where2,$select,$orderBy);
+
+                $list=array_values(array_unique(array_merge($list1,$list2)));
+            }
+        }else{
+            $list=$this->databaseModel->getMany($where,$select,$orderBy);
+        }
+
+        if(empty($list)){
+            return array();
+        }
+        $list=new ListIterator($list);
+        $result=array();
+        foreach($list as $row){
+            $result[]=$this->dataModel->format($row);
+        }
+
+        return $result;
+    }
 }

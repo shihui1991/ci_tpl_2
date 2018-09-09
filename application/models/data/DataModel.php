@@ -91,7 +91,7 @@ class DataModel
      * @param bool $filter  是否过滤无关字段
      * @return array
      */
-    public function getRealRow(array $input,$filter=true)
+    public function getRealRow(array $input,$filter=false)
     {
         if(empty($input)){
             return array();

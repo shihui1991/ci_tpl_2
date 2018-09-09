@@ -44,7 +44,7 @@ class Welcome extends Init
         );
         $code=EXIT_SUCCESS;
         $msg='登录成功';
-        $url='/admin/homel';
+        $url='/admin/home';
         $tpls=array();
         $this->_response($data,$code,$msg,$url,$tpls);
     }

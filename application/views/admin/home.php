@@ -143,7 +143,7 @@
                     layer.closeAll('iframe');
                 }
                 ,btn2:function (index,layero) {
-                    ajaxSubmit('/admin/login/logout',{},'get');
+                    ajaxSubmit('/admin/welcome/logout',{},'get');
                     if(!ajaxResp || "undefined" === typeof ajaxResp){
                         layer.msg('网络出问题了……',{icon:5});
                     }
