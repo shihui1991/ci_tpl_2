@@ -7,6 +7,8 @@
 
 namespace models\logic;
 
+use libraries\ListIterator;
+
 class LogicModel
 {
     public $databaseModel;
@@ -31,14 +33,17 @@ class LogicModel
      */
     public function getAll()
     {
-        $where=array();
-        $select=array();
-        $orderBy=array(
-            'Sort'=>ORDER_BY_ASC,
-        );
-        $list=$this->databaseModel->getMany($where,$select,$orderBy);
+        $list=$this->databaseModel->getMany();
+        if(empty($list)){
+            return array();
+        }
+        $list=new ListIterator($list);
+        $result=array();
+        foreach($list as $row){
+            $result[]=$this->dataModel->format($row);
+        }
 
-        return $list;
+        return $result;
     }
 
     /** 通过 ID 获取数据
@@ -48,8 +53,12 @@ class LogicModel
     public function getRowById($id)
     {
         $row=$this->databaseModel->getOneByKey($id);
+        if(empty($row)){
+            return array();
+        }
+        $result=$this->dataModel->format($row);
 
-        return $row;
+        return $result;
     }
 
 
@@ -76,9 +85,9 @@ class LogicModel
             throw new \Exception('保存失败',EXIT_DATABASE);
         }
         $data['Id']=$id;
-        $newRow=$this->dataModel->format($data);
+        $result=$this->dataModel->format($data);
 
-        return $newRow;
+        return $result;
     }
 
     /** 表单修改
@@ -109,9 +118,9 @@ class LogicModel
         }
         // 获取更新后数据
         $updated=array_merge($preRow,$data);
-        $updated=$this->dataModel->format($updated);
+        $result=$this->dataModel->format($updated);
 
-        return $updated;
+        return $result;
     }
 
     /**   验证 Name 是否唯一

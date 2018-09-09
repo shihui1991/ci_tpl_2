@@ -374,3 +374,41 @@ if(!function_exists('recordLog')){
         file_put_contents($file,$log,FILE_APPEND);
     }
 }
+
+if(!function_exists('formatArray')){
+    /** 格式化数组
+     * @param array $array
+     * @return array
+     */
+    function formatArray(array $array)
+    {
+        if(empty($array)){
+            return $array;
+        }
+        $result=array();
+        foreach($array as $key=>$val){
+            // 格式化 键名
+            if(is_numeric($key)){
+                $key=(int)$key;
+            }else{
+                $key=(string)$key;
+            }
+            // 格式化 值
+            if(is_array($val)){
+                $val=formatArray($val);
+            }
+            elseif (is_numeric($val)){
+                if(is_int($val)){
+                    $val=(int)$val;
+                }else{
+                    $val=(double)$val;
+                }
+            }
+            else{
+                $val=(string)$val;
+            }
+            $result[$key]=$val;
+        }
+        return $result;
+    }
+}

@@ -50,6 +50,7 @@ trait GetAttr
             return array();
         }
         $value = array_values(array_filter($value));
+        $value=formatArray($value);
 
         return $value;
     }
@@ -66,6 +67,8 @@ trait GetAttr
         if(empty($value)){
             return array();
         }
+        $value=formatArray($value);
+
         return $value;
     }
 

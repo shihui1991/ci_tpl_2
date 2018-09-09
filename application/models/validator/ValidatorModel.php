@@ -39,7 +39,16 @@ class ValidatorModel
         $fields=$this->$method();
         // 设置验证规则
         foreach($fields as $field){
-            $this->validator->set_rules($field, $columns[$field]['name'], $columns[$field]['rules']);
+            // 特定验证规则
+            $func='vali'.ucfirst($field).'Rules';
+            if(method_exists($this,$func)){
+                $this->$func();
+            }else{
+                if(empty($columns[$field]['rules'])){
+                    continue;
+                }
+                $this->validator->set_rules($field, $columns[$field]['name'], $columns[$field]['rules']);
+            }
         }
     }
 

@@ -7,6 +7,7 @@
 
 namespace models\logic;
 
+use libraries\ListIterator;
 use models\data\MenuData;
 use models\database\redis\MenuRedis;
 use models\validator\MenuValidator;
@@ -56,9 +57,42 @@ class MenuLogic extends LogicModel
         $select=array();
         $orderBy=array(
             'Sort'=>ORDER_BY_ASC,
+            'Id'=>ORDER_BY_ASC,
         );
         $list=$this->databaseModel->getMany($where,$select,$orderBy);
+        if(empty($list)){
+            return array();
+        }
+        $list=new ListIterator($list);
+        $result=array();
+        foreach($list as $row){
+            $result[]=$this->dataModel->format($row);
+        }
 
-        return $list;
+        return $result;
+    }
+
+    /** 获取全部
+     * @return mixed
+     */
+    public function getAll()
+    {
+        $where=array();
+        $select=array();
+        $orderBy=array(
+            'Sort'=>ORDER_BY_ASC,
+            'Id'=>ORDER_BY_ASC,
+        );
+        $list=$this->databaseModel->getMany($where,$select,$orderBy);
+        if(empty($list)){
+            return array();
+        }
+        $list=new ListIterator($list);
+        $result=array();
+        foreach($list as $row){
+            $result[]=$this->dataModel->format($row);
+        }
+
+        return $result;
     }
 }

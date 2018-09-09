@@ -23,7 +23,6 @@
         padding-left: 20px;
     }
 </style>
-<script src="/js/flexie.min.js"></script>
 
 <div class="layui-fluid" id="body">
     <div class="layui-row" >

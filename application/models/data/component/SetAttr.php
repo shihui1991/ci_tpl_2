@@ -43,7 +43,7 @@ trait SetAttr
     public function setArrayAttr($value=null)
     {
         if(empty($value)){
-            return '[]';
+            return '';
         }
         if(is_object($value)){
             $value=json_encode($value);
@@ -52,9 +52,10 @@ trait SetAttr
             $value=json_decode($value,true);
         }
         if(is_array($value)){
+            $value=formatArray($value);
             $value=json_encode(array_values($value));
         }else{
-            $value='[]';
+            $value='';
         }
 
         return $value;
@@ -67,7 +68,7 @@ trait SetAttr
     public function setJsonAttr($value=null)
     {
         if(empty($value)){
-            return '{}';
+            return '';
         }
         if(is_object($value)){
             $value=json_encode($value);
@@ -76,9 +77,10 @@ trait SetAttr
             $value=json_decode($value,true);
         }
         if(is_array($value)){
+            $value=formatArray($value);
             $value=json_encode($value);
         }else{
-            $value='{}';
+            $value='';
         }
         return $value;
     }
