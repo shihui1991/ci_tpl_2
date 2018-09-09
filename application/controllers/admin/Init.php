@@ -59,4 +59,39 @@ class Init extends Base
             }
         }
     }
+
+    /** 生成分页条
+     * @param $baseUrl
+     * @param $total
+     * @param $perPage
+     * @param int $linksNum
+     * @return mixed
+     */
+    protected function _makePageLinks($baseUrl, $total, $perPage, $linksNum=DEFAULT_PAGEBAR_NUM)
+    {
+        // 生成分页
+        $this->load->library('pagination');
+        $pageConfig=array(
+            'base_url'=>$baseUrl,
+            'total_rows'=>$total,
+            'per_page'=>$perPage,
+            'num_links'=>$linksNum,
+            'use_page_numbers'=>TRUE,
+            'page_query_string'=>TRUE,
+            'reuse_query_string'=>TRUE,
+            'query_string_segment'=>'page',
+            'full_tag_open'=>'<div class="layui-box layui-laypage layui-laypage-default">',
+            'full_tag_close'=>'</div>',
+            'first_link'=>'首页',
+            'last_link'=>'末页',
+            'next_link'=>'<i class="layui-icon layui-icon-next"></i>',
+            'prev_link'=>'<i class="layui-icon layui-icon-prev"></i>',
+            'cur_tag_open'=>'<span class="layui-laypage-curr"><em class="layui-laypage-em"></em><em>',
+            'cur_tag_close'=>'</em></span>',
+        );
+        $this->pagination->initialize($pageConfig);
+        $links=$this->pagination->create_links();
+
+        return $links;
+    }
 }

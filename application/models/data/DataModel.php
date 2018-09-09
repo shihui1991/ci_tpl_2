@@ -20,11 +20,11 @@ class DataModel
     public $fieldsAttr;    // 字段属性
     public $fieldsAlias;   // 字段映射
 
-    use GetAttr;
-    use GetField;
+    use GetAttr;  // 组件 - 按字段属性格式化字段
+    use GetField; // 组件 - 按字段格式化字段
 
-    use SetAttr;
-    use SetField;
+    use SetAttr;  // 组件 - 按字段属性修改字段
+    use SetField; // 组件 - 按字段修改字段
 
 
     /**

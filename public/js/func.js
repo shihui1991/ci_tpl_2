@@ -241,6 +241,50 @@ function getChilds(dataList,parentId)
     return result;
 }
 
+// 生成树形option
+function makeOptionTree(dataList,parentId,level,value,title) {
+    if(0 == dataList.length){
+        return '';
+    }console.log(parentId);
+    var group=getChilds(dataList,parentId);
+    var num=group.childs.length;
+    var dom='';
+    var icon=['&nbsp;┃','&nbsp;┣','&nbsp;┗'];
+    var nbsp='&nbsp;';
+    var choose='';
+    if('undefined' != typeof(arguments[5])){
+        choose = arguments[5];
+    }
+
+    var n=1;
+    $.each(group.childs,function (i,data) {
+        var space='';
+        for(var j=1;j<level;j++){
+            if(1 == j){
+                space +=nbsp;
+            }else{
+                space +=icon[0]+nbsp;
+            }
+        }
+        if(1 != level){
+            if(n == num){
+                space += icon[2];
+            }else{
+                space += icon[1];
+            }
+        }
+        var selected='';
+        if(choose == data[value]){
+            selected = ' selected ';
+        }
+        dom += '<option value="'+data[value]+'" '+selected+'> '+space+' '+data[title]+' </option>';
+        dom += makeOptionTree(group.other,data[value],level+1,value,title,choose);
+        n++;
+    });
+
+    return dom;
+}
+
 //表头 ==>> 全选、全不选
 function allCheckOrCancel(obj){
     var _checked=$(obj).prop('checked');

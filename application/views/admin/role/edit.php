@@ -139,6 +139,9 @@
     var isAdmin=<?php echo $data['List']['Admin']?>;
 
     function makeTableTree(dataList,parentId) {
+        if(0 == dataList.length){
+            return '';
+        }
         var group=getChilds(dataList,parentId);
         var dom='';
 
