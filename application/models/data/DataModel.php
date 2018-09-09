@@ -88,9 +88,10 @@ class DataModel
 
     /**  获取真实数据
      * @param array $input
+     * @param bool $filter  是否过滤无关字段
      * @return array
      */
-    public function getRealRow(array $input)
+    public function getRealRow(array $input,$filter=true)
     {
         if(empty($input)){
             return array();
@@ -100,6 +101,9 @@ class DataModel
             $field=$this->getRealField($alias);
             // 真实字段不存在，则返回原数据
             if(false == $field){
+                if($filter){
+                    continue;
+                }
                 $field=$alias;
             }
             $result[$field]=$val;
@@ -144,6 +148,9 @@ class DataModel
         else{
             $method='fill'.ucfirst($method).'Fields';
             $fields=$this->$method();
+        }
+        if(empty($fields)){
+            return array();
         }
         // 获取真实数据
         if(false == $isReal){

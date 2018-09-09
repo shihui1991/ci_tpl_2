@@ -95,4 +95,22 @@ class MenuLogic extends LogicModel
 
         return $result;
     }
+
+    /** 通过 Url 获取菜单
+     * @param string $url
+     * @return array
+     */
+    public function getRowByUrl($url)
+    {
+        $where=array(
+            array('Url','eq',$url),
+        );
+        $row=$this->databaseModel->getOne($where);
+        if(empty($row)){
+            return array();
+        }
+        $result=$this->dataModel->format($row);
+
+        return $result;
+    }
 }

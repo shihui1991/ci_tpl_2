@@ -106,4 +106,23 @@ class MasterData extends DataModel
             'Updated',
         );
     }
+
+    /** 登录 批量赋值字段
+     * @return array
+     */
+    public function fillLoginFields()
+    {
+        return array(
+            'Token',
+            'Updated',
+        );
+    }
+
+    /** 已登录 批量赋值字段
+     * @return array
+     */
+    public function fillOnlineFields()
+    {
+        return array();
+    }
 }

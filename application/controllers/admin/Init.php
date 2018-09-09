@@ -7,9 +7,12 @@
 
 require_once APPPATH.'controllers/Base.php';
 
+use models\logic\MenuLogic;
+
 class Init extends Base
 {
     protected $logicModel;
+    protected $menu;
 
     public function __construct()
     {
@@ -26,6 +29,13 @@ class Init extends Base
      */
     public function _response(array $data=array(),$code=EXIT_SUCCESS,$msg='请求成功',$url='', $tpls=array())
     {
+        // 登录验证失败强制跳转
+        if(isset($_SESSION['redirect'])){
+            $code=EXIT_ERROR;
+            $msg='请重新登录';
+            $url=$_SESSION['redirect'];
+        }
+        // 响应数据
         $this->outputData=array(
             'data'=>$data,
             'code'=>$code,
@@ -93,5 +103,19 @@ class Init extends Base
         $links=$this->pagination->create_links();
 
         return $links;
+    }
+
+    /** 获取当前菜单
+     * @return array
+     */
+    protected function _getMenu()
+    {
+        $menu=MenuLogic::instance()->getRowByUrl($this->requestUrl);
+        if(empty($menu['Id'])){
+            return array();
+        }
+        $this->menu = $menu;
+
+        return $this->menu;
     }
 }

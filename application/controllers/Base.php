@@ -29,6 +29,8 @@ class Base extends CI_Controller
         // 加载辅助函数
         $this->load->helper('common');
         $this->load->helper('url');
+        $this->load->library('session');
+
         // 获取请求 URL
         $url=uri_string();
         $index=strpos($url,'/');

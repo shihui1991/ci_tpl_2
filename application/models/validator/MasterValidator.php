@@ -37,4 +37,26 @@ class MasterValidator extends ValidatorModel
             'State',
         );
     }
+
+    /** 登录 验证字段
+     * @return array
+     */
+    public function valiLoginFields()
+    {
+        return array(
+            'Account',
+            'Password',
+        );
+    }
+
+    /** 已登录 验证字段
+     * @return array
+     */
+    public function valiOnlineFields()
+    {
+        return array(
+            'Id',
+            'Token',
+        );
+    }
 }

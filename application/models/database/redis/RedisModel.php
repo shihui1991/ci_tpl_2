@@ -255,13 +255,6 @@ class RedisModel extends DatabaseModel
                 $key=$this->table.':'.$key;
             }
             $data=$this->dbModel->hGetAll($key);
-            // 查询条件
-            if(!empty($where)){
-                $result=$this->dealWhere($where,$data);
-                if(false == $result){
-                    continue;
-                }
-            }
             $list[]=$data;
         }
         if(empty($list)){
