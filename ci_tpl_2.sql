@@ -39,6 +39,7 @@ CREATE TABLE `Api` (
   `Response` text NOT NULL COMMENT '响应参数',
   `Example` text COMMENT '响应示例',
   `State` tinyint(1) NOT NULL DEFAULT '0' COMMENT '状态，0禁用，1启用',
+  `Infos` text DEFAULT NULL COMMENT ' 说明 ',
   `Created` datetime DEFAULT NULL,
   `Updated` datetime DEFAULT NULL,
   PRIMARY KEY (`Id`)
