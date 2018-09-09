@@ -15,6 +15,7 @@ class Menu extends Auth
     {
         parent::__construct();
 
+        $this->logicModel = MenuLogic::instance();
     }
 
     /**
@@ -27,7 +28,7 @@ class Menu extends Auth
             $parentId=(int)$this->inputData['ParentId'];
         }
         // 获取子菜单列表
-        $list=MenuLogic::instance()->getListChildByParentId($parentId);
+        $list=$this->logicModel->getListChildByParentId($parentId);
 
         $data=array(
             'ParentId'=>$parentId,
@@ -39,6 +40,23 @@ class Menu extends Auth
         $tpls=array(
             'admin/menu/index',
         );
+        $this->_response($data,$code,$msg,$url,$tpls);
+    }
+
+    /**
+     *  全部
+     */
+    public function all()
+    {
+        $list=$this->logicModel->getAll();
+
+        $data=array(
+            'List'=>$list,
+        );
+        $code=EXIT_SUCCESS;
+        $msg='请求成功';
+        $url='';
+        $tpls=array();
         $this->_response($data,$code,$msg,$url,$tpls);
     }
 
@@ -68,7 +86,7 @@ class Menu extends Auth
         }
         // 保存
         else{
-            $newRow=MenuLogic::instance()->add($this->inputData);
+            $newRow=$this->logicModel->add($this->inputData);
 
             $data=array(
                 'List'=>$newRow,
@@ -90,7 +108,7 @@ class Menu extends Auth
             throw new Exception('请选择数据',EXIT_USER_INPUT);
         }
         $id=(int)$this->inputData['Id'];
-        $row=MenuLogic::instance()->getRowById($id);
+        $row=$this->logicModel->getRowById($id);
         if(empty($row['Id'])){
             throw new Exception('数据不存在',EXIT_DATABASE);
         }
@@ -118,7 +136,7 @@ class Menu extends Auth
                 throw new Exception('请选择数据',EXIT_USER_INPUT);
             }
             $id=(int)$this->inputData['Id'];
-            $row=MenuLogic::instance()->getRowById($id);
+            $row=$this->logicModel->getRowById($id);
             if(empty($row['Id'])){
                 throw new Exception('数据不存在',EXIT_DATABASE);
             }
@@ -137,7 +155,7 @@ class Menu extends Auth
         }
         // 保存
         else{
-            $updated=MenuLogic::instance()->edit($this->inputData);
+            $updated=$this->logicModel->edit($this->inputData);
 
             $data=array(
                 'List'=>$updated,

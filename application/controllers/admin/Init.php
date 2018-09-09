@@ -9,6 +9,7 @@ require_once APPPATH.'controllers/Base.php';
 
 class Init extends Base
 {
+    protected $logicModel;
 
     public function __construct()
     {
