@@ -8,7 +8,7 @@
     <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
     <link rel="stylesheet" href="/layui/2.4.3/css/layui.css">
 
-    <script src="/js/jquery-3.3.1.min.js"></script>
+    <script src="/js/jquery-2.2.4.min.js"></script>
     <script src="/layui/2.4.3/layui.js"></script>
     <script src="/js/flexie.min.js"></script>
     <script src="/js/func.js"></script>

@@ -203,7 +203,7 @@
                     elem.after(navDom);
                 }
                 elem.data('loaded',true);
-                elem.parent().addClass('layui-nav-itemed').removeClass('layui-this');
+                elem.parent().addClass('layui-nav-itemed');
                 element.render('nav', 'nav-menu');
             }
         });
