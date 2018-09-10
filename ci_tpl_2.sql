@@ -72,7 +72,7 @@ CREATE TABLE `Cate` (
   `Name` varchar(255) NOT NULL COMMENT '名称',
   `Constant` varchar(255) DEFAULT NULL COMMENT '常量名',
   `Sort` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '排序',
-  `State` tinyint(1) NOT NULL DEFAULT '0' COMMENT '状态，0禁用，1启用',
+  `Display` tinyint(1) NOT NULL DEFAULT '1' COMMENT '是否显示，0隐藏，1显示',
   `Infos` varchar(255) NOT NULL COMMENT '描述',
   `Created` datetime DEFAULT NULL,
   `Updated` datetime DEFAULT NULL,
