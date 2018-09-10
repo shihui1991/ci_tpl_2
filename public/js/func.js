@@ -77,16 +77,20 @@ function btnFormSubmit(obj) {
     // 防止重复提交
     btn.data('loading',true).prop('disabled',true).addClass('disabled');
     // 提交提示
+    var canDo=true;
     if(btnConfirm){
         if(false === confirm(btnConfirm)){
-            return false;
+            canDo = false;
         }
     }
-    ajaxSubmit(url,data,type);
+    var result=false;
+    if(canDo){
+        result = ajaxSubmit(url,data,type);
+    }
     // 释放提交按钮
     btn.data('loading',false).prop('disabled',false).removeClass('disabled');
-    // 阻止表单默认行为
-    return false;
+
+    return result;
 }
 
 // btn 操作
@@ -95,28 +99,30 @@ function btnAct(obj) {
         var layer = layui.layer;
         var loading=layer.load();
 
-        btnFormSubmit(obj);
+        var result = btnFormSubmit(obj);
 
         layer.close(loading);
 
         if(!ajaxResp || "undefined" === typeof ajaxResp){
             return false;
         }
+        if(false !== result){
+            if(ajaxResp.code){
+                layer.msg(ajaxResp.msg,{icon:2});
+            }
+            else{
+                layer.msg(ajaxResp.msg,{icon:1,time:1000},function () {
+                    if(ajaxResp.url) {
+                        location.href=ajaxResp.url;
+                    }
+                    else{
+                        location.reload();
+                    }
+                });
 
-        if(ajaxResp.code){
-            layer.msg(ajaxResp.msg,{icon:2});
+            }
         }
-        else{
-            layer.msg(ajaxResp.msg,{icon:1,time:1000},function () {
-                if(ajaxResp.url) {
-                    location.href=ajaxResp.url;
-                }
-                else{
-                    location.reload();
-                }
-            });
 
-        }
     });
 }
 
