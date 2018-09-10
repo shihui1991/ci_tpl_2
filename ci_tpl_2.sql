@@ -7,7 +7,7 @@
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
- SET NAMES utf8mb4 ;
+ SET NAMES utf8 ;
 /*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
 /*!40103 SET TIME_ZONE='+00:00' */;
 /*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
@@ -29,7 +29,7 @@ USE `ci_tpl`;
 
 DROP TABLE IF EXISTS `Api`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8mb4 ;
+ SET character_set_client = utf8;
 CREATE TABLE `Api` (
   `Id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `Name` varchar(255) NOT NULL COMMENT '名称',
@@ -56,12 +56,48 @@ LOCK TABLES `Api` WRITE;
 UNLOCK TABLES;
 
 --
+-- Table structure for table `Cate`
+--
+
+DROP TABLE IF EXISTS `Cate`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+ SET character_set_client = utf8;
+
+CREATE TABLE `Cate` (
+  `Id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `Group` varchar(255) NOT NULL COMMENT '分组',
+  `Value` varchar(255) NOT NULL COMMENT '值',
+  `Name` varchar(255) NOT NULL COMMENT '名称',
+  `Constant` varchar(255) DEFAULT NULL COMMENT '常量名',
+  `Sort` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '排序',
+  `State` tinyint(1) NOT NULL DEFAULT '0' COMMENT '状态，0禁用，1启用',
+  `Infos` varchar(255) NOT NULL COMMENT '描述',
+  `Created` datetime DEFAULT NULL,
+  `Updated` datetime DEFAULT NULL,
+  PRIMARY KEY (`Id`) USING BTREE,
+  KEY `Group` (`Group`) USING BTREE,
+  KEY `Value` (`Value`) USING BTREE,
+  KEY `Name` (`Name`) USING BTREE,
+  KEY `Constant` (`Constant`) USING BTREE,
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='分类';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `Cate`
+--
+
+LOCK TABLES `Cate` WRITE;
+/*!40000 ALTER TABLE `Cate` DISABLE KEYS */;
+/*!40000 ALTER TABLE `Cate` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `Master`
 --
 
 DROP TABLE IF EXISTS `Master`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8mb4 ;
+ SET character_set_client = utf8 ;
 CREATE TABLE `Master` (
   `Id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `Realname` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '真实姓名',
@@ -95,7 +131,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `Menu`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8mb4 ;
+ SET character_set_client = utf8 ;
 CREATE TABLE `Menu` (
   `Id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `ParentId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '上级菜单 ID',
@@ -132,7 +168,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `Role`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8mb4 ;
+ SET character_set_client = utf8 ;
 CREATE TABLE `Role` (
   `Id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `ParentId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '上级ID',
