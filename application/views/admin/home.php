@@ -28,6 +28,7 @@
     <div class="layui-row" >
         <div class="layui-col-xs12" >
             控制台
+            <button class="layui-btn layui-btn-normal" data-action="/admin/home/rsync" data-confirm="确定要同步吗？" onclick="btnAct(this);">数据同步</button>
         </div>
     </div>
 </div>

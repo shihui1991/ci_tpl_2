@@ -13,6 +13,7 @@ use models\logic\component\CheckUnique;
 class LogicModel
 {
     public $databaseModel;
+    public $backDB;
     public $dataModel;
     public $validatorModel;
 
@@ -29,6 +30,20 @@ class LogicModel
     public static function instance()
     {
         return new static();
+    }
+
+    /** 同步
+     * @return int
+     */
+    public function rsync()
+    {
+        $list = $this->databaseModel->getMany();
+        if(empty($list)){
+            return 0;
+        }
+        $result = $this->backDB->batchInsertUpdate($list);
+
+        return $result;
     }
 
     /** 将请求参数转换为查询条件

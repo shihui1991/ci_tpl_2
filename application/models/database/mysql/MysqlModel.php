@@ -34,6 +34,18 @@ class MysqlModel extends DatabaseModel
         return $query;
     }
 
+    /** 重置 ID
+     * @param int $start
+     * @return mixed
+     */
+    public function resetId($start=1)
+    {
+        $sql='ALTER TABLE `'.$this->db.'`.`'.$this->table.'` AUTO_INCREMENT = '.$start;
+        $result=$this->query($sql);
+
+        return $result;
+    }
+
     /**  处理查询条件
      * @param array $wheres  查询条件
      * @return bool
@@ -374,18 +386,22 @@ class MysqlModel extends DatabaseModel
      * @param array $list
      * @return int 返回条数
      */
-    public function batchInsert(array $list)
+    public function batchInsertUpdate(array $list)
     {
         $result=0;
         $fields=array_keys($list[0]);
-        $sqls=batchInsertOrUpdateSql($this->table, $list, $fields);
+        $updates='';
+        if(isset($list[0]['Id'])){
+            $updates='Id';
+        }
+        $sqls=batchInsertOrUpdateSql($this->table, $list, $fields, $updates);
         if(false === $sqls){
             return 0;
         }
         foreach($sqls as $sql){
             $this->query($sql);
+            $result += $this->dbModel->affected_rows();
         }
-        $result = $this->dbModel->affected_rows();
 
         return (int)$result;
     }
@@ -419,10 +435,12 @@ class MysqlModel extends DatabaseModel
         if(false === $sqls){
             return 0;
         }
-        foreach($sqls as $sql){
+        foreach($sqls as $i=>$sql){
             $this->query($sql);
+            if($i > 1){
+                $result += $this->dbModel->affected_rows();
+            }
         }
-        $result = $this->dbModel->affected_rows();
 
         return (int)$result;
     }

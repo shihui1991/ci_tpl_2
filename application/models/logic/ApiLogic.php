@@ -9,6 +9,7 @@ namespace models\logic;
 
 use libraries\ListIterator;
 use models\data\ApiData;
+use models\database\mysql\ApiMysql;
 use models\database\redis\ApiRedis;
 use models\validator\ApiValidator;
 
@@ -19,6 +20,7 @@ class ApiLogic extends LogicModel
         parent::__construct();
 
         $this->databaseModel = ApiRedis::instance();
+        $this->backDB = ApiMysql::instance();
         $this->dataModel = ApiData::instance();
         $this->validatorModel = ApiValidator::instance();
     }

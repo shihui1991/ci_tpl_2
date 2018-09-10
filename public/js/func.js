@@ -46,9 +46,14 @@ function btnFormSubmit(obj) {
     var btnType=btn.data('type');
     var btnConfirm=btn.data('confirm');
     var formObj=btnForm?$(btnForm):btn.parents('form:first');
-    var formType=formObj.attr('method');
-    var url=btnAction?btnAction:formObj.attr('action');
-    var data=formObj.serialize();
+    var formType;
+    var data='';
+    var url=btnAction;
+    if(formObj.length){
+        formType=formObj.attr('method');
+        url=btnAction?btnAction:formObj.attr('action');
+        data=formObj.serialize();
+    }
     // btn 数据
     if(btnData){
         if(data){

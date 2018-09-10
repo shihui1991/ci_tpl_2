@@ -9,6 +9,7 @@ namespace models\logic;
 
 use libraries\ListIterator;
 use models\data\MasterData;
+use models\database\mysql\MasterMysql;
 use models\database\redis\MasterRedis;
 use models\validator\MasterValidator;
 
@@ -19,6 +20,7 @@ class MasterLogic extends LogicModel
         parent::__construct();
 
         $this->databaseModel = MasterRedis::instance();
+        $this->backDB = MasterMysql::instance();
         $this->dataModel = MasterData::instance();
         $this->validatorModel = MasterValidator::instance();
     }
