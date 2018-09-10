@@ -12,9 +12,10 @@ trait SetField
 
     /** 处理 Password
      * @param $value
+     * @param array $data
      * @return bool|mixed|string
      */
-    public function SetPasswordField($value)
+    public function SetPasswordField($value,$data=array())
     {
         $value=password_hash($value,PASSWORD_DEFAULT);
 
@@ -23,11 +24,14 @@ trait SetField
 
     /** 处理 Token
      * @param $value
+     * @param array $data
      * @return string
      */
-    public function SetTokenField($value)
+    public function SetTokenField($value,$data=array())
     {
-        $value=createGuid();
+        if(empty($value)){
+            $value=createGuid();
+        }
 
         return $value;
     }

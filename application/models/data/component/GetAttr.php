@@ -30,6 +30,15 @@ trait GetAttr
 
     /**
      * @param null $value
+     * @return double
+     */
+    public function getDoubleAttr($value=null)
+    {
+        return (double)$value;
+    }
+
+    /**
+     * @param null $value
      * @return string
      */
     public function getStringAttr($value=null)

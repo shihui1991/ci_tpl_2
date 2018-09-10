@@ -29,6 +29,15 @@ trait SetAttr
 
     /**
      * @param null $value
+     * @return double
+     */
+    public function setDoubleAttr($value=null)
+    {
+        return (double)$value;
+    }
+
+    /**
+     * @param null $value
      * @return string
      */
     public function setStringAttr($value=null)
