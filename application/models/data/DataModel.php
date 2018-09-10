@@ -101,10 +101,11 @@ class DataModel
             $field=$this->getRealField($alias);
             // 真实字段不存在，则返回原数据
             if(false == $field){
-                if($filter){
-                    continue;
-                }
                 $field=$alias;
+            }
+            // 是否过滤无关字段
+            if($filter && !in_array($field,$this->fields)){
+                continue;
             }
             $result[$field]=$val;
         }

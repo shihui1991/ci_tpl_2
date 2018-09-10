@@ -47,7 +47,7 @@ class MasterLogic extends LogicModel
     public function login(array $input)
     {
         // 获取真实字段数据
-        $data=$this->dataModel->getRealRow($input);
+        $data=$this->dataModel->getRealRow($input,true);
         // 验证模型 验证数据格式
         $vali=$this->validatorModel->validate($data,$this->dataModel->columns,'login');
         if(true !== $vali){
