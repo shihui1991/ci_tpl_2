@@ -366,7 +366,7 @@ if(!function_exists('recordLog')){
      */
     function recordLog($log, $fileName='debug')
     {
-        $path=APPPATH.'logs/'.date('Y_m_d');
+        $path=FCPATH.'logs/'.date('Y_m_d');
         if(!file_exists($path)){
             mkdir($path,DIR_WRITE_MODE,true);
         }

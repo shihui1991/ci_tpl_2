@@ -34,6 +34,7 @@ class Init extends Base
             $code=EXIT_ERROR;
             $msg='请重新登录';
             $url=$_SESSION['redirect'];
+            unset($_SESSION['redirect']);
         }
         // 响应数据
         $this->outputData=array(

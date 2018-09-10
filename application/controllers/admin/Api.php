@@ -39,14 +39,14 @@ class Api extends Auth
         $name='';
         if(!empty($this->inputData['Name'])){
             $name=(string)$this->inputData['Name'];
-            $params['Name']=$name;
+            $params[]=array('Name','like',$name);
         }
         $args['Name']=$name;
         // Url
         $url='';
         if(!empty($this->inputData['Url'])){
             $url=(string)$this->inputData['Url'];
-            $params['Url']=$url;
+            $params[]=array('Url','like',$url);
         }
         $args['Url']=$url;
         // 状态
@@ -56,7 +56,7 @@ class Api extends Auth
             && in_array($this->inputData['State'],array(STATE_OFF,STATE_ON))){
 
             $state=(int)$this->inputData['State'];
-            $params['State']=$state;
+            $params[]=array('State','eq',$state);
         }
         $args['State']=$state;
 
@@ -81,7 +81,7 @@ class Api extends Auth
         // 生成分页条
         $baseUrl='/admin/api';
         $links=$this->_makePageLinks($baseUrl,$total,$perPage);
-        
+
         $data=array(
             'Page'=>$page,
             'PerPage'=>$perPage,

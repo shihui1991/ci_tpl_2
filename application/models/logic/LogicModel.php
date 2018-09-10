@@ -42,13 +42,13 @@ class LogicModel
         }
         $fields=$this->dataModel->getFields();
         $where=array();
-        foreach($params as $key=>$val){
-            $field=$this->dataModel->getRealField($key);
+        foreach($params as $param){
+            $field=$this->dataModel->getRealField($param[0]);
             if(false == $field){
-                $field=$key;
+                $field=$param[0];
             }
             if(in_array($field,$fields)){
-                $where[]=array($field,'eq',$val);
+                $where[]=array($param[0],$param[1],$param[2]);
             }
         }
         return $where;
