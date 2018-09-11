@@ -410,13 +410,12 @@ if(!function_exists('formatArray')){
     }
 }
 
-if(!function_exists('getDirAllFile')){
+if(!function_exists('getDirAllDirOrFile')){
     /** 获取目录下全部目录及文件
-     * @param $dir
-     * @param string $prefix
+     * @param string $dir
      * @return mixed
      */
-    function getDirAllFile($dir)
+    function getDirAllDirOrFile($dir='./')
     {
         // 验证目录有效性
         if(false == ($realDir = realpath($dir))){
@@ -452,8 +451,61 @@ if(!function_exists('getDirAllFile')){
             );
 
             if($isDir){
+                $array = getDirAllDirOrFile($path);
+                $result = array_merge($result,$array);
+            }
+        }
+        // 关闭目录
+        closedir($handle);
+
+        return $result;
+    }
+}
+
+if(!function_exists('getDirAllFile')){
+    /** 获取目录下全部文件
+     * @param string $dir
+     * @return mixed
+     */
+    function getDirAllFile($dir='./')
+    {
+        // 验证目录有效性
+        if(false == ($realDir = realpath($dir))){
+            return array();
+        }
+        if(false == is_dir($realDir)){
+            return array();
+        }
+        // 验证打开目录函数是否可用
+        if(!function_usable('readdir')){
+            return array();
+        }
+        // 打开目录
+        if(false == ($handle = opendir($realDir))){
+            return array();
+        }
+        // 遍历目录
+        $result=array();
+        while (false !== ($file = readdir($handle))){
+            if(in_array($file,array('.','..'))){
+                continue;
+            }
+            $path = $dir.'/'.$file;
+            $isDir=is_dir($path);
+
+            if($isDir){
                 $array = getDirAllFile($path);
                 $result = array_merge($result,$array);
+            }else{
+                $pathinfo=pathinfo($file);
+                $result[]=array(
+                    'File'=>$file,
+                    'Ext'=>$pathinfo['extension'],
+                    'Dir'=>$dir,
+                    'Path'=>$path,
+                    'RealDir'=>$realDir,
+                    'RealPath'=>$realDir.'/'.$file,
+                );
             }
         }
         // 关闭目录
