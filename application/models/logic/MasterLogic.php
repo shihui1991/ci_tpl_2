@@ -111,14 +111,12 @@ class MasterLogic extends LogicModel
             throw new \Exception('用户不存在',EXIT_USER_INPUT);
         }
         if($data['Token'] != $master['Token']){
-            throw new \Exception('登录令牌已过期',EXIT_USER_INPUT);
+            throw new \Exception('请重新登录',EXIT_USER_INPUT);
         }
         if(STATE_OFF == $master['State']){
             throw new \Exception('用户已禁用',EXIT_USER_INPUT);
         }
         // 获取用户全部信息
-        $online=$this->dataModel->fill($data,'online');
-        $master=array_merge($master,$online);
         $masterFullInfo=$this->getMasterFullInfo($master);
         $masterFullInfo['Timeout']=time()+OPERAT_WAIT_TIME;
 
