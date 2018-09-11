@@ -41,4 +41,29 @@ class ApiLogic extends LogicModel
         return true;
     }
 
+    /** 通过 Url 获取接口配置信息
+     * @param string $url
+     * @return array
+     */
+    public function getRowByUrl($url)
+    {
+        $where=array(
+            array('Url','eq',$url),
+        );
+        $select=array(
+            'Id',
+            'Name',
+            'Url',
+            'EventId',
+            'State',
+            'Infos',
+        );
+        $row = $this->databaseModel->getOne($where,$select);
+        if(empty($row)){
+            return array();
+        }
+        $result=$this->dataModel->format($row);
+
+        return $result;
+    }
 }

@@ -25,15 +25,15 @@ class Auth extends Init
         // 验证登录
         $_SESSION['redirect']='/admin';
         if(empty($_SESSION['Master'])){
-            $this->master=MasterLogic::instance()->checkLogin($this->inputData);
+            MasterLogic::instance()->checkLogin($this->inputData);
         }else{
             if(time()>$_SESSION['Master']['Timeout']){
                 unset($_SESSION['Master']);
                 throw new \Exception('等待超时，请重新登录！',EXIT_ERROR);
             }
             $_SESSION['Master']['Timeout']=time()+OPERAT_WAIT_TIME;
-            $this->master=$_SESSION['Master'];
         }
+        $this->master=$_SESSION['Master'];
         unset($_SESSION['redirect']);
         // 验证菜单
         $this->_getMenu();

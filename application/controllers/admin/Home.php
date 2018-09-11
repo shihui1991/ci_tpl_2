@@ -16,6 +16,9 @@ class Home extends Auth
         parent::__construct();
     }
 
+    /**
+     *  控制台
+     */
     public function index()
     {
         $data=array(

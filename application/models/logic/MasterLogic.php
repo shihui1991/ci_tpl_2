@@ -92,6 +92,8 @@ class MasterLogic extends LogicModel
         $masterFullInfo['Timeout']=time()+OPERAT_WAIT_TIME;
 
         $_SESSION['Master']=$masterFullInfo;
+        // 字段映射
+        $masterFullInfo=$this->dataModel->format($masterFullInfo,true);
 
         return $masterFullInfo;
     }
@@ -150,8 +152,6 @@ class MasterLogic extends LogicModel
     {
         // 获取角色数据
         $role=RoleLogic::instance()->getRowById($master['RoleId']);
-        // 字段映射
-        $master=$this->dataModel->format($master,true);
 
         $other=array(
             'RoleName'=>$role['Name'],
