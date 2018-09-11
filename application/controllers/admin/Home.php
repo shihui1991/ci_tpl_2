@@ -7,6 +7,7 @@
 
 require_once APPPATH.'controllers/admin/Auth.php';
 
+use models\logic\MasterLogic;
 use models\logic\MenuLogic;
 
 class Home extends Auth
@@ -21,8 +22,11 @@ class Home extends Auth
      */
     public function index()
     {
+        // 获取管理员公开信息
+        $master = MasterLogic::instance()->makePublicInfo($this->master);
+
         $data=array(
-            'Master'=>$this->master,
+            'Master'=>$master,
         );
         $code=EXIT_SUCCESS;
         $msg='请求成功';

@@ -52,7 +52,7 @@ trait GetAttr
      */
     public function getArrayAttr($value=null)
     {
-        if(!empty($value)){
+        if(!empty($value) && is_string($value)){
             $value=json_decode($value,true);
         }
         if(empty($value)){
@@ -70,7 +70,7 @@ trait GetAttr
      */
     public function getJsonAttr($value=null)
     {
-        if(!empty($value)){
+        if(!empty($value) && is_string($value)){
             $value=json_decode($value,true);
         }
         if(empty($value)){

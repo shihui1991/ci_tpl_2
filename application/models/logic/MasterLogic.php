@@ -79,12 +79,12 @@ class MasterLogic extends LogicModel
         }
         // 获取用户全部信息
         $master=array_merge($master,$update);
-        $masterFullInfo=$this->getMasterFullInfo($master);
+        $masterFullInfo=$this->getFullInfo($master);
         $masterFullInfo['Timeout']=time()+OPERAT_WAIT_TIME;
 
-        $_SESSION['Master']=$masterFullInfo;
+        $_SESSION['Master']=$this->dataModel->format($masterFullInfo);
         // 字段映射
-        unset($master['Password']);
+        unset($masterFullInfo['Password']);
         $masterFullInfo=$this->dataModel->format($masterFullInfo,true);
 
         return $masterFullInfo;
@@ -117,19 +117,19 @@ class MasterLogic extends LogicModel
             throw new \Exception('用户已禁用',EXIT_USER_INPUT);
         }
         // 获取用户全部信息
-        $masterFullInfo=$this->getMasterFullInfo($master);
+        $masterFullInfo=$this->getFullInfo($master);
         $masterFullInfo['Timeout']=time()+OPERAT_WAIT_TIME;
 
-        $_SESSION['Master']=$masterFullInfo;
+        $_SESSION['Master']=$this->dataModel->format($masterFullInfo);
 
-        return $masterFullInfo;
+        return $_SESSION['Master'];
     }
 
     /** 获取管理员全部信息
      * @param array $master
      * @return array
      */
-    public function getMasterFullInfo(array $master)
+    public function getFullInfo(array $master)
     {
         // 获取角色数据
         $role=RoleLogic::instance()->getRowById($master['RoleId']);
@@ -142,5 +142,35 @@ class MasterLogic extends LogicModel
         $result=array_merge($master,$other);
 
         return $result;
+    }
+
+    /** 生成管理员私有信息
+     * @param array $master
+     * @return array
+     */
+    public function makePrivateInfo(array $master)
+    {
+        unset(
+            $master['Password']
+        );
+        $master = $this->dataModel->format($master,true);
+
+        return $master;
+    }
+
+    /** 生成管理员公开信息
+     * @param array $master
+     * @return array
+     */
+    public function makePublicInfo(array $master)
+    {
+        unset(
+            $master['Account'],
+            $master['Password'],
+            $master['Token']
+        );
+        $master = $this->dataModel->format($master,true);
+        
+        return $master;
     }
 }
