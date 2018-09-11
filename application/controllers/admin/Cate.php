@@ -146,4 +146,22 @@ class Cate extends Auth
             $this->_response($data,$code,$msg,$url,$tpls);
         }
     }
+
+    /** 更新配置文件 config/common/conf.php
+     * @throws Exception
+     */
+    public function update()
+    {
+        $result = $this->logicModel->updateConf();
+        if(false == $result){
+            throw new Exception('更新失败',EXIT_DATABASE);
+        }
+
+        $data=array();
+        $code=EXIT_SUCCESS;
+        $msg='更新成功';
+        $url='';
+        $tpls=array();
+        $this->_response($data,$code,$msg,$url,$tpls);
+    }
 }

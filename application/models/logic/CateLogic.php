@@ -78,4 +78,62 @@ class CateLogic extends LogicModel
 
         return $result;
     }
+
+    /** 更新配置文件 config/common/conf.php
+     * @return bool|int
+     */
+    public function updateConf()
+    {
+        $path=APPPATH.'config/common/';
+        $file=$path.'conf.php';
+        // 备份
+        $backup='';
+        if(file_exists($file)){
+            $backup = $file.'.'.date('YmdHis',filemtime($file));
+            exec('cp -a '.$file.' '.$backup);
+        }
+        // 获取配置
+        $where=array();
+        $select=array();
+        $orderBy=array(
+            'Group'=>ORDER_BY_ASC,
+            'Sort'=>ORDER_BY_ASC,
+            'Value'=>ORDER_BY_ASC,
+            'Display'=>ORDER_BY_DESC,
+        );
+        $list=$this->databaseModel->getMany($where,$select,$orderBy);
+        // 文件头
+        $str = <<<FFF
+<?php
+/**
+ *  动态配置
+ */
+ 
+FFF;
+        // 文件体
+        if(!empty($list)){
+            $list = new ListIterator($list);
+            foreach($list as $row){
+                $str .= <<<"FFF"
+/* {$row['Group']} - {$row['Name']} */
+defined('{$row['Constant']}')      OR define('{$row['Constant']}', '{$row['Value']}');
+
+FFF;
+            }
+        }
+        // 写入
+        $result= file_put_contents($file,$str);
+        if($backup){
+            if(false === $result){
+                // 失败回滚
+                exec('mv -f '.$backup.' '.$file);
+            }
+            else{
+                // 成功删除备份
+//                exec('rm -rf '.$backup);
+            }
+        }
+
+        return $result;
+    }
 }

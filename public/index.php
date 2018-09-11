@@ -312,4 +312,5 @@ switch (ENVIRONMENT)
  *
  * And away we go...
  */
+header("Access-Control-Allow-Origin: *");
 require_once BASEPATH.'core/CodeIgniter.php';
