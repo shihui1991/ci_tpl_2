@@ -9,6 +9,7 @@ namespace models\logic;
 
 use libraries\ListIterator;
 use models\data\MenuData;
+use models\database\mysql\MenuMysql;
 use models\database\redis\MenuRedis;
 use models\validator\MenuValidator;
 
@@ -19,6 +20,7 @@ class MenuLogic extends LogicModel
         parent::__construct();
 
         $this->databaseModel = MenuRedis::instance();
+        $this->backDB = MenuMysql::instance();
         $this->dataModel = MenuData::instance();
         $this->validatorModel = MenuValidator::instance();
     }

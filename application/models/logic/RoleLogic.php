@@ -9,6 +9,7 @@ namespace models\logic;
 
 use libraries\ListIterator;
 use models\data\RoleData;
+use models\database\mysql\RoleMysql;
 use models\database\redis\RoleRedis;
 use models\validator\RoleValidator;
 
@@ -19,6 +20,7 @@ class RoleLogic extends LogicModel
         parent::__construct();
 
         $this->databaseModel = RoleRedis::instance();
+        $this->backDB = RoleMysql::instance();
         $this->dataModel = RoleData::instance();
         $this->validatorModel = RoleValidator::instance();
     }

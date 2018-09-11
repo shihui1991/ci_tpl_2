@@ -45,6 +45,18 @@ class RedisModel extends DatabaseModel
         return $query;
     }
 
+    /** 重置 ID
+     * @param int $start
+     * @return bool
+     */
+    public function resetId($start=0)
+    {
+        $table=empty($this->table)?'Id':$this->table;
+        $this->dbModel->hSet('Id',$table,$start);
+
+        return true;
+    }
+
     /**  处理查询条件
      * @param array $wheres  查询条件
      * @param array $data        处理数据
@@ -407,18 +419,45 @@ class RedisModel extends DatabaseModel
         return $key;
     }
 
+    /** 更新 ID
+     * @param int $id
+     * @return bool|int
+     */
+    public function updateId($id=0)
+    {
+        $table=empty($this->table)?'Id':$this->table;
+        if(empty($id)){
+            $id=$this->dbModel->hIncrBy('Id',$table,1);
+            if($id < 1){
+                return false;
+            }
+        }else{
+            $curId=$this->dbModel->hGet('Id',$table);
+            if($id > $curId){
+                $this->dbModel->hSet('Id',$table,$id);
+            }
+        }
+
+        return $id;
+    }
+
     /**  插入数据
      * @param array $data
      * @return mixed 成功返回 ID，失败返回 false
      */
     public function insert(array $data)
     {
-        $table=empty($this->table)?'Id':$this->table;
-        $id=$this->dbModel->hIncrBy('Id',$table,1);
-        if($id < 1){
+        // 处理 ID
+        $id=0;
+        if(!empty($data['Id'])){
+            $id=$data['Id'];
+        }
+        $id = $this->updateId($id);
+        if(false === $id){
             return false;
         }
         $data['Id']=$id;
+
         // 获取主键值
         $key=$this->getKey($data);
         if(!empty($this->table)){
@@ -429,23 +468,18 @@ class RedisModel extends DatabaseModel
         return (int)$id;
     }
 
-    /**  批量插入
+    /**  批量插入或更新
      * @param array $list
      * @return int 返回条数
      */
-    public function batchInsert(array $list)
+    public function batchInsertUpdate(array $list)
     {
         $result=0;
-        $table=empty($this->table)?'Id':$this->table;
         foreach($list as $data){
-            $id=$this->dbModel->hIncrBy('Id',$table,1);
-            $data['Id']=$id;
-            // 获取主键值
-            $key=$this->getKey($data);
-            if(!empty($this->table)){
-                $key=$this->table.':'.$key;
+            $id = $this->insert($data);
+            if(false === $id){
+                return false;
             }
-            $this->dbModel->hMSet($key,$data);
             $result++;
         }
 
@@ -501,17 +535,7 @@ class RedisModel extends DatabaseModel
                 $update[$field]=$data[$field];
             }
 
-            $preList=$this->getMany($where);
-            $preList=new ListIterator($preList);
-            foreach($preList as $preData){
-                $key=$this->getKey($preData);
-                if(!empty($this->table)){
-                    $key=$this->table.':'.$key;
-                }
-
-                $this->dbModel->hMset($key,$update);
-                $result++;
-            }
+            $result += $this->update($update,$where);
         }
 
         return $result;

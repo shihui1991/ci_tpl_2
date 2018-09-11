@@ -114,4 +114,47 @@ trait CheckUnique
         }
         return true;
     }
+
+    /**   验证 Constant 是否唯一
+     * @param array $data
+     * @return bool
+     */
+    public function checkConstantUnique(array $data)
+    {
+        if(!empty($data['Constant'])){
+            $where=array(
+                array('Constant','eq',$data['Constant']),
+            );
+            if(!empty($data['Id'])){
+                $where[]=array('Id','!=',$data['Id']);
+            }
+            $count=$this->databaseModel->getCount($where);
+            if($count > 0){
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**   验证 Value 是否唯一
+     * @param array $data
+     * @return bool
+     */
+    public function checkValueUnique(array $data)
+    {
+        if(!empty($data['Value']) && !empty($data['Group'])){
+            $where=array(
+                array('Value','eq',$data['Value']),
+                array('Group','eq',$data['Group']),
+            );
+            if(!empty($data['Id'])){
+                $where[]=array('Id','!=',$data['Id']);
+            }
+            $count=$this->databaseModel->getCount($where);
+            if($count > 0){
+                return false;
+            }
+        }
+        return true;
+    }
 }
