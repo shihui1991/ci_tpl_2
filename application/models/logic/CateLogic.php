@@ -41,4 +41,41 @@ class CateLogic extends LogicModel
         return true;
     }
 
+    /** 获取分组列表
+     * @return array
+     */
+    public function getGroupList()
+    {
+        $where=array();
+        $select=array();
+        $orderBy=array(
+            'Group'=>ORDER_BY_ASC,
+            'Sort'=>ORDER_BY_ASC,
+            'Value'=>ORDER_BY_ASC,
+            'Display'=>ORDER_BY_DESC,
+        );
+        $list=$this->databaseModel->getMany($where,$select,$orderBy);
+        if(empty($list)){
+            return array();
+        }
+        $list=new ListIterator($list);
+        $groupList=array();
+        $cateList=array();
+        $groups=array();
+        foreach($list as $row){
+            $row=$this->dataModel->format($row);
+
+            if(!in_array($row['Group'],$groups)){
+                $groups[]=$row['Group'];
+                $groupList[]=$row;
+            }
+            $cateList[$row['Group']][]=$row;
+        }
+        $result=array(
+            'GroupList'=>$groupList,
+            'CateList'=>$cateList,
+        );
+
+        return $result;
+    }
 }

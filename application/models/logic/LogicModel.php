@@ -108,7 +108,7 @@ class LogicModel
         return $result;
     }
 
-    /** 查询列表
+    /** 查询分页列表
      * @param int $page
      * @param int $perPage
      * @param array $params
