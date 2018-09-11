@@ -29,7 +29,7 @@
                                 <?php foreach($data['List']['GroupList'] as $group): ?>
 
                                     <div class="layui-colla-item">
-                                        <h2 class="layui-colla-title">
+                                        <h2 class="layui-colla-title" style="color: blue;font-weight: bold;">
                                             <?php echo $group['Group']; ?>
                                             <a class="layui-btn layui-btn-xs" href="/admin/cate/add?Group=<?php echo $group['Group']; ?>">添加分类</a>
                                         </h2>

@@ -390,11 +390,7 @@ class MysqlModel extends DatabaseModel
     {
         $result=0;
         $fields=array_keys($list[0]);
-        $updates='';
-        if(isset($list[0]['Id'])){
-            $updates='Id';
-        }
-        $sqls=batchInsertOrUpdateSql($this->table, $list, $fields, $updates);
+        $sqls=batchInsertOrUpdateSql($this->table, $list, $fields, $fields);
         if(false === $sqls){
             return 0;
         }

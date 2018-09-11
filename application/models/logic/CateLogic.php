@@ -51,6 +51,7 @@ class CateLogic extends LogicModel
         $orderBy=array(
             'Group'=>ORDER_BY_ASC,
             'Sort'=>ORDER_BY_ASC,
+            'Constant'=>ORDER_BY_ASC,
             'Value'=>ORDER_BY_ASC,
             'Display'=>ORDER_BY_DESC,
         );
@@ -98,6 +99,7 @@ class CateLogic extends LogicModel
         $orderBy=array(
             'Group'=>ORDER_BY_ASC,
             'Sort'=>ORDER_BY_ASC,
+            'Constant'=>ORDER_BY_ASC,
             'Value'=>ORDER_BY_ASC,
             'Display'=>ORDER_BY_DESC,
         );
