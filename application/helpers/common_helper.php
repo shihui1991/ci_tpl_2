@@ -140,7 +140,6 @@ if(!function_exists('batchInsertOrUpdateSql')){
     }
 }
 
-
 if(!function_exists('batchUpdateSql')){
     /** 虚拟表批量更新数据 sql
      * @param string $table         数据表名
@@ -236,7 +235,6 @@ if(!function_exists('batchUpdateSql')){
         return $sqls;
     }
 }
-
 
 if(!function_exists('createGuid')){
     /** 生成GUID
@@ -338,7 +336,6 @@ if(!function_exists('httpCurl')){
     }
 }
 
-
 if(!function_exists('compareVersion')){
     /**  比较两个版本号大小
      * @param string $curVersion  当前版本
@@ -409,6 +406,59 @@ if(!function_exists('formatArray')){
             }
             $result[$key]=$val;
         }
+        return $result;
+    }
+}
+
+if(!function_exists('getDirAllFile')){
+    /** 获取目录下全部目录及文件
+     * @param $dir
+     * @param string $prefix
+     * @return mixed
+     */
+    function getDirAllFile($dir)
+    {
+        // 验证目录有效性
+        if(false == ($realDir = realpath($dir))){
+            return array();
+        }
+        if(false == is_dir($realDir)){
+            return array();
+        }
+        // 验证打开目录函数是否可用
+        if(!function_usable('readdir')){
+            return array();
+        }
+        // 打开目录
+        if(false == ($handle = opendir($realDir))){
+            return array();
+        }
+        // 遍历目录
+        $result=array();
+        while (false !== ($file = readdir($handle))){
+            if(in_array($file,array('.','..'))){
+                continue;
+            }
+            $path = $dir.'/'.$file;
+            $isDir=is_dir($path);
+
+            $result[]=array(
+                'File'=>$file,
+                'IsDir'=>(int)$isDir,
+                'Dir'=>$dir,
+                'Path'=>$path,
+                'RealDir'=>$realDir,
+                'RealPath'=>$realDir.'/'.$file,
+            );
+
+            if($isDir){
+                $array = getDirAllFile($path);
+                $result = array_merge($result,$array);
+            }
+        }
+        // 关闭目录
+        closedir($handle);
+
         return $result;
     }
 }
