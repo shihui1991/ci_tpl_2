@@ -60,15 +60,7 @@ class MasterLogic extends LogicModel
         $where=array(
             array('Account','eq',$data['Account']),
         );
-        $select=array(
-            'Id',
-            'Realname',
-            'RoleId',
-            'Account',
-            'Password',
-            'State',
-        );
-        $master=$this->databaseModel->getOne($where,$select);
+        $master=$this->databaseModel->getOne($where);
         if(empty($master['Id'])){
             throw new \Exception('用户不存在',EXIT_USER_INPUT);
         }
@@ -85,7 +77,6 @@ class MasterLogic extends LogicModel
         if(false === $result){
             throw new \Exception('登录失败',EXIT_DATABASE);
         }
-        unset($master['Password'],$master['State']);
         // 获取用户全部信息
         $master=array_merge($master,$update);
         $masterFullInfo=$this->getMasterFullInfo($master);
@@ -93,6 +84,7 @@ class MasterLogic extends LogicModel
 
         $_SESSION['Master']=$masterFullInfo;
         // 字段映射
+        unset($master['Password']);
         $masterFullInfo=$this->dataModel->format($masterFullInfo,true);
 
         return $masterFullInfo;
@@ -114,25 +106,16 @@ class MasterLogic extends LogicModel
             throw new \Exception($err,EXIT_USER_INPUT);
         }
         // 获取用户
-        $select=array(
-            'Id',
-            'Realname',
-            'RoleId',
-            'Account',
-            'Token',
-            'State',
-        );
-        $master=$this->databaseModel->getOneByKey($data['Id'],$select);
+        $master=$this->databaseModel->getOneByKey($data['Id']);
         if(empty($master['Id'])){
             throw new \Exception('用户不存在',EXIT_USER_INPUT);
-        }
-        if(STATE_OFF == $master['State']){
-            throw new \Exception('用户已禁用',EXIT_USER_INPUT);
         }
         if($data['Token'] != $master['Token']){
             throw new \Exception('登录令牌已过期',EXIT_USER_INPUT);
         }
-        unset($master['Token'],$master['State']);
+        if(STATE_OFF == $master['State']){
+            throw new \Exception('用户已禁用',EXIT_USER_INPUT);
+        }
         // 获取用户全部信息
         $online=$this->dataModel->fill($data,'online');
         $master=array_merge($master,$online);
