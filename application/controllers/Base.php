@@ -184,25 +184,30 @@ class Base extends CI_Controller
         $execTime=$this->benchmark->elapsed_time('app_start', 'app_end');
 
         $datetime=date('Y-m-d H:i:s');
-        $url=current_url();
+        $reqUrl=$this->requestUrl;
         $ip=$this->input->ip_address();
         $get=json_encode($this->input->get());
         $post=json_encode($this->input->post());
         $stream=urldecode($this->input->raw_input_stream);
-        $output=json_encode($this->outputData);
+        $output=json_encode($data);
         // 记录内容
         $record=<<<"EEE"
 
-[$url][$ip][$datetime][执行时间： $execTime s]
-[Get:]$get
-[Post:]$post
-[Stream:]$stream
-[OutputData:]$output
+【记录时间】--> $datetime
+【访问 IP 】--> $ip
+【请求地址】--> $reqUrl
+【执行时间】--> $execTime
+【响应代码】--> $code
+【响应信息】--> $msg
+【请求数据】↓
+【  Get 】$get
+【 Post 】$post
+【Stream】$stream
+【响应数据】--> $output
 -------------------------------------------------
 
 EEE;
         recordLog($record);
-
     }
 
     /**  记录异常
@@ -213,26 +218,6 @@ EEE;
      */
     public function _recordException($type, $msg, $file, $line)
     {
-        $datetime=date('Y-m-d H:i:s');
-        $url=current_url();
-        $ip=$this->input->ip_address();
-        $get=json_encode($this->input->get());
-        $post=json_encode($this->input->post());
-        $stream=urldecode($this->input->raw_input_stream);
-        $output=json_encode($this->outputData);
-
-        $record=<<<"EEE"
-
-[$url][$ip][$datetime][$type][$msg][$file][$line]
-[Get:]$get
-[Post:]$post
-[Stream:]$stream
-[OutputData:]$output
--------------------------------------------------
-
-EEE;
-        log_message('error',$record);
-
         $data=array();
         $code=EXIT_ERROR;
         $msg='';
