@@ -139,9 +139,6 @@ class DataModel
      */
     public function fill(array $data, $method='',$isReal=true)
     {
-        if(empty($data)){
-            return array();
-        }
         // 获取批量赋值字段
         if(empty($method)){
             $fields=$this->fields;
