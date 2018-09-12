@@ -1,4 +1,7 @@
-$('head').append('<link rel="stylesheet" href="/viewer/viewer.min.css"><script src="/viewer/viewer.min.js"></script>');
+$('head').append('' +
+    '<link rel="stylesheet" href="/viewer/jquery-0.6.0/viewer.min.css">' +
+    '<script src="/viewer/jquery-0.6.0/viewer.min.js"></script>'
+);
 
 if($('.img-box').find('li').length){
     $('.img-box').viewer();
