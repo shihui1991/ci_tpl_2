@@ -16,6 +16,9 @@ class Base extends CI_Controller
     {
         parent::__construct();
 
+        // 开始计时
+        $this->benchmark->mark('app_start');
+
         // 记录异常
         if(ENVIRONMENT == 'development'){
             set_error_handler(array($this,'_recordException'));
@@ -166,7 +169,41 @@ class Base extends CI_Controller
      * @param string $url 重定向地址
      * @param array $tpls 响应模板
      */
-    public function _response(array $data=array(),$code=EXIT_SUCCESS,$msg='请求成功',$url='', $tpls=array()){}
+    public function _response(array $data=array(),$code=EXIT_SUCCESS,$msg='请求成功',$url='', $tpls=array())
+    {
+        // 响应数据
+        $this->outputData=array(
+            'data'=>$data,
+            'code'=>$code,
+            'msg'=>$msg,
+            'url'=>$url,
+        );
+        // 结束计时
+        $this->benchmark->mark('app_end');
+        // 执行时间
+        $execTime=$this->benchmark->elapsed_time('app_start', 'app_end');
+
+        $datetime=date('Y-m-d H:i:s');
+        $url=current_url();
+        $ip=$this->input->ip_address();
+        $get=json_encode($this->input->get());
+        $post=json_encode($this->input->post());
+        $stream=urldecode($this->input->raw_input_stream);
+        $output=json_encode($this->outputData);
+        // 记录内容
+        $record=<<<"EEE"
+
+[$url][$ip][$datetime][执行时间： $execTime s]
+[Get:]$get
+[Post:]$post
+[Stream:]$stream
+[OutputData:]$output
+-------------------------------------------------
+
+EEE;
+        recordLog($record);
+
+    }
 
     /**  记录异常
      * @param $type

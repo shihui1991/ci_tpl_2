@@ -37,12 +37,7 @@ class Init extends Base
             unset($_SESSION['redirect']);
         }
         // 响应数据
-        $this->outputData=array(
-            'data'=>$data,
-            'code'=>$code,
-            'msg'=>$msg,
-            'url'=>$url,
-        );
+        parent::_response($data,$code,$msg,$url,$tpls);
         $resp=json_encode($this->outputData);
 
         // AJAX

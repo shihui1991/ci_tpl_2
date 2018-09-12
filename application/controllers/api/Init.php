@@ -25,12 +25,7 @@ class Init extends Base
      */
     public function _response(array $data=array(),$code=EXIT_SUCCESS,$msg='请求成功',$url='', $tpls=array())
     {
-        $this->outputData=array(
-            'data'=>$data,
-            'code'=>$code,
-            'msg'=>$msg,
-            'url'=>$url,
-        );
+        parent::_response($data,$code,$msg,$url,$tpls);
         $resp=json_encode($this->outputData);
         echo $resp;
     }
