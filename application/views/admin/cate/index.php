@@ -1,4 +1,11 @@
 <body>
+<style>
+    .btn-group-add{
+        position: absolute;
+        right: 20px;
+        top: 10px;
+    }
+</style>
 <div class="layui-fluid">
     <div class="layui-row">
         <div class="layui-col-xs12">
@@ -31,7 +38,7 @@
                                     <div class="layui-colla-item">
                                         <h2 class="layui-colla-title" style="color: blue;font-weight: bold;">
                                             <?php echo $group['Group']; ?>
-                                            <a class="layui-btn layui-btn-xs" href="/admin/cate/add?Group=<?php echo $group['Group']; ?>">添加分类</a>
+                                            <a class="layui-btn layui-btn-xs layui-btn-normal btn-group-add" href="/admin/cate/add?Group=<?php echo $group['Group']; ?>">添加子分类</a>
                                         </h2>
 
                                         <div class="layui-colla-content">
