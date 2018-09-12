@@ -88,7 +88,7 @@ function upload(obj) {
                 formdata.append('UploadName',uploadname);
                 formdata.append(uploadname,file);
 
-                ajaxUpload('/admin/Home/upload',formdata);
+                ajaxUpload('/admin/home/upload',formdata);
 
                 if(!ajaxResp || "undefined" === typeof ajaxResp){
                     layer.msg('网络开小差了',{icon:5});

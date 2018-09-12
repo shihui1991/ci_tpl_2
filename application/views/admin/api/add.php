@@ -94,7 +94,7 @@
                                     <button class="layui-btn layui-btn-sm" type="button" onclick="uploadBtn(this)">
                                         点击上传
                                     </button>
-                                    <input type="file" accept="image/*" name="UploadFile" multiple data-field="Example" data-savepath="api" data-savename="" data-overwrite="true" onchange="upload(this)" style="display: none;">
+                                    <input type="file" accept="image/*" name="UploadFile" multiple data-field="Example[]" data-savepath="api" data-savename="" data-overwrite="true" onchange="upload(this)" style="display: none;">
                                 </label>
                                 <div class="layui-input-block uploaded-box">
                                     <ul class="img-box">
