@@ -51,7 +51,7 @@ class Api extends Auth
         $args['Url']=$url;
         // 状态
         $state= -1;
-        if(!empty($this->inputData['State'])
+        if(isset($this->inputData['State'])
             && is_numeric($this->inputData['State'])
             && in_array($this->inputData['State'],array(STATE_OFF,STATE_ON))){
 

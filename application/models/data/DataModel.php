@@ -12,7 +12,7 @@ use models\data\component\GetField;
 use models\data\component\SetAttr;
 use models\data\component\SetField;
 
-class DataModel
+abstract class DataModel
 {
     public $columns;       // 字段详情 field => [field,name,alias,attr,rules]
     public $fields;        // 字段

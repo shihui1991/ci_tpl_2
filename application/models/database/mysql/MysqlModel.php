@@ -421,11 +421,14 @@ class MysqlModel extends DatabaseModel
      * @param array $list
      * @param array $whereFields
      * @param array $updateFields
-     * @param array $insertFields
      * @return int  返回更新条数
      */
-    public function batchUpdate(array $list, array $whereFields, array $updateFields, array $insertFields)
+    public function batchUpdate(array $list, array $whereFields, array $updateFields)
     {
+        if(empty($list)){
+            return 0;
+        }
+        $insertFields=array_keys($list[0]);
         $result=0;
         $sqls=batchUpdateSql($this->table, $list, $insertFields, $updateFields, $whereFields);
         if(false === $sqls){

@@ -110,8 +110,9 @@ class RedisModel extends DatabaseModel
 
     /**  处理排序
      * @param array $orderBy
+     * @param array $list
      */
-    public function dealOrderBy(array $orderBy,array $list)
+    public function dealOrderBy(array $orderBy,array $list=array())
     {
         if(!empty($orderBy) && !empty($list)){
             $orderData=array();
@@ -517,10 +518,9 @@ class RedisModel extends DatabaseModel
      * @param array $list
      * @param array $whereFields
      * @param array $updateFields
-     * @param array $insertFields
      * @return int  返回更新条数
      */
-    public function batchUpdate(array $list, array $whereFields, array $updateFields, array $insertFields)
+    public function batchUpdate(array $list, array $whereFields, array $updateFields)
     {
         $result=0;
         foreach($list as $data){

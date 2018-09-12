@@ -7,7 +7,7 @@
 
 namespace models\validator;
 
-class ValidatorModel
+abstract class ValidatorModel
 {
     protected $CI;
     protected $validator;

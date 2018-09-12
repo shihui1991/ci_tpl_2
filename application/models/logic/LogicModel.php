@@ -10,7 +10,7 @@ namespace models\logic;
 use libraries\ListIterator;
 use models\logic\component\CheckUnique;
 
-class LogicModel
+abstract class LogicModel
 {
     public $databaseModel;
     public $backDB;
