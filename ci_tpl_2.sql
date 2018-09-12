@@ -204,6 +204,8 @@ CREATE TABLE `Source` (
   `Id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `Name` varchar(255) NOT NULL COMMENT '名称',
   `Url` varchar(255) NOT NULL COMMENT '地址',
+  `Cloud` varchar(255) DEFAULT NULL COMMENT '云存储地址',
+  `Infos` varchar(255) DEFAULT NULL COMMENT '说明',
   `Created` datetime DEFAULT NULL,
   `Updated` datetime DEFAULT NULL,
   PRIMARY KEY (`Id`) USING BTREE
