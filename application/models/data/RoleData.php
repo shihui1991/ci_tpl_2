@@ -16,6 +16,7 @@ class RoleData extends DataModel
             'name'  => '角色ID',
             'alias' => 'RoleId',
             'attr'  => 'int',
+            'desc'  => "int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '角色ID'",
             'rules' => 'trim|required|max_length[10]|is_natural',
         ),
         'ParentId' => array(
@@ -23,6 +24,7 @@ class RoleData extends DataModel
             'name'  => '上级角色',
             'alias' => 'RolePid',
             'attr'  => 'int',
+            'desc'  => "int(10) unsigned NOT NULL DEFAULT '0' COMMENT '上级角色ID'",
             'rules' => 'trim|required|max_length[10]|is_natural',
         ),
         'Name' => array(
@@ -30,6 +32,7 @@ class RoleData extends DataModel
             'name'  => '名称',
             'alias' => 'RoleName',
             'attr'  => 'string',
+            'desc'  => "varchar(255) NOT NULL COMMENT ' 名称'",
             'rules' => 'trim|required|max_length[255]',
         ),
         'Admin' => array(
@@ -37,6 +40,7 @@ class RoleData extends DataModel
             'name'  => '是否超管',
             'alias' => 'RoleAdmin',
             'attr'  => 'int',
+            'desc'  => "tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否超管，0否 ，1是'",
             'rules' => 'trim|required|max_length[1]|is_natural|in_list[0,1]',
         ),
         'MenuIds' => array(
@@ -44,27 +48,31 @@ class RoleData extends DataModel
             'name'  => '授权菜单',
             'alias' => 'RoleMenus',
             'attr'  => 'array',
+            'desc'  => "text COMMENT '权限菜单'",
             'rules' => '',
         ),
         'Infos' => array(
             'field' => 'Infos',
-            'name'  => '功能说明',
+            'name'  => '描述',
             'alias' => 'RoleInfos',
             'attr'  => 'string',
+            'desc'  => "varchar(255) DEFAULT NULL COMMENT '描述 '",
             'rules' => 'trim|max_length[255]',
         ),
         'Created' => array(
             'field' => 'Created',
             'name'  => '创建时间',
-            'alias' => 'RoleCreated',
+            'alias' => 'ApiCreated',
             'attr'  => 'datetime',
+            'desc'  => "datetime DEFAULT NULL COMMENT '创建时间'",
             'rules' => 'trim|max_length[255]',
         ),
         'Updated' => array(
             'field' => 'Updated',
             'name'  => '更新时间',
-            'alias' => 'RoleUpdated',
+            'alias' => 'ApiUpdated',
             'attr'  => 'datetime',
+            'desc'  => "datetime DEFAULT NULL COMMENT '更新时间'",
             'rules' => 'trim|max_length[255]',
         ),
     );

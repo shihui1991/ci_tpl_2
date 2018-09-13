@@ -207,7 +207,7 @@ class Base extends CI_Controller
 -------------------------------------------------
 
 EEE;
-        recordLog($record);
+        recordLog($record,'response');
     }
 
     /**  记录异常

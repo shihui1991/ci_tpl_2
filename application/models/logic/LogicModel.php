@@ -17,6 +17,8 @@ abstract class LogicModel
     public $dataModel;
     public $validatorModel;
 
+    public $isFormat=true;
+
     use CheckUnique; // 组件 - 验证唯一
 
     public function __construct()
@@ -44,6 +46,17 @@ abstract class LogicModel
         $result = $this->backDB->batchInsertUpdate($list);
 
         return $result;
+    }
+
+    /** 是否格式化数据
+     * @param bool $isFormat
+     * @return $this
+     */
+    public function isFormat($isFormat=true)
+    {
+        $this->isFormat = $isFormat;
+
+        return $this;
     }
 
     /** 将请求参数转换为查询条件
@@ -125,10 +138,15 @@ abstract class LogicModel
         if(empty($list)){
             return array();
         }
-        $list=new ListIterator($list);
+
         $result=array();
-        foreach($list as $row){
-            $result[]=$this->dataModel->format($row);
+        if($this->isFormat){
+            $list=new ListIterator($list);
+            foreach($list as $row){
+                $result[]=$this->dataModel->format($row);
+            }
+        }else{
+            $result = $list;
         }
 
         return $result;
@@ -143,10 +161,15 @@ abstract class LogicModel
         if(empty($list)){
             return array();
         }
-        $list=new ListIterator($list);
+
         $result=array();
-        foreach($list as $row){
-            $result[]=$this->dataModel->format($row);
+        if($this->isFormat){
+            $list=new ListIterator($list);
+            foreach($list as $row){
+                $result[]=$this->dataModel->format($row);
+            }
+        }else{
+            $result = $list;
         }
 
         return $result;
@@ -162,7 +185,12 @@ abstract class LogicModel
         if(empty($row)){
             return array();
         }
-        $result=$this->dataModel->format($row);
+
+        if($this->isFormat){
+            $result=$this->dataModel->format($row);
+        }else{
+            $result = $row;
+        }
 
         return $result;
     }
@@ -178,7 +206,7 @@ abstract class LogicModel
         // 获取真实字段数据
         $data=$this->dataModel->getRealRow($input);
         // 验证模型 验证数据格式
-        $vali=$this->validatorModel->validate($data,$this->dataModel->columns,'add');
+        $vali=$this->validatorModel->validate($data,$this->dataModel->getColumns(),'add');
         if(true !== $vali){
             $err=array_shift($vali);
             throw new \Exception($err,EXIT_USER_INPUT);
@@ -193,7 +221,11 @@ abstract class LogicModel
             throw new \Exception('保存失败',EXIT_DATABASE);
         }
         $row['Id']=$id;
-        $result=$this->dataModel->format($row);
+        if($this->isFormat){
+            $result=$this->dataModel->format($row);
+        }else{
+            $result = $row;
+        }
 
         return $result;
     }
@@ -208,7 +240,7 @@ abstract class LogicModel
         // 获取真实字段数据
         $data=$this->dataModel->getRealRow($input);
         // 验证模型 验证数据格式
-        $vali=$this->validatorModel->validate($data,$this->dataModel->columns,'edit');
+        $vali=$this->validatorModel->validate($data,$this->dataModel->getColumns(),'edit');
         if(true !== $vali){
             $err=array_shift($vali);
             throw new \Exception($err,EXIT_USER_INPUT);
@@ -220,15 +252,19 @@ abstract class LogicModel
             throw new \Exception('数据不存在',EXIT_USER_INPUT);
         }
         // 批量赋值
-        $row=$this->dataModel->fill($data,'edit');
+        $update=$this->dataModel->fill($data,'edit');
         // 修改
-        $result = $this->databaseModel->setOneByKey($data['Id'],$row);
+        $result = $this->databaseModel->setOneByKey($data['Id'],$update);
         if(false === $result){
             throw new \Exception('保存失败',EXIT_DATABASE);
         }
         // 获取更新后数据
-        $updated=array_merge($preRow,$row);
-        $result=$this->dataModel->format($updated);
+        $row=array_merge($preRow,$update);
+        if($this->isFormat){
+            $result=$this->dataModel->format($row);
+        }else{
+            $result = $row;
+        }
 
         return $result;
     }

@@ -51,7 +51,7 @@ class MasterLogic extends LogicModel
         // 获取真实字段数据
         $data=$this->dataModel->getRealRow($input,true);
         // 验证模型 验证数据格式
-        $vali=$this->validatorModel->validate($data,$this->dataModel->columns,'login');
+        $vali=$this->validatorModel->validate($data,$this->dataModel->getColumns(),'login');
         if(true !== $vali){
             $err=array_shift($vali);
             throw new \Exception($err,EXIT_USER_INPUT);
@@ -100,7 +100,7 @@ class MasterLogic extends LogicModel
         // 获取真实字段数据
         $data=$this->dataModel->getRealRow($input);
         // 验证模型 验证数据格式
-        $vali=$this->validatorModel->validate($data,$this->dataModel->columns,'online');
+        $vali=$this->validatorModel->validate($data,$this->dataModel->getColumns(),'online');
         if(true !== $vali){
             $err=array_shift($vali);
             throw new \Exception($err,EXIT_USER_INPUT);

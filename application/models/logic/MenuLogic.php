@@ -89,10 +89,15 @@ class MenuLogic extends LogicModel
         if(empty($list)){
             return array();
         }
-        $list=new ListIterator($list);
+
         $result=array();
-        foreach($list as $row){
-            $result[]=$this->dataModel->format($row);
+        if($this->isFormat){
+            $list=new ListIterator($list);
+            foreach($list as $row){
+                $result[]=$this->dataModel->format($row);
+            }
+        }else{
+            $result = $list;
         }
 
         return $result;
