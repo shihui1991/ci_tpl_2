@@ -7,7 +7,6 @@
 
 namespace libraries;
 
-
 class Excel
 {
     protected $k;
@@ -66,7 +65,7 @@ class Excel
      */
     public function exportData(array $list, array $fields=array(), $fileName='exportData', $dir='download/excel')
     {
-        $this->setActiveSheet();    // 设置工作表
+        $this->setActiveSheet(0,$fileName);    // 设置工作表
         $this->setFields($fields);  // 设置字段表头
         $this->setDataList($list,$fields);   // 设置数据列表
         $result=$this->make($fileName,$dir); // 生成文件
@@ -113,7 +112,7 @@ class Excel
      */
     public function exportConfig(array $list, array $columns, $fileName='exportConfig', $dir='download/excel')
     {
-        $this->setActiveSheet();    // 设置工作表
+        $this->setActiveSheet(0,$fileName);    // 设置工作表
         $this->setHeader($columns); // 设置数据表头
         $this->setDataList($list);  // 设置数据列表
         $result=$this->make($fileName,$dir); // 生成文件
@@ -250,130 +249,7 @@ class Excel
         return $result;
     }
 
-    /** 获取所有数据表
-     * @param string $file
-     * @return array
-     * @throws \Exception
-     * @throws \PHPExcel_Reader_Exception
-     */
-    public function getDataList($file)
-    {
-        $realPath=realpath($file);
-        if(false == $realPath){
-            throw new \Exception('文件不存在',EXIT_USER_INPUT);
-        }
-        // 获取所有工作表
-        $this->objPHPExcel=\PHPExcel_IOFactory::load($realPath);
-        $sheets=$this->objPHPExcel->getAllSheets();
-        if(empty($sheets)){
-            return array();
-        }
-        $result=array();
-        $sheets=new ListIterator($sheets);
-        foreach($sheets as $sheet){
-            $dataList=array_filter($sheet->toArray()); //  工作表内容
-            if(empty($dataList)){
-                continue;
-            }
-            $array1=array_filter($dataList[0]);
-            if(empty($array1)){
-                continue;
-            }
-            $fields=$dataList[0];  // 所有字段
-            $sheetName=$sheet->getTitle(); // 工作表名称
-            // 整理数据列表
-            unset($dataList[0]);
-            $list=array();
-            if(!empty($dataList)){
-                $dataList = new ListIterator($dataList,1);
-                foreach($dataList as $data){
-                    $row = array_combine($fields,$data);
-                    $list[]=$row;
-                }
-            }
-
-            $result[$sheetName]=array(
-                'fields'=>$fields,
-                'list'=>$list,
-            );
-        }
-
-        return $result;
-    }
-
-    /** 获取所有配置工作表
-     * @param string $file
-     * @return array
-     * @throws \Exception
-     * @throws \PHPExcel_Reader_Exception
-     */
-    public function getConfigDataList($file)
-    {
-        $realPath=realpath($file);
-        if(false == $realPath){
-            throw new \Exception('文件不存在',EXIT_USER_INPUT);
-        }
-        // 获取所有工作表
-        $this->objPHPExcel=\PHPExcel_IOFactory::load($realPath);
-        $sheets=$this->objPHPExcel->getAllSheets();
-        if(empty($sheets)){
-            return array();
-        }
-        $result=array();
-        $sheets=new ListIterator($sheets);
-        foreach($sheets as $sheet){
-            $dataList=array_filter($sheet->toArray()); //  工作表内容
-            if(empty($dataList)){
-                continue;
-            }
-            $array1=array_filter($dataList[0]);
-            if(empty($array1)){
-                continue;
-            }
-            $fields = $dataList[0];  // 所有字段
-            $names  = $dataList[1];  // 所有字段名称
-            $aliases= $dataList[2];  // 所有字段映射
-            $attrs  = $dataList[3];  // 所有字段属性
-            $descs  = $dataList[4];  // 所有字段描述
-            $columns=array();   // 所有字段详情
-            foreach ($fields as $i=>$field){
-                $columns[$field]=array(
-                    'field' => $field,
-                    'name'  => $names[$i],
-                    'alias' => $aliases[$i],
-                    'attr'  => $attrs[$i],
-                    'desc'  => $descs[$i],
-                );
-            }
-            $sheetName=$sheet->getTitle(); // 工作表名称
-            // 整理数据列表
-            unset(
-                $dataList[0],
-                $dataList[1],
-                $dataList[2],
-                $dataList[3],
-                $dataList[4],
-                $dataList[5]
-            );
-            $list=array();
-            if(!empty($dataList)){
-                $dataList = new ListIterator($dataList,6);
-                foreach($dataList as $data){
-                    $row = array_combine($fields,$data);
-                    $list[]=$row;
-                }
-            }
-
-            $result[$sheetName]=array(
-                'columns'=>$columns,
-                'list'=>$list,
-            );
-        }
-
-        return $result;
-    }
-
-    /** 获取所有工作表内容
+    /** 获取所有工作表
      * @param string $file
      * @return array
      * @throws \Exception
@@ -388,8 +264,21 @@ class Excel
         $this->objPHPExcel=\PHPExcel_IOFactory::load($realPath);
         $sheets=$this->objPHPExcel->getAllSheets();
         if(empty($sheets)){
-            return array();
+            throw new \Exception('文件为空',EXIT_USER_INPUT);
         }
+
+        return $sheets;
+    }
+
+    /** 获取所有工作表内容
+     * @param string $file
+     * @return array
+     * @throws \Exception
+     * @throws \PHPExcel_Reader_Exception
+     */
+    public function getAllSheetsDataList($file)
+    {
+        $sheets = $this->getAllSheets($file);
         $result=array();
         $sheets=new ListIterator($sheets);
         foreach($sheets as $sheet){
@@ -399,6 +288,195 @@ class Excel
             $result[$sheetName]=$list;
         }
 
+        return $result;
+    }
+
+    /** 整理数据
+     * @param array $dataList
+     * @return array
+     */
+    public function makeDataList(array $dataList)
+    {
+        $fields=$dataList[0];  // 所有字段
+        // 整理数据列表
+        unset($dataList[0]);
+        $list=array();
+        if(!empty($dataList)){
+            $dataList = new ListIterator($dataList,1);
+            foreach($dataList as $data){
+                $row = array_combine($fields,$data);
+                $list[]=$row;
+            }
+        }
+        $result=array(
+            'fields'=>$fields,
+            'list'=>$list,
+        );
+
+        return $result;
+    }
+
+    /** 整理配置数据
+     * @param array $dataList
+     * @return array
+     */
+    public function makeConfigDataList(array $dataList)
+    {
+        $fields = $dataList[0];  // 所有字段
+        $names  = $dataList[1];  // 所有字段名称
+        $aliases= $dataList[2];  // 所有字段映射
+        $attrs  = $dataList[3];  // 所有字段属性
+        $descs  = $dataList[4];  // 所有字段描述
+        $columns=array();   // 所有字段详情
+        foreach ($fields as $i=>$field){
+            $columns[$field]=array(
+                'field' => $field,
+                'name'  => $names[$i],
+                'alias' => $aliases[$i],
+                'attr'  => $attrs[$i],
+                'desc'  => $descs[$i],
+            );
+        }
+        // 整理数据列表
+        unset(
+            $dataList[0],
+            $dataList[1],
+            $dataList[2],
+            $dataList[3],
+            $dataList[4],
+            $dataList[5]
+        );
+        $list=array();
+        if(!empty($dataList)){
+            $dataList = new ListIterator($dataList,6);
+            foreach($dataList as $data){
+                $row = array_combine($fields,$data);
+                $list[]=$row;
+            }
+        }
+
+        $result=array(
+            'columns'=>$columns,
+            'list'=>$list,
+        );
+
+        return $result;
+    }
+
+    /** 获取所有数据表
+     * @param string $file
+     * @return array
+     * @throws \Exception
+     * @throws \PHPExcel_Reader_Exception
+     */
+    public function getAllDataList($file)
+    {
+        $sheets = $this->getAllSheets($file);
+        $result=array();
+        $sheets=new ListIterator($sheets);
+        foreach($sheets as $sheet){
+            $dataList=array_filter($sheet->toArray()); //  工作表内容
+            if(empty($dataList)){
+                continue;
+            }
+            $array1=array_filter($dataList[0]);
+            if(empty($array1)){
+                continue;
+            }
+            $sheetName=$sheet->getTitle(); // 工作表名称
+            $dataList=$this->makeDataList($dataList);
+            $result[$sheetName]=$dataList;
+        }
+
+        return $result;
+    }
+
+    /** 获取所有配置工作表
+     * @param string $file
+     * @return array
+     * @throws \Exception
+     * @throws \PHPExcel_Reader_Exception
+     */
+    public function getAllConfigDataList($file)
+    {
+        $sheets = $this->getAllSheets($file);
+        $result=array();
+        $sheets=new ListIterator($sheets);
+        foreach($sheets as $sheet){
+            $dataList=array_filter($sheet->toArray()); //  工作表内容
+            if(empty($dataList)){
+                continue;
+            }
+            $array1=array_filter($dataList[0]);
+            if(empty($array1)){
+                continue;
+            }
+
+            $sheetName=$sheet->getTitle(); // 工作表名称
+            $dataList = $this->makeConfigDataList($dataList);
+            $result[$sheetName]=$dataList;
+        }
+
+        return $result;
+    }
+
+    /** 通过工作表名获取数据
+     * @param string $file
+     * @param string $sheetName
+     * @return array
+     * @throws \Exception
+     * @throws \PHPExcel_Reader_Exception
+     */
+    public function getOneSheetDataListByName($file, $sheetName)
+    {
+        $realPath=realpath($file);
+        if(false == $realPath){
+            throw new \Exception('文件不存在',EXIT_USER_INPUT);
+        }
+        $this->objPHPExcel=\PHPExcel_IOFactory::load($realPath);
+        $sheet=$this->objPHPExcel->getSheetByName($sheetName);
+        if(empty($sheet)){
+            throw new \Exception('工作表不存在',EXIT_USER_INPUT);
+        }
+        $list=array_filter($sheet->toArray()); //  工作表内容
+        if(empty($list)){
+            throw new \Exception('工作表为空',EXIT_USER_INPUT);
+        }
+        $array1=array_filter($list[0]);
+        if(empty($array1)){
+            throw new \Exception('工作表为空',EXIT_USER_INPUT);
+        }
+
+        return $list;
+    }
+
+    /**  通过工作表名获取数据表
+     * @param string $file
+     * @param string $sheetName
+     * @return array
+     * @throws \Exception
+     * @throws \PHPExcel_Reader_Exception
+     */
+    public function getOneDataListByName($file, $sheetName)
+    {
+        $dataList=$this->getOneSheetDataListByName($file, $sheetName);
+        $result=$this->makeDataList($dataList);
+
+        return $result;
+    }
+
+    /** 通过工作表名获取配置数据
+     * @param string $file
+     * @param string $sheetName
+     * @return array
+     * @throws \Exception
+     * @throws \PHPExcel_Reader_Exception
+     */
+    public function getOneConfigDataListByName($file, $sheetName)
+    {
+        $dataList=$this->getOneSheetDataListByName($file, $sheetName);
+        $result = $this->makeConfigDataList($dataList);
+        
         return $result;
     }
 }
