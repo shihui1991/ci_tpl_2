@@ -240,6 +240,7 @@ class Excel
         if(!file_exists($path)){
             mkdir($path,DIR_WRITE_MODE,true);
         }
+        $fileName .= '_'.date('YmdHis');
         $file=$path.'/'.$fileName.'.xls';
         if($file){
             $result='/'.$dir.'/'.$fileName.'.xls';
@@ -249,8 +250,155 @@ class Excel
         return $result;
     }
 
-    public function import()
+    /** 获取所有数据表
+     * @param string $file
+     * @return array
+     * @throws \Exception
+     * @throws \PHPExcel_Reader_Exception
+     */
+    public function getDataList($file)
     {
+        $realPath=realpath($file);
+        if(false == $realPath){
+            throw new \Exception('文件不存在',EXIT_USER_INPUT);
+        }
+        // 获取所有工作表
+        $this->objPHPExcel=\PHPExcel_IOFactory::load($realPath);
+        $sheets=$this->objPHPExcel->getAllSheets();
+        if(empty($sheets)){
+            return array();
+        }
+        $result=array();
+        $sheets=new ListIterator($sheets);
+        foreach($sheets as $sheet){
+            $dataList=array_filter($sheet->toArray()); //  工作表内容
+            if(empty($dataList)){
+                continue;
+            }
+            $array1=array_filter($dataList[0]);
+            if(empty($array1)){
+                continue;
+            }
+            $fields=$dataList[0];  // 所有字段
+            $sheetName=$sheet->getTitle(); // 工作表名称
+            // 整理数据列表
+            unset($dataList[0]);
+            $list=array();
+            if(!empty($dataList)){
+                $dataList = new ListIterator($dataList,1);
+                foreach($dataList as $data){
+                    $row = array_combine($fields,$data);
+                    $list[]=$row;
+                }
+            }
 
+            $result[$sheetName]=array(
+                'fields'=>$fields,
+                'list'=>$list,
+            );
+        }
+
+        return $result;
+    }
+
+    /** 获取所有配置工作表
+     * @param string $file
+     * @return array
+     * @throws \Exception
+     * @throws \PHPExcel_Reader_Exception
+     */
+    public function getConfigDataList($file)
+    {
+        $realPath=realpath($file);
+        if(false == $realPath){
+            throw new \Exception('文件不存在',EXIT_USER_INPUT);
+        }
+        // 获取所有工作表
+        $this->objPHPExcel=\PHPExcel_IOFactory::load($realPath);
+        $sheets=$this->objPHPExcel->getAllSheets();
+        if(empty($sheets)){
+            return array();
+        }
+        $result=array();
+        $sheets=new ListIterator($sheets);
+        foreach($sheets as $sheet){
+            $dataList=array_filter($sheet->toArray()); //  工作表内容
+            if(empty($dataList)){
+                continue;
+            }
+            $array1=array_filter($dataList[0]);
+            if(empty($array1)){
+                continue;
+            }
+            $fields = $dataList[0];  // 所有字段
+            $names  = $dataList[1];  // 所有字段名称
+            $aliases= $dataList[2];  // 所有字段映射
+            $attrs  = $dataList[3];  // 所有字段属性
+            $descs  = $dataList[4];  // 所有字段描述
+            $columns=array();   // 所有字段详情
+            foreach ($fields as $i=>$field){
+                $columns[$field]=array(
+                    'field' => $field,
+                    'name'  => $names[$i],
+                    'alias' => $aliases[$i],
+                    'attr'  => $attrs[$i],
+                    'desc'  => $descs[$i],
+                );
+            }
+            $sheetName=$sheet->getTitle(); // 工作表名称
+            // 整理数据列表
+            unset(
+                $dataList[0],
+                $dataList[1],
+                $dataList[2],
+                $dataList[3],
+                $dataList[4],
+                $dataList[5]
+            );
+            $list=array();
+            if(!empty($dataList)){
+                $dataList = new ListIterator($dataList,6);
+                foreach($dataList as $data){
+                    $row = array_combine($fields,$data);
+                    $list[]=$row;
+                }
+            }
+
+            $result[$sheetName]=array(
+                'columns'=>$columns,
+                'list'=>$list,
+            );
+        }
+
+        return $result;
+    }
+
+    /** 获取所有工作表内容
+     * @param string $file
+     * @return array
+     * @throws \Exception
+     * @throws \PHPExcel_Reader_Exception
+     */
+    public function getAllSheets($file)
+    {
+        $realPath=realpath($file);
+        if(false == $realPath){
+            throw new \Exception('文件不存在',EXIT_USER_INPUT);
+        }
+        $this->objPHPExcel=\PHPExcel_IOFactory::load($realPath);
+        $sheets=$this->objPHPExcel->getAllSheets();
+        if(empty($sheets)){
+            return array();
+        }
+        $result=array();
+        $sheets=new ListIterator($sheets);
+        foreach($sheets as $sheet){
+            $sheetName=$sheet->getTitle();
+            $list=$sheet->toArray();
+
+            $result[$sheetName]=$list;
+        }
+
+        return $result;
     }
 }
