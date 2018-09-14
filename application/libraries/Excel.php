@@ -58,31 +58,37 @@ class Excel
      * @param array $list
      * @param array $fields
      * @param string $fileName
-     * @param string $dir
+     * @param bool $output
      * @return bool|string
      * @throws \PHPExcel_Reader_Exception
      * @throws \PHPExcel_Writer_Exception
      */
-    public function exportData(array $list, array $fields=array(), $fileName='exportData', $dir='download/excel')
+    public function exportData(array $list, array $fields=array(), $fileName='exportData', $output=true)
     {
         $this->setActiveSheet(0,$fileName);    // 设置工作表
         $this->setFields($fields);  // 设置字段表头
         $this->setDataList($list,$fields);   // 设置数据列表
-        $result=$this->make($fileName,$dir); // 生成文件
-
-        return $result;
+        // 直接文件输出
+        if($output){
+            $this->output($fileName);
+        }
+        // 生成文件
+        else{
+            $result=$this->make($fileName);
+            return $result;
+        }
     }
 
     /** 导出分表数据
      * @param array $list
      * @param array $group
      * @param string $fileName
-     * @param string $dir
+     * @param bool $output
      * @return bool|string
      * @throws \PHPExcel_Reader_Exception
      * @throws \PHPExcel_Writer_Exception
      */
-    public function exportGroupData(array $list, array $group=array(), $fileName='exportGroupData', $dir='download/excel')
+    public function exportGroupData(array $list, array $group=array(), $fileName='exportGroupData', $output=true)
     {
         $index=0;
         foreach($list as $key=>$data){
@@ -96,40 +102,52 @@ class Excel
 
             $index++;
         }
-        $result=$this->make($fileName,$dir); // 生成文件
-
-        return $result;
+        // 直接文件输出
+        if($output){
+            $this->output($fileName);
+        }
+        // 生成文件
+        else{
+            $result=$this->make($fileName);
+            return $result;
+        }
     }
 
     /** 导出配置
      * @param array $list
      * @param array $columns
      * @param string $fileName
-     * @param string $dir
+     * @param bool $output
      * @return bool|string
      * @throws \PHPExcel_Reader_Exception
      * @throws \PHPExcel_Writer_Exception
      */
-    public function exportConfig(array $list, array $columns, $fileName='exportConfig', $dir='download/excel')
+    public function exportConfig(array $list, array $columns, $fileName='exportConfig', $output=true)
     {
         $this->setActiveSheet(0,$fileName);    // 设置工作表
         $this->setHeader($columns); // 设置数据表头
         $this->setDataList($list);  // 设置数据列表
-        $result=$this->make($fileName,$dir); // 生成文件
-
-        return $result;
+        // 直接文件输出
+        if($output){
+            $this->output($fileName);
+        }
+        // 生成文件
+        else{
+            $result=$this->make($fileName);
+            return $result;
+        }
     }
 
     /** 导出所有配置
      * @param array $list
      * @param array $group
      * @param string $fileName
-     * @param string $dir
+     * @param bool $output
      * @return bool|string
      * @throws \PHPExcel_Reader_Exception
      * @throws \PHPExcel_Writer_Exception
      */
-    public function exportGroupConfig(array $list, array $group, $fileName='exportGroupConfig', $dir='download/excel')
+    public function exportGroupConfig(array $list, array $group, $fileName='exportGroupConfig', $output=true)
     {
         $index=0;
         foreach($list as $key=>$data){
@@ -143,9 +161,15 @@ class Excel
 
             $index++;
         }
-        $result=$this->make($fileName,$dir); // 生成文件
-
-        return $result;
+        // 直接文件输出
+        if($output){
+            $this->output($fileName);
+        }
+        // 生成文件
+        else{
+            $result=$this->make($fileName);
+            return $result;
+        }
     }
 
     /** 设置工作表
@@ -226,27 +250,52 @@ class Excel
 
     /** 生成 Excel 文件
      * @param string $fileName
-     * @param string $dir
      * @return bool|string
      * @throws \PHPExcel_Reader_Exception
      * @throws \PHPExcel_Writer_Exception
      */
-    public function make($fileName='excel', $dir='download/excel')
+    public function make($fileName='excel')
     {
         $result=false;
         $objWriter = \PHPExcel_IOFactory::createWriter($this->objPHPExcel, 'Excel5');
-        $path=realpath(FCPATH.$dir);
-        if(!file_exists($path)){
-            mkdir($path,DIR_WRITE_MODE,true);
+        $path='download/excel';
+        $realpath=realpath(FCPATH.$path);
+        if(!file_exists($realpath)){
+            mkdir($realpath,DIR_WRITE_MODE,true);
         }
         $fileName .= '_'.date('YmdHis');
-        $file=$path.'/'.$fileName.'.xls';
+        $file=$realpath.'/'.$fileName.'.xls';
         if($file){
-            $result='/'.$dir.'/'.$fileName.'.xls';
+            $result='/'.$path.'/'.$fileName.'.xls';
             $objWriter->save($file);
         }
 
         return $result;
+    }
+
+    /**  直接输出
+     * @param string $fileName
+     * @throws \PHPExcel_Reader_Exception
+     * @throws \PHPExcel_Writer_Exception
+     */
+    public function output($fileName='excel')
+    {
+        $fileName .= '_'.date('YmdHis');
+        // Redirect output to a client’s web browser (Excel5)
+        header('Content-Type: application/vnd.ms-excel');
+        header('Content-Disposition: attachment;filename="'.$fileName.'.xls"');
+        header('Cache-Control: max-age=0');
+        // If you're serving to IE 9, then the following may be needed
+        header('Cache-Control: max-age=1');
+
+        // If you're serving to IE over SSL, then the following may be needed
+        header ('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
+        header ('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT'); // always modified
+        header ('Cache-Control: cache, must-revalidate'); // HTTP/1.1
+        header ('Pragma: public'); // HTTP/1.0
+
+        $objWriter = \PHPExcel_IOFactory::createWriter($this->objPHPExcel, 'Excel5');
+        $objWriter->save('php://output');
     }
 
     /** 获取所有工作表
