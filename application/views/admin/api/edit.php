@@ -144,10 +144,10 @@
                             <div class="layui-form-item upload-content">
                                 <label class="layui-form-label">
                                     响应示例：
-                                    <button class="layui-btn layui-btn-sm" type="button" onclick="uploadBtn(this)">
+                                    <a class="layui-btn layui-btn-warm layui-btn-sm btn-upload">
                                         点击上传
-                                    </button>
-                                    <input type="file" accept="image/*" name="UploadFile" multiple data-field="Example[]" data-savepath="api" data-savename="" data-overwrite="true" onchange="upload(this)" style="display: none;">
+                                        <input type="file" accept="image/*" name="UploadFile" multiple data-field="Example[]" data-savepath="api" data-savename="" data-overwrite="true" onchange="uploadImg(this)">
+                                    </a>
                                 </label>
                                 <div class="layui-input-block uploaded-box">
                                     <ul class="img-box">
@@ -193,6 +193,9 @@
 
 <link rel="stylesheet" href="/treetable/treetable.min.css" />
 <script src="/treetable/jquery.treetable.min.js"></script>
+
+<link rel="stylesheet" href="/viewer/jquery-0.6.0/viewer.min.css">
+<script src="/viewer/jquery-0.6.0/viewer.min.js"></script>
 <script src="/js/upload-images.js"></script>
 
 <script>

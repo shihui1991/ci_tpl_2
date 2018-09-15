@@ -1,8 +1,4 @@
-$('head').append('' +
-    '<link rel="stylesheet" href="/viewer/jquery-0.6.0/viewer.min.css">' +
-    '<script src="/viewer/jquery-0.6.0/viewer.min.js"></script>'
-);
-
+// 图片预览初始化
 if($('.img-box').find('li').length){
     $('.img-box').viewer();
 }
@@ -24,11 +20,7 @@ function removePic(obj) {
     imbBox.viewer('update');
 }
 
-// 上传按钮
-function uploadBtn(obj) {
-    $(obj).next('input[type="file"]').click();
-}
-
+// 上传图片后显示模板
 var tpl='<div class="layui-form-item upload-content">' +
     '    <label class="layui-form-label">' +
     '        图标：' +
@@ -56,74 +48,43 @@ var tpl='<div class="layui-form-item upload-content">' +
     '</div>';
 
  // 上传
-function upload(obj) {
+function uploadImg(obj) {
     var btn=$(obj);
     var uploadContent=btn.parents('.upload-content:first');
     var uploadedBox=uploadContent.find('.uploaded-box');
     var imbBox=uploadContent.find('.img-box');
-    var multi=btn.prop('multiple');
     var field=btn.data('field');
-    var savepath=btn.data('savepath');
-    var savename=btn.data('savename');
-    var overwrite=btn.data('overwrite');
-    var uploadname=btn.attr('name');
-    var files=obj.files;
+    var multi=btn.prop('multiple');
     var img='';
 
-    if(btn.data('loading') || btn.prop('disabled')){
-        return false;
+    var fileUrls=uploadFile(obj);
+    $.each(fileUrls,function (i,url) {
+        img+='<li style="display: inline-block;margin:10px;">' +
+            '    <div style="width:300px;height:200px;">' +
+            '        <img style="max-width:250px;max-height:200px;" src="'+url+'" alt="">' +
+            '        <div class="text">' +
+            '            <div class="inner">' +
+            '                <a class="layui-btn layui-btn-xs layui-btn-normal" onclick="viewPic(this)">查看</a>' +
+            '                <a class="layui-btn layui-btn-xs layui-btn-warm" onclick="removePic(this)">删除</a>' +
+            '            </div>' +
+            '        </div>' +
+            '        <input type="text" name="'+field+'" value="'+url+'" placeholder="" readonly  class="layui-input">'+
+            '    </div>' +
+            '</li>';
+    });
+
+    if(multi){
+        imbBox.append(img);
+    }else{
+        imbBox.html(img);
     }
-    btn.data('loading',true).prop('disabled',true);
+    imbBox.viewer('update');
+
 
     layui.use(['form','layer'], function(){
         var form = layui.form;
         var layer = layui.layer;
 
-        if(files && files.length){
-            $.each(files,function (i,file) {
-                var formdata=new FormData();
-                if(!savename){
-                    savename=file.name;
-                }
-                formdata.append('SavePath',savepath);
-                formdata.append('SaveName',savename);
-                formdata.append('Overwrite',overwrite);
-                formdata.append('UploadName',uploadname);
-                formdata.append(uploadname,file);
-
-                ajaxUpload('/admin/home/upload',formdata);
-
-                if(!ajaxResp || "undefined" === typeof ajaxResp){
-                    layer.msg('网络开小差了',{icon:5});
-                }else{
-                    if(ajaxResp.code){
-                        layer.msg(file.name+' 上传失败',{icon:2});
-                    }
-                    else{
-                        img+='<li style="display: inline-block;margin:10px;">' +
-                            '    <div style="width:300px;height:200px;">' +
-                            '        <img style="max-width:250px;max-height:200px;" src="'+ajaxResp.data.FileUrl+'" alt="">' +
-                            '        <div class="text">' +
-                            '            <div class="inner">' +
-                            '                <a class="layui-btn layui-btn-xs layui-btn-normal" onclick="viewPic(this)">查看</a>' +
-                            '                <a class="layui-btn layui-btn-xs layui-btn-warm" onclick="removePic(this)">删除</a>' +
-                            '            </div>' +
-                            '        </div>' +
-                            '        <input type="text" name="'+field+'" value="'+ajaxResp.data.FileUrl+'" placeholder="" readonly  class="layui-input">'+
-                            '    </div>' +
-                            '</li>';
-
-                    }
-                }
-            })
-        }
-        if(multi){
-            imbBox.append(img);
-        }else{
-            imbBox.html(img);
-        }
-        imbBox.viewer('update');
         form.render();
     });
-    btn.data('loading',false).prop('disabled',false).val('');
 }

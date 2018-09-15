@@ -135,6 +135,9 @@
 
 <link rel="stylesheet" href="/treetable/treetable.min.css" />
 <script src="/treetable/jquery.treetable.min.js"></script>
+
+<link rel="stylesheet" href="/viewer/jquery-0.6.0/viewer.min.css">
+<script src="/viewer/jquery-0.6.0/viewer.min.js"></script>
 <script src="/js/upload-images.js"></script>
 
 <script>

@@ -35,7 +35,6 @@ function ajaxUpload(url,data) {
     });
 }
 
-
 // btn 表单提交
 function btnFormSubmit(obj) {
     var type='get';
@@ -124,6 +123,46 @@ function btnAct(obj) {
         }
 
     });
+}
+
+// btn 上传文件
+function uploadFile(obj) {
+    var btn=$(obj);
+    var multi=btn.prop('multiple');
+    var field=btn.data('field');
+    var savepath=btn.data('savepath');
+    var savename=btn.data('savename');
+    var overwrite=btn.data('overwrite');
+    var uploadname=btn.attr('name');
+    var files=obj.files;
+    var fileUrls=[];
+
+    if(btn.data('loading') || btn.prop('disabled')){
+        return false;
+    }
+    btn.data('loading',true).prop('disabled',true);
+    if(files && files.length){
+        $.each(files,function (i,file) {
+            var formdata=new FormData();
+            if(!savename){
+                savename=file.name;
+            }
+            formdata.append('SavePath',savepath);
+            formdata.append('SaveName',savename);
+            formdata.append('Overwrite',overwrite);
+            formdata.append('UploadName',uploadname);
+            formdata.append(uploadname,file);
+
+            ajaxUpload('/admin/home/upload',formdata);
+
+            if(ajaxResp && 0 == ajaxResp.code){
+                fileUrls[i]=ajaxResp.data.FileUrl;
+            }
+        })
+    }
+    btn.data('loading',false).prop('disabled',false).val('');
+
+    return fileUrls;
 }
 
 // 增加 option
@@ -232,8 +271,7 @@ function renderDate() {
 }
 
 // 获取下级
-function getChilds(dataList,parentId)
-{
+function getChilds(dataList,parentId) {
     var childs=[];
     var other=[];
     $.each(dataList,function (i,data) {

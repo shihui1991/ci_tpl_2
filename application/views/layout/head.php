@@ -12,5 +12,21 @@
     <script src="/layui/2.4.3/layui.js"></script>
     <script src="/js/flexie.min.js"></script>
     <script src="/js/func.js"></script>
+
+    <style>
+        .btn-upload {
+            position: relative;
+            display: inline-block;
+        }
+        .btn-upload input {
+            position: absolute;
+            right: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            -ms-filter: 'alpha(opacity=0)';
+        }
+    </style>
 </head>
 
