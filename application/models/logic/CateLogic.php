@@ -64,7 +64,9 @@ class CateLogic extends LogicModel
         $cateList=array();
         $groups=array();
         foreach($list as $row){
-            $row=$this->dataModel->format($row);
+            if($this->isFormat){
+                $row=$this->dataModel->format($row,$this->isAlias);
+            }
 
             if(!in_array($row['Group'],$groups)){
                 $groups[]=$row['Group'];

@@ -116,6 +116,29 @@ class MasterData extends DataModel
         );
     }
 
+    /** 修改资料 批量赋值字段
+     * @return array
+     */
+    public function fillModifyFields()
+    {
+        return array(
+            'Realname',
+            'Account',
+            'Updated',
+        );
+    }
+
+    /** 修改密码 批量赋值字段
+     * @return array
+     */
+    public function fillEditPasswdFields()
+    {
+        return array(
+            'Password',
+            'Updated',
+        );
+    }
+
     /** 登录 批量赋值字段
      * @return array
      */

@@ -18,6 +18,7 @@ abstract class LogicModel
     public $validatorModel;
 
     public $isFormat=true;
+    public $isAlias=false;
 
     use CheckUnique; // 组件 - 验证唯一
 
@@ -55,6 +56,17 @@ abstract class LogicModel
     public function isFormat($isFormat=true)
     {
         $this->isFormat = $isFormat;
+
+        return $this;
+    }
+
+    /** 是否开启字段映射
+     * @param bool $isAlias
+     * @return $this
+     */
+    public function isAlias($isAlias=false)
+    {
+        $this->isAlias = $isAlias;
 
         return $this;
     }
@@ -143,7 +155,7 @@ abstract class LogicModel
         if($this->isFormat){
             $list=new ListIterator($list);
             foreach($list as $row){
-                $result[]=$this->dataModel->format($row);
+                $result[]=$this->dataModel->format($row,$this->isAlias);
             }
         }else{
             $result = $list;
@@ -166,7 +178,7 @@ abstract class LogicModel
         if($this->isFormat){
             $list=new ListIterator($list);
             foreach($list as $row){
-                $result[]=$this->dataModel->format($row);
+                $result[]=$this->dataModel->format($row,$this->isAlias);
             }
         }else{
             $result = $list;
@@ -187,7 +199,7 @@ abstract class LogicModel
         }
 
         if($this->isFormat){
-            $result=$this->dataModel->format($row);
+            $result=$this->dataModel->format($row,$this->isAlias);
         }else{
             $result = $row;
         }
@@ -222,7 +234,7 @@ abstract class LogicModel
         }
         $row['Id']=$id;
         if($this->isFormat){
-            $result=$this->dataModel->format($row);
+            $result=$this->dataModel->format($row,$this->isAlias);
         }else{
             $result = $row;
         }
@@ -261,7 +273,7 @@ abstract class LogicModel
         // 获取更新后数据
         $row=array_merge($preRow,$update);
         if($this->isFormat){
-            $result=$this->dataModel->format($row);
+            $result=$this->dataModel->format($row,$this->isAlias);
         }else{
             $result = $row;
         }

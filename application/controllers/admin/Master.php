@@ -172,4 +172,51 @@ class Master extends Auth
             $this->_response($data,$code,$msg,$url,$tpls);
         }
     }
+
+    /**
+     *  修改资料
+     */
+    public function modify()
+    {
+        $updated=$this->logicModel->modify($this->master, $this->inputData);
+
+        $data=array(
+            'List'=>$updated,
+        );
+        $code=EXIT_SUCCESS;
+        $msg='请求成功';
+        $url='';
+        $tpls=array();
+        $this->_response($data,$code,$msg,$url,$tpls);
+    }
+
+    /**
+     *  修改密码
+     */
+    public function editPasswd()
+    {
+        // 修改页
+        if('get' == $this->input->method()){
+
+            $data=array();
+            $code=EXIT_SUCCESS;
+            $msg='请求成功';
+            $url='';
+            $tpls=array(
+                'admin/master/editPasswd',
+            );
+            $this->_response($data,$code,$msg,$url,$tpls);
+        }
+        // 保存
+        else{
+            $this->logicModel->editPasswd($this->master, $this->inputData);
+
+            $data=array();
+            $code=EXIT_SUCCESS;
+            $msg='请求成功';
+            $url='';
+            $tpls=array();
+            $this->_response($data,$code,$msg,$url,$tpls);
+        }
+    }
 }

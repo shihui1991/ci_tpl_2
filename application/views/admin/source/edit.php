@@ -17,7 +17,8 @@
                 </ul>
                 <div class="layui-tab-content">
                     <div class="layui-tab-item layui-show">
-                        <form class="layui-form " action="/admin/source/edit" method="post">
+                        <form class="layui-form " action="/admin/source/edit" method="post" onsubmit="return false;">
+
                             <input type="hidden" name="Id" value="<?php echo $data['Id']?>">
                             
                             <div class="layui-form-item">

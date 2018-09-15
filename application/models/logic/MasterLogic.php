@@ -79,15 +79,9 @@ class MasterLogic extends LogicModel
         }
         // 获取用户全部信息
         $master=array_merge($master,$update);
-        $masterFullInfo=$this->getFullInfo($master);
-        $masterFullInfo['Timeout']=time()+OPERAT_WAIT_TIME;
+        $this->makePrivateInfo($master);
 
-        $_SESSION['Master']=$this->dataModel->format($masterFullInfo);
-        // 字段映射
-        unset($masterFullInfo['Password']);
-        $masterFullInfo=$this->dataModel->format($masterFullInfo,true);
-
-        return $masterFullInfo;
+        return $_SESSION['Master'];
     }
 
     /** 验证是否登录
@@ -117,10 +111,7 @@ class MasterLogic extends LogicModel
             throw new \Exception('用户已禁用',EXIT_USER_INPUT);
         }
         // 获取用户全部信息
-        $masterFullInfo=$this->getFullInfo($master);
-        $masterFullInfo['Timeout']=time()+OPERAT_WAIT_TIME;
-
-        $_SESSION['Master']=$this->dataModel->format($masterFullInfo);
+        $this->makePrivateInfo($master);
 
         return $_SESSION['Master'];
     }
@@ -132,12 +123,13 @@ class MasterLogic extends LogicModel
     public function getFullInfo(array $master)
     {
         // 获取角色数据
-        $role=RoleLogic::instance()->getRowById($master['RoleId']);
+        $role=RoleLogic::instance()->isFormat(true)->getRowById($master['RoleId']);
 
         $other=array(
             'RoleName'=>$role['Name'],
             'IsAdmin'=>$role['Admin'],
             'MenuIds'=>$role['MenuIds'],
+            'Timeout'=>time()+OPERAT_WAIT_TIME,
         );
         $result=array_merge($master,$other);
 
@@ -150,12 +142,15 @@ class MasterLogic extends LogicModel
      */
     public function makePrivateInfo(array $master)
     {
+        $masterFullInfo=$this->getFullInfo($master);
         unset(
-            $master['Password']
+            $masterFullInfo['Password']
         );
-        $master = $this->dataModel->format($master,true);
+        $_SESSION['Master']=$this->dataModel->format($masterFullInfo);
+        // 字段映射
+        $result=$this->dataModel->format($masterFullInfo,true);
 
-        return $master;
+        return $result;
     }
 
     /** 生成管理员公开信息
@@ -164,13 +159,77 @@ class MasterLogic extends LogicModel
      */
     public function makePublicInfo(array $master)
     {
+        $masterFullInfo=$this->getFullInfo($master);
         unset(
-            $master['Account'],
-            $master['Password'],
-            $master['Token']
+            $masterFullInfo['Account'],
+            $masterFullInfo['Password'],
+            $masterFullInfo['Token']
         );
-        $master = $this->dataModel->format($master,true);
+        $_SESSION['Master']=$this->dataModel->format($masterFullInfo);
+        // 字段映射
+        $result=$this->dataModel->format($masterFullInfo,true);
         
-        return $master;
+        return $result;
+    }
+
+    /**  修改资料
+     * @param array $master
+     * @param array $input
+     * @return mixed
+     * @throws \Exception
+     */
+    public function modify(array $master, array $input)
+    {
+        // 获取真实字段数据
+        $data=$this->dataModel->getRealRow($input,true);
+        // 验证模型 验证数据格式
+        $vali=$this->validatorModel->validate($data,$this->dataModel->getColumns(),'modify');
+        if(true !== $vali){
+            $err=array_shift($vali);
+            throw new \Exception($err,EXIT_USER_INPUT);
+        }
+        $update=$this->dataModel->fill($data,'modify');
+        $result = $this->databaseModel->setOneByKey($master['Id'],$update);
+        if(false === $result){
+            throw new \Exception('修改失败',EXIT_DATABASE);
+        }
+        // 获取用户全部信息
+        $master=array_merge($master,$update);
+        $this->makePrivateInfo($master);
+
+        return $_SESSION['Master'];
+    }
+
+    /** 修改密码
+     * @param array $master
+     * @param array $input
+     * @throws \Exception
+     */
+    public function editPasswd(array $master, array $input)
+    {
+        // 获取真实字段数据
+        $data=$this->dataModel->getRealRow($input);
+        // 验证模型 验证数据格式
+        $vali=$this->validatorModel->validate($data,$this->dataModel->getColumns(),'editPasswd');
+        if(true !== $vali){
+            $err=array_shift($vali);
+            throw new \Exception($err,EXIT_USER_INPUT);
+        }
+        // 验证重复密码
+        if($input['PasswordConfim'] != $input['Password'])
+        {
+            throw new \Exception('重复密码错误',EXIT_USER_INPUT);
+        }
+        $passwd=$this->databaseModel->getOneByKey($master['Id'],array('Password'));
+        // 验证密码
+        $vali=password_verify($input['OldPassword'],$passwd['Password']);
+        if(false == $vali){
+            throw new \Exception('旧密码错误',EXIT_USER_INPUT);
+        }
+        $update=$this->dataModel->fill($data,'editPasswd');
+        $result = $this->databaseModel->setOneByKey($master['Id'],$update);
+        if(false === $result){
+            throw new \Exception('修改失败',EXIT_DATABASE);
+        }
     }
 }

@@ -22,8 +22,7 @@ class Home extends Auth
      */
     public function index()
     {
-        // 获取管理员公开信息
-        $master = MasterLogic::instance()->makePublicInfo($this->master);
+        $master = $this->master;
 
         $data=array(
             'Master'=>$master,

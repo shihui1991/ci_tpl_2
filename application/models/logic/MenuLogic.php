@@ -68,7 +68,11 @@ class MenuLogic extends LogicModel
         $list=new ListIterator($list);
         $result=array();
         foreach($list as $row){
-            $result[]=$this->dataModel->format($row);
+            if($this->isFormat){
+                $result[]=$this->dataModel->format($row,$this->isAlias);
+            }else{
+                $result[] = $row;
+            }
         }
 
         return $result;
@@ -94,7 +98,11 @@ class MenuLogic extends LogicModel
         if($this->isFormat){
             $list=new ListIterator($list);
             foreach($list as $row){
-                $result[]=$this->dataModel->format($row);
+                if($this->isFormat){
+                    $result[]=$this->dataModel->format($row,$this->isAlias);
+                }else{
+                    $result[] = $row;
+                }
             }
         }else{
             $result = $list;
@@ -116,7 +124,11 @@ class MenuLogic extends LogicModel
         if(empty($row)){
             return array();
         }
-        $result=$this->dataModel->format($row);
+        if($this->isFormat){
+            $result=$this->dataModel->format($row,$this->isAlias);
+        }else{
+            $result = $row;
+        }
 
         return $result;
     }
@@ -170,7 +182,11 @@ class MenuLogic extends LogicModel
         $list=new ListIterator($list);
         $result=array();
         foreach($list as $row){
-            $result[]=$this->dataModel->format($row);
+            if($this->isFormat){
+                $result[]=$this->dataModel->format($row,$this->isAlias);
+            }else{
+                $result[] = $row;
+            }
         }
 
         return $result;

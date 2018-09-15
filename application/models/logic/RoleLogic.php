@@ -62,7 +62,11 @@ class RoleLogic extends LogicModel
         $list=new ListIterator($list);
         $result=array();
         foreach($list as $row){
-            $result[]=$this->dataModel->format($row);
+            if($this->isFormat){
+                $result[]=$this->dataModel->format($row,$this->isAlias);
+            }else{
+                $result[] = $row;
+            }
         }
 
         return $result;

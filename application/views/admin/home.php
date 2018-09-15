@@ -50,31 +50,31 @@
                 </ul>
             </div>
             <div class="layui-tab-item">
-                <form class="layui-form layui-form-pane" action="/admin/master/modify" method="post">
+                <form class="layui-form layui-form-pane" action="/admin/master/modify" method="post" onsubmit="return false;">
                     <div class="layui-form-item">
-                        <label class="layui-form-label">用户名：</label>
+                        <label class="layui-form-label">账户：</label>
                         <div class="layui-input-block">
-                            <input type="text" name="Username" value="dev" required  lay-verify="required" placeholder=""  class="layui-input">
+                            <input type="text" name="Account" value="<?php echo $data['Master']['Account']; ?>" required  lay-verify="required" placeholder=""  class="layui-input">
                         </div>
                     </div>
 
                     <div class="layui-form-item">
                         <label class="layui-form-label">姓名：</label>
                         <div class="layui-input-block">
-                            <input type="text" name="Realname" value="开发者账号" required  lay-verify="required" placeholder=""  class="layui-input">
+                            <input type="text" name="Realname" value="<?php echo $data['Master']['Realname']; ?>" required  lay-verify="required" placeholder=""  class="layui-input">
                         </div>
                     </div>
 
                     <div class="layui-form-item">
                         <label class="layui-form-label">角色：</label>
                         <div class="layui-input-block">
-                            <input type="text" value="开发者" readonly class="layui-input">
+                            <input type="text" value="<?php echo $data['Master']['RoleName']; ?>" readonly class="layui-input">
                         </div>
                     </div>
 
                     <div class="layui-form-item">
                         <div class="layui-btn-group" id="btn-list">
-                            <button class="layui-btn layui-btn-primary layui-btn-sm" lay-submit lay-filter="formSubmit" type="button">
+                            <button class="layui-btn layui-btn-primary layui-btn-sm" lay-submit lay-filter="formSubmit">
                                 <i class="layui-icon layui-icon-edit"></i>
                                 确认修改
                             </button>
@@ -149,7 +149,7 @@
                 ,btn2:function (index,layero) {
                     ajaxSubmit('/admin/welcome/logout',{},'get');
                     if(!ajaxResp || "undefined" === typeof ajaxResp){
-                        layer.msg('网络出问题了……',{icon:5});
+                        layer.msg('网络出小差了……',{icon:5});
                     }
                     if(ajaxResp.code){
                         layer.msg(ajaxResp.msg,{icon:5});
@@ -220,6 +220,7 @@
         // 修改资料
         form.on('submit(formSubmit)', function(data){
             editInfo(data.elem);
+            return false;
         });
     });
 
@@ -235,7 +236,7 @@
             layer.close(loading);
 
             if(!ajaxResp || "undefined" === typeof ajaxResp){
-                layer.msg('网络出问题了……',{icon:5});
+                layer.msg('网络出小差了……',{icon:5});
             }
 
             if(ajaxResp.code){

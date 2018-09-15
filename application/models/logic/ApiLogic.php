@@ -62,7 +62,11 @@ class ApiLogic extends LogicModel
         if(empty($row)){
             return array();
         }
-        $result=$this->dataModel->format($row);
+        if($this->isFormat){
+            $result=$this->dataModel->format($row,$this->isAlias);
+        }else{
+            $result = $row;
+        }
 
         return $result;
     }

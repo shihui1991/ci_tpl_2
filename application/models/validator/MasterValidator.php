@@ -38,6 +38,27 @@ class MasterValidator extends ValidatorModel
         );
     }
 
+    /** 修改资料 验证字段
+     * @return array
+     */
+    public function valiModifyFields()
+    {
+        return array(
+            'Realname',
+            'Account',
+        );
+    }
+
+    /** 修改密码 验证字段
+     * @return array
+     */
+    public function valiEditPasswdFields()
+    {
+        return array(
+            'Password',
+        );
+    }
+
     /** 登录 验证字段
      * @return array
      */
