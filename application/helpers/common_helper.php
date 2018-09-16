@@ -415,7 +415,7 @@ if(!function_exists('getDirAllDirOrFile')){
      * @param string $dir
      * @return mixed
      */
-    function getDirAllDirOrFile($dir='./')
+    function getDirAllDirOrFile($dir='.')
     {
         // 验证目录有效性
         if(false == ($realDir = realpath($dir))){
@@ -448,6 +448,7 @@ if(!function_exists('getDirAllDirOrFile')){
                 'Path'=>$path,
                 'RealDir'=>$realDir,
                 'RealPath'=>$realDir.'/'.$file,
+                'Updated'=>date('Y-m-d H:i:s',filemtime($realDir.'/'.$file)),
             );
 
             if($isDir){
@@ -467,7 +468,7 @@ if(!function_exists('getDirAllFile')){
      * @param string $dir
      * @return mixed
      */
-    function getDirAllFile($dir='./')
+    function getDirAllFile($dir='.')
     {
         // 验证目录有效性
         if(false == ($realDir = realpath($dir))){
@@ -505,6 +506,7 @@ if(!function_exists('getDirAllFile')){
                     'Path'=>$path,
                     'RealDir'=>$realDir,
                     'RealPath'=>$realDir.'/'.$file,
+                    'Updated'=>date('Y-m-d H:i:s',filemtime($realDir.'/'.$file)),
                 );
             }
         }

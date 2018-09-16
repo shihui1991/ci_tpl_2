@@ -16,7 +16,7 @@ class CateData extends DataModel
             'name'  => '分类ID',
             'alias' => 'CateId',
             'attr'  => 'int',
-            'desc'  => "int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '分类ID'",
+            'desc'  => "int(10) unsigned NOT NULL PRIMARY KEY AUTO_INCREMENT COMMENT '分类ID'",
             'rules' => 'trim|required|max_length[10]|is_natural',
         ),
         'Group' => array(

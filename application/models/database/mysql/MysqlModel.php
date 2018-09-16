@@ -13,9 +13,9 @@ class MysqlModel extends DatabaseModel
 {
     public $dbConfigFile='database';       // 数据库配置文件
 
-    public function __construct()
+    public function __construct(array $args=array())
     {
-        parent::__construct();
+        parent::__construct($args);
 
         // 连接数据库
         $this->dbModel=$this->CI->load->database($this->dbConfigName,true);
@@ -32,6 +32,37 @@ class MysqlModel extends DatabaseModel
         $query=$this->dbModel->query($sql,$arguments);
 
         return $query;
+    }
+
+    /** 建表
+     * @param string $table
+     * @param array $columns
+     * @return mixed
+     */
+    public function createTable($table, array $columns)
+    {
+        // 设置字符集
+        $sql = 'SET NAMES utf8';
+        $this->query($sql);
+        // 删除表
+        $sql = "DROP TABLE IF EXISTS `$table`";
+        $this->query($sql);
+        // 设置字符集
+        $sql = "SET character_set_client = utf8 ;";
+        $this->query($sql);
+        // 建表
+        $sql = "CREATE TABLE `$table` (";
+
+        $fields=array();
+        foreach($columns as $field=>$column){
+            $fields[]="`$field` {$column['desc']}";
+        }
+        $sql .= implode(',',$fields);
+        $sql .= ") ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='$table';";
+
+        $result = $this->query($sql);
+
+        return $result;
     }
 
     /** 重置 ID

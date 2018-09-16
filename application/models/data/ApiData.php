@@ -16,7 +16,7 @@ class ApiData extends DataModel
             'name'  => '接口ID',
             'alias' => 'ApiId',
             'attr'  => 'int',
-            'desc'  => "int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '接口ID'",
+            'desc'  => "int(10) unsigned NOT NULL PRIMARY KEY AUTO_INCREMENT COMMENT '接口ID'",
             'rules' => 'trim|required|max_length[10]|is_natural',
         ),
         'Name' => array(

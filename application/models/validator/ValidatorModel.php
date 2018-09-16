@@ -11,6 +11,7 @@ abstract class ValidatorModel
 {
     protected $CI;
     protected $validator;
+    static protected $objs;
 
 
     public function __construct()
@@ -21,22 +22,48 @@ abstract class ValidatorModel
     }
 
     /**  获取实例
+     * @param int $k
      * @return ValidatorModel
      */
-    public static function instance()
+    static public function instance($k=0)
     {
-        return new static();
+        if(empty($k)){
+            $k=get_called_class();
+        }
+        if(empty(static::$objs[$k])){
+            static::$objs[$k] = new static();
+        }
+        return static::$objs[$k];
+    }
+
+    /** 销毁实例
+     * @param string $k
+     */
+    public function _unset($k = 0)
+    {
+        if(empty($k)){
+            $k=get_called_class();
+        }
+        if(isset(static::$objs[$k])){
+            unset(static::$objs[$k]);
+        }
     }
 
     /**  设置验证规则
      * @param array $columns
-     * @param $method
+     * @param string $method
      */
-    public function setValiRules(array $columns, $method)
+    public function setValiRules(array $columns, $method='')
     {
         // 获取验证字段
-        $method='vali'.ucfirst($method).'Fields';
-        $fields=$this->$method();
+        if(empty($method)){
+            $fields=array_column($columns,'field');
+        }
+        else{
+            $method='vali'.ucfirst($method).'Fields';
+            $fields=$this->$method();
+        }
+
         // 设置验证规则
         foreach($fields as $field){
             // 特定验证规则

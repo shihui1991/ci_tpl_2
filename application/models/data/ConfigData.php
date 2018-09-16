@@ -1,47 +1,47 @@
 <?php
 /**
- *  Source 数据模型
+ *  Config 数据模型
  * @user 罗仕辉
- * @create 2018-09-12
+ * @create 2018-09-15
  */
 
 namespace models\data;
 
-class SourceData extends DataModel
+class ConfigData extends DataModel
 {
     // 字段详情 field => [field,name,alias,attr,rules]
     public $columns=array(
         'Id' => array(
             'field' => 'Id',
-            'name'  => '资源ID',
-            'alias' => 'SourceId',
+            'name'  => '配置ID',
+            'alias' => 'ConfigId',
             'attr'  => 'int',
-            'desc'  => "int(10) unsigned NOT NULL PRIMARY KEY AUTO_INCREMENT COMMENT '资源ID'",
+            'desc'  => "int(10) unsigned NOT NULL PRIMARY KEY AUTO_INCREMENT COMMENT '配置ID'",
             'rules' => 'trim|required|max_length[10]|is_natural',
+        ),
+        'Table' => array(
+            'field' => 'Table',
+            'name'  => '表名',
+            'alias' => 'ConfigTable',
+            'attr'  => 'string',
+            'desc'  => "varchar(255) NOT NULL COMMENT ' 表名'",
+            'rules' => 'trim|required|max_length[255]',
         ),
         'Name' => array(
             'field' => 'Name',
             'name'  => '名称',
-            'alias' => 'SourceName',
+            'alias' => 'ConfigName',
             'attr'  => 'string',
-            'desc'  => "varchar(255) NOT NULL COMMENT ' 名称'",
-            'rules' => 'trim|required|max_length[255]',
-        ),
-        'Url' => array(
-            'field' => 'Url',
-            'name'  => '资源地址',
-            'alias' => 'SourceUrl',
-            'attr'  => 'string',
-            'desc'  => "varchar(255) NOT NULL COMMENT ' 资源地址'",
-            'rules' => 'trim|required|max_length[255]',
-        ),
-        'Cloud' => array(
-            'field' => 'Cloud',
-            'name'  => '云地址',
-            'alias' => 'CloudUrl',
-            'attr'  => 'string',
-            'desc'  => "varchar(255) DEFAULT NULL COMMENT '云存储地址'",
+            'desc'  => "varchar(255) DEFAULT NULL COMMENT ' 名称'",
             'rules' => 'trim|max_length[255]',
+        ),
+        'Columns' => array(
+            'field' => 'Columns',
+            'name'  => '字段详情',
+            'alias' => 'ConfigColumns',
+            'attr'  => 'json',
+            'desc'  => "text COMMENT '字段详情'",
+            'rules' => '',
         ),
         'Infos' => array(
             'field' => 'Infos',
@@ -75,11 +75,23 @@ class SourceData extends DataModel
     public function fillAddFields()
     {
         return array(
+            'Table',
             'Name',
-            'Url',
-            'Cloud',
+            'Columns',
             'Infos',
             'Created',
+            'Updated',
+        );
+    }
+
+    /** 批量更新 批量赋值字段
+     * @return array
+     */
+    public function fillUpdateFields()
+    {
+        return array(
+            'Columns',
+            'Updated',
         );
     }
 
@@ -91,8 +103,6 @@ class SourceData extends DataModel
         return array(
             'Id',
             'Name',
-            'Url',
-            'Cloud',
             'Infos',
             'Updated',
         );

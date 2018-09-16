@@ -19,11 +19,13 @@ class SourceLogic extends LogicModel
     {
         parent::__construct();
 
+        // redis 为主，mysql 备份
         $this->databaseModel = SourceRedis::instance();
         $this->backDB = SourceMysql::instance();
-
+        // mysql 为主，redis 备份
 //        $this->databaseModel = SourceMysql::instance();
 //        $this->backDB = SourceRedis::instance();
+
 
         $this->dataModel = SourceData::instance();
         $this->validatorModel = SourceValidator::instance();

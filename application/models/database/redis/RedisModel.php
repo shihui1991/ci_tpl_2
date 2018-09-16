@@ -14,9 +14,9 @@ class RedisModel extends DatabaseModel
 {
     public $dbConfigFile='redis';       // 数据库配置文件
 
-    public function __construct()
+    public function __construct(array $args=array())
     {
-        parent::__construct();
+        parent::__construct($args);
 
         // 加载配置
         $this->CI->load->config($this->dbConfigFile,TRUE);
@@ -45,6 +45,16 @@ class RedisModel extends DatabaseModel
         return $query;
     }
 
+    /** 建表
+     * @param string $table
+     * @param array $columns
+     * @return mixed
+     */
+    public function createTable($table, array $columns)
+    {
+
+    }
+
     /** 重置 ID
      * @param int $start
      * @return bool
@@ -71,6 +81,9 @@ class RedisModel extends DatabaseModel
         $array=array('>','>=','<','<=','!=');
         foreach($wheres as $where){
             if(is_array($where)){
+                if( !isset($where[0])){
+                    return false;
+                }
                 switch ($where[1]){
                     case 'eq':
                         $result=$data[$where[0]]==$where[2];
@@ -145,7 +158,7 @@ class RedisModel extends DatabaseModel
             foreach($list as $data){
                 $array=array();
                 foreach($select as $field){
-                    $array[$field]=$data[$field];
+                    $array[$field]=isset($data[$field])?$data[$field]:null;
                 }
                 $result[]=$array;
             }

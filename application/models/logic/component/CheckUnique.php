@@ -135,4 +135,25 @@ trait CheckUnique
         }
         return true;
     }
+
+    /**   验证 Table 是否唯一
+     * @param array $data
+     * @return bool
+     */
+    public function checkTableUnique(array $data)
+    {
+        if(!empty($data['Table'])){
+            $where=array(
+                array('Table','eq',$data['Table']),
+            );
+            if(!empty($data['Id'])){
+                $where[]=array('Id','!=',$data['Id']);
+            }
+            $count=$this->databaseModel->getCount($where);
+            if($count > 0){
+                return false;
+            }
+        }
+        return true;
+    }
 }

@@ -16,7 +16,7 @@ class MenuData extends DataModel
             'name'  => '菜单ID',
             'alias' => 'MenuId',
             'attr'  => 'int',
-            'desc'  => "int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '菜单ID'",
+            'desc'  => "int(10) unsigned NOT NULL PRIMARY KEY AUTO_INCREMENT COMMENT '菜单ID'",
             'rules' => 'trim|required|max_length[10]|is_natural',
         ),
         'ParentId' => array(

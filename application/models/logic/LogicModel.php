@@ -16,6 +16,7 @@ abstract class LogicModel
     public $backDB;
     public $dataModel;
     public $validatorModel;
+    static protected $objs;
 
     public $isFormat=true;
     public $isAlias=false;
@@ -28,11 +29,31 @@ abstract class LogicModel
     }
 
     /**  获取实例
+     * @param int $k
      * @return LogicModel
      */
-    public static function instance()
+    static public function instance($k=0)
     {
-        return new static();
+        if(empty($k)){
+            $k=get_called_class();
+        }
+        if(empty(static::$objs[$k])){
+            static::$objs[$k] = new static();
+        }
+        return static::$objs[$k];
+    }
+
+    /** 销毁实例
+     * @param string $k
+     */
+    public function _unset($k = 0)
+    {
+        if(empty($k)){
+            $k=get_called_class();
+        }
+        if(isset(static::$objs[$k])){
+            unset(static::$objs[$k]);
+        }
     }
 
     /** 同步
@@ -167,9 +188,11 @@ abstract class LogicModel
     /** 获取全部
      * @return mixed
      */
-    public function getAll()
+    public function getAll(array $params=array())
     {
-        $list=$this->databaseModel->getMany();
+        $where=$this->trunsParamsToWhere($params);
+
+        $list=$this->databaseModel->getMany($where);
         if(empty($list)){
             return array();
         }

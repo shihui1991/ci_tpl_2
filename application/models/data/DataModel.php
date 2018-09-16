@@ -14,11 +14,13 @@ use models\data\component\SetField;
 
 abstract class DataModel
 {
-    public $columns;       // 字段详情 field => [field,name,alias,attr,rules]
-    public $fields;        // 字段
-    public $fieldsName;    // 字段名称
-    public $fieldsAttr;    // 字段属性
-    public $fieldsAlias;   // 字段映射
+    public $columns=array();       // 字段详情 field => [field,name,alias,attr,rules]
+    public $fields=array();        // 字段
+    public $fieldsName=array();    // 字段名称
+    public $fieldsAttr=array();    // 字段属性
+    public $fieldsAlias=array();   // 字段映射
+
+    static protected $objs;
 
     use GetAttr;  // 组件 - 按字段属性格式化字段
     use GetField; // 组件 - 按字段格式化字段
@@ -30,8 +32,9 @@ abstract class DataModel
     /**
      *  初始化，整理字段
      */
-    public function __construct()
+    public function __construct(array $columns = array())
     {
+        $this->setColumns($columns);
         // 字段详情
         foreach($this->columns as $field=>$column) {
             $this->fields[] = $field;
@@ -41,12 +44,44 @@ abstract class DataModel
         }
     }
 
-    /**  获取实例
+    /** 获取实例
+     * @param string $k
+     * @param array $columns
      * @return DataModel
      */
-    public static function instance()
+    public static function instance($k = 0, array $columns = array())
     {
-        return new static();
+        if(empty($k)){
+            $k=get_called_class();
+        }
+        if(empty(static::$objs[$k])){
+            static::$objs[$k] = new static($columns);
+        }
+
+        return static::$objs[$k];
+    }
+
+    /** 销毁实例
+     * @param string $k
+     */
+    public function _unset($k = 0)
+    {
+        if(empty($k)){
+            $k=get_called_class();
+        }
+        if(isset(static::$objs[$k])){
+            unset(static::$objs[$k]);
+        }
+    }
+
+    /** 设置字段
+     * @param array $columns
+     */
+    public function setColumns(array $columns = array())
+    {
+        if(!empty($columns)){
+            $this->columns=$columns;
+        }
     }
 
     /** 获取字段详情列表

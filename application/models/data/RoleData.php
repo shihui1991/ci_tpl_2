@@ -16,7 +16,7 @@ class RoleData extends DataModel
             'name'  => '角色ID',
             'alias' => 'RoleId',
             'attr'  => 'int',
-            'desc'  => "int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '角色ID'",
+            'desc'  => "int(10) unsigned NOT NULL PRIMARY KEY AUTO_INCREMENT COMMENT '角色ID'",
             'rules' => 'trim|required|max_length[10]|is_natural',
         ),
         'ParentId' => array(

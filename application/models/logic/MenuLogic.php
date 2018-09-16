@@ -19,8 +19,13 @@ class MenuLogic extends LogicModel
     {
         parent::__construct();
 
+        // redis 为主，mysql 备份
         $this->databaseModel = MenuRedis::instance();
         $this->backDB = MenuMysql::instance();
+        // mysql 为主，redis 备份
+//        $this->databaseModel = MenuMysql::instance();
+//        $this->backDB = MenuRedis::instance();
+
         $this->dataModel = MenuData::instance();
         $this->validatorModel = MenuValidator::instance();
     }
@@ -81,9 +86,9 @@ class MenuLogic extends LogicModel
     /** 获取全部
      * @return mixed
      */
-    public function getAll()
+    public function getAll(array $params=array())
     {
-        $where=array();
+        $where=$this->trunsParamsToWhere($params);
         $select=array();
         $orderBy=array(
             'Sort'=>ORDER_BY_ASC,

@@ -16,7 +16,7 @@ class MasterData extends DataModel
             'name'  => '管理员ID',
             'alias' => 'MasterId',
             'attr'  => 'int',
-            'desc'  => "int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '管理员ID'",
+            'desc'  => "int(10) unsigned NOT NULL PRIMARY KEY AUTO_INCREMENT COMMENT '管理员ID'",
             'rules' => 'trim|required|max_length[10]|is_natural',
         ),
         'Realname' => array(

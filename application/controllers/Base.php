@@ -89,9 +89,9 @@ class Base extends CI_Controller
         $config['allowed_types'] = '*';
         // 保存目录
         if(empty($this->inputData['SavePath'])){
-            $savePath= '/uploads/'.date('Ymd');
+            $savePath= '/'.UPLOAD_DIR.'/'.date('Ymd');
         }else{
-            $savePath='/uploads/'.$this->inputData['SavePath'];
+            $savePath='/'.UPLOAD_DIR.'/'.str_replace('/','_',trim($this->inputData['SavePath']));
         }
         $savePath=str_replace(' ','_',trim($savePath));
         $path='.'.$savePath;
@@ -107,6 +107,7 @@ class Base extends CI_Controller
         }else{
             $saveName=$this->inputData['SaveName'];
             $saveName=str_replace(' ','_',trim($saveName));
+            $saveName=str_replace('/','_',trim($saveName));
             $config['file_name']=$saveName;
         }
 
@@ -145,7 +146,7 @@ class Base extends CI_Controller
             $fileUrl=$savePath.'/'.$saveName;
             goto result;
         }
-        throw new Exception('上传失败',EXIT_ERROR);
+        throw new Exception('上传失败',EXIT_UNKNOWN_FILE);
 
         result:
 
@@ -171,13 +172,6 @@ class Base extends CI_Controller
      */
     public function _response(array $data=array(),$code=EXIT_SUCCESS,$msg='请求成功',$url='', $tpls=array())
     {
-        // 响应数据
-        $this->outputData=array(
-            'data'=>$data,
-            'code'=>$code,
-            'msg'=>$msg,
-            'url'=>$url,
-        );
         // 结束计时
         $this->benchmark->mark('app_end');
         // 执行时间
@@ -208,6 +202,13 @@ class Base extends CI_Controller
 
 EEE;
         recordLog($record,'response');
+        // 响应数据
+        $this->outputData=array(
+            'data'=>$data,
+            'code'=>$code,
+            'msg'=>(EXIT_ERROR == $code ? '' : $msg),
+            'url'=>$url,
+        );
     }
 
     /**  记录异常
@@ -218,9 +219,26 @@ EEE;
      */
     public function _recordException($type, $msg, $file, $line)
     {
+        $datetime=date('Y-m-d H:i:s');
+        $reqUrl=$this->requestUrl;
+        $ip=$this->input->ip_address();
+        // 记录内容
+        $record=<<<"EEE"
+        
+【产生时间】--> $datetime
+【访问 IP 】--> $ip
+【请求地址】--> $reqUrl
+【异常类型】--> $type
+【异常信息】--> $msg
+【异常文件】--> $file
+【异常行号】--> $line
+-------------------------------------------------
+
+EEE;
+        recordLog($record,'exception');
+
         $data=array();
         $code=EXIT_ERROR;
-        $msg='';
         $url='';
         $tpls=array();
         // 缓存重定向 URL

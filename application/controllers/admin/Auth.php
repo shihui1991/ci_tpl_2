@@ -29,7 +29,7 @@ class Auth extends Init
         }else{
             if(time()>$_SESSION['Master']['Timeout']){
                 unset($_SESSION['Master']);
-                throw new \Exception('等待超时，请重新登录！',EXIT_ERROR);
+                throw new \Exception('等待超时，请重新登录！',EXIT_CONFIG);
             }
             $_SESSION['Master']['Timeout']=time()+OPERAT_WAIT_TIME;
         }
@@ -38,16 +38,16 @@ class Auth extends Init
         // 验证菜单
         $this->_getMenu();
         if(empty($this->menu['Id'])){
-            throw new \Exception('无法访问',EXIT_ERROR);
+            throw new \Exception('无法访问',EXIT_CONFIG);
         }
         if(STATE_OFF == $this->menu['State']){
-            throw new \Exception('功能已禁用',EXIT_ERROR);
+            throw new \Exception('功能已禁用',EXIT_CONFIG);
         }
         if(ADMIN_NO == $this->master['IsAdmin']
             && STATE_ON == $this->menu['Ctrl']
             && !in_array($this->menu['Id'],$this->master['MenuIds'])){
 
-            throw new \Exception('未授权',EXIT_ERROR);
+            throw new \Exception('未授权',EXIT_CONFIG);
         }
     }
 }

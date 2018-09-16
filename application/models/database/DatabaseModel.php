@@ -18,8 +18,26 @@ abstract class DatabaseModel
     public $table;         // 数据表
     public $primaryKey;    // 主键
 
-    public function __construct()
+    static protected $objs;
+
+    public function __construct(array $args=array())
     {
+        if(isset($args['dbConfigFile'])){
+            $this->dbConfigFile=$args['dbConfigFile'];
+        }
+        if(isset($args['dbConfigName'])){
+            $this->dbConfigName=$args['dbConfigName'];
+        }
+        if(isset($args['db'])){
+            $this->db=$args['db'];
+        }
+        if(isset($args['table'])){
+            $this->table=$args['table'];
+        }
+        if(isset($args['primaryKey'])){
+            $this->primaryKey=$args['primaryKey'];
+        }
+
         $this->CI = & get_instance();
 
     }
@@ -27,11 +45,30 @@ abstract class DatabaseModel
     /**  获取实例
      * @return DatabaseModel
      */
-    public static function instance()
+    public static function instance($k=0,array $args=array())
     {
-        return new static();
+        if(empty($k)){
+            $k=get_called_class();
+        }
+        if(empty(static::$objs[$k])){
+            static::$objs[$k] = new static($args);
+        }
+
+        return static::$objs[$k];
     }
 
+    /** 销毁实例
+     * @param string $k
+     */
+    public function _unset($k = 0)
+    {
+        if(empty($k)){
+            $k=get_called_class();
+        }
+        if(isset(static::$objs[$k])){
+            unset(static::$objs[$k]);
+        }
+    }
 
     /** 执行一条原生命令
      * @param string $cmd
@@ -40,6 +77,12 @@ abstract class DatabaseModel
      */
     abstract public function query($cmd, $arguments=array());
 
+    /** 建表
+     * @param string $table
+     * @param array $columns
+     * @return mixed
+     */
+    abstract public function createTable($table, array $columns);
 
     /** 重置 ID
      * @param int $start

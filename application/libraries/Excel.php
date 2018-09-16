@@ -9,15 +9,14 @@ namespace libraries;
 
 class Excel
 {
-    protected $k;
-    protected $objGroup;
+    static protected $objs;
     protected $objPHPExcel;
     protected $fields;
     protected $rowStart;
 
-    public function __construct($k=0)
+    public function __construct()
     {
-        $this->setObj($k);
+        $this->objPHPExcel = new \PHPExcel();
     }
 
     /**  获取实例
@@ -26,31 +25,19 @@ class Excel
      */
     static public function instance($k=0)
     {
-        return new static($k);
-    }
-
-    /** 实例化 PHPExcel
-     * @param int $k
-     * @return mixed
-     */
-    public function setObj($k=0)
-    {
-        $this->k = $k;
-        if(empty($this->objGroup[$this->k])){
-            $this->objGroup[$this->k] = new \PHPExcel();
+        if(empty(static::$objs[$k])){
+            static::$objs[$k] = new static();
         }
-        $this->objPHPExcel = $this->objGroup[$this->k];
-
-        return $this->objPHPExcel;
+        return static::$objs[$k];
     }
 
-    /** 销毁 PHPExcel
+    /** 销毁实例
      * @param int $k
      */
-    public function unsetObj($k=0)
+    public function _unset($k=0)
     {
-        if(isset($this->objGroup[$k])){
-            unset($this->objGroup[$k]);
+        if(isset(static::$objs[$k])){
+            unset(static::$objs[$k]);
         }
     }
 
@@ -214,11 +201,12 @@ class Excel
             $this->objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow($index, 3, $column['alias']);
             $this->objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow($index, 4, $column['attr']);
             $this->objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow($index, 5, $column['desc']);
-            $this->objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow($index, 6, '/');
+            $this->objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow($index, 6, $column['rules']);
+            $this->objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow($index, 7, '/');
             $index++;
         }
 
-        $this->rowStart = 7;
+        $this->rowStart = 8;
         $this->fields = $fields;
     }
 
@@ -229,6 +217,9 @@ class Excel
      */
     public function setDataList(array $list, array $fields=array(), $rowStart=0)
     {
+        if(empty($list)){
+            return array();
+        }
         if(empty($fields)){
             $fields = $this->fields;
         }
@@ -258,11 +249,8 @@ class Excel
     {
         $result=false;
         $objWriter = \PHPExcel_IOFactory::createWriter($this->objPHPExcel, 'Excel5');
-        $path='download/excel';
-        $realpath=realpath(FCPATH.$path);
-        if(!file_exists($realpath)){
-            mkdir($realpath,DIR_WRITE_MODE,true);
-        }
+        $path= DOWNLOAD_DIR.'/excel';
+        $realpath=FCPATH.$path;
         $fileName .= '_'.date('YmdHis');
         $file=$realpath.'/'.$fileName.'.xls';
         if($file){
@@ -353,6 +341,10 @@ class Excel
         if(!empty($dataList)){
             $dataList = new ListIterator($dataList,1);
             foreach($dataList as $data){
+                $temp=array_filter($data);
+                if(empty($temp)){
+                    continue;
+                }
                 $row = array_combine($fields,$data);
                 $list[]=$row;
             }
@@ -371,11 +363,12 @@ class Excel
      */
     public function makeConfigDataList(array $dataList)
     {
-        $fields = $dataList[0];  // 所有字段
-        $names  = $dataList[1];  // 所有字段名称
-        $aliases= $dataList[2];  // 所有字段映射
-        $attrs  = $dataList[3];  // 所有字段属性
-        $descs  = $dataList[4];  // 所有字段描述
+        $fields  = $dataList[0];  // 所有字段
+        $names   = $dataList[1];  // 所有字段名称
+        $aliases = $dataList[2];  // 所有字段映射
+        $attrs   = $dataList[3];  // 所有字段属性
+        $descs   = $dataList[4];  // 所有字段描述
+        $ruleses = $dataList[5];  // 所有字段验证规则
         $columns=array();   // 所有字段详情
         foreach ($fields as $i=>$field){
             $columns[$field]=array(
@@ -384,6 +377,7 @@ class Excel
                 'alias' => $aliases[$i],
                 'attr'  => $attrs[$i],
                 'desc'  => $descs[$i],
+                'rules' => $ruleses[$i],
             );
         }
         // 整理数据列表
@@ -393,12 +387,17 @@ class Excel
             $dataList[2],
             $dataList[3],
             $dataList[4],
-            $dataList[5]
+            $dataList[5],
+            $dataList[6]
         );
         $list=array();
         if(!empty($dataList)){
-            $dataList = new ListIterator($dataList,6);
+            $dataList = new ListIterator($dataList,7);
             foreach($dataList as $data){
+                $temp=array_filter($data);
+                if(empty($temp)){
+                    continue;
+                }
                 $row = array_combine($fields,$data);
                 $list[]=$row;
             }
@@ -480,12 +479,12 @@ class Excel
     {
         $realPath=realpath($file);
         if(false == $realPath){
-            throw new \Exception('文件不存在',EXIT_USER_INPUT);
+            throw new \Exception('文件不存在',EXIT_UNKNOWN_FILE);
         }
         $this->objPHPExcel=\PHPExcel_IOFactory::load($realPath);
         $sheet=$this->objPHPExcel->getSheetByName($sheetName);
         if(empty($sheet)){
-            throw new \Exception('工作表不存在',EXIT_USER_INPUT);
+            throw new \Exception('工作表不存在',EXIT_UNKNOWN_FILE);
         }
         $list=array_filter($sheet->toArray()); //  工作表内容
         if(empty($list)){
