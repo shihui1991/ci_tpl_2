@@ -23,7 +23,11 @@
                             <thead>
                             <tr>
                                 <?php foreach($data['Config']['Columns'] as $field=>$column):?>
-                                    <th><?php echo $field;?></th>
+                                    <th>
+                                        <?php echo $field;?><br>
+                                        <?php echo $column['name'];?><br>
+                                        <?php echo $column['attr'];?>
+                                    </th>
                                 <?php endforeach;?>
                             </tr>
                             </thead>
