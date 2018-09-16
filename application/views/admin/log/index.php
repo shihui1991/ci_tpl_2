@@ -29,9 +29,10 @@
                                         <td>
                                             <div class="layui-btn-group">
                                                 <?php if(!$row['IsDir']):?>
-                                                    <a class="layui-btn layui-btn-xs" href="/<?php echo $row['Path'];?>" target="_blank">下载</a>
+                                                    <a class="layui-btn layui-btn-xs" href="/admin/log/download?File=<?php echo $row['Path'];?>" target="_blank">下载</a>
+                                                    <a class="layui-btn layui-btn-xs" href="/admin/log/info?File=<?php echo $row['Path'];?>">查看</a>
                                                 <?php endif;?>
-                                                <a class="layui-btn layui-btn-xs" data-confirm="确定要删除【<?php echo $row['File'];?>】吗？" onclick="btnAct(this);" data-action="/admin/file/del?File=<?php echo $row['Path'];?>">删除</a>
+                                                <a class="layui-btn layui-btn-xs" data-confirm="确定要删除【<?php echo $row['File'];?>】吗？" onclick="btnAct(this);" data-action="/admin/log/del?File=<?php echo $row['Path'];?>">删除</a>
                                             </div>
                                         </td>
                                     </tr>

@@ -234,7 +234,7 @@ $config['log_threshold'] = ( ENVIRONMENT == 'development' ? 4 : 1 );
 | application/logs/ directory. Use a full server path with trailing slash.
 |
 */
-$config['log_path'] = '';
+$config['log_path'] = APPPATH.'logs/'.date('Y_m_d').'/';
 
 /*
 |--------------------------------------------------------------------------
