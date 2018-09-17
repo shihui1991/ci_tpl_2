@@ -85,7 +85,7 @@ class Init extends Base
             'use_page_numbers'=>TRUE,
             'page_query_string'=>TRUE,
             'reuse_query_string'=>TRUE,
-            'query_string_segment'=>'page',
+            'query_string_segment'=>'Page',
             'full_tag_open'=>'<div class="layui-box layui-laypage layui-laypage-default">',
             'full_tag_close'=>'</div>',
             'first_link'=>'首页',

@@ -127,18 +127,29 @@ class RedisModel extends DatabaseModel
      */
     public function dealOrderBy(array $orderBy,array $list=array())
     {
-        if(!empty($orderBy) && !empty($list)){
-            $orderData=array();
-            foreach($orderBy as $order=>$by){
-                $orderData[]=array_column($list,$order);
-                if('ASC' == strtoupper($by)){
-                    $orderData[]=SORT_ASC;
-                }else{
-                    $orderData[]=SORT_DESC;
-                }
-            }
-            $orderData[] = & $list;
+        if(!empty($list)){
+            // 默认 Id 顺序排序
+            $ids=array_column($list,'Id');
+            $orderData=array(
+                $ids,
+                SORT_ASC,
+                &$list,
+            );
             call_user_func_array('array_multisort',$orderData);
+            // 条件排序
+            if(!empty($orderBy)){
+                $orderData=array();
+                foreach($orderBy as $order=>$by){
+                    $orderData[]=array_column($list,$order);
+                    if('ASC' == strtoupper($by)){
+                        $orderData[]=SORT_ASC;
+                    }else{
+                        $orderData[]=SORT_DESC;
+                    }
+                }
+                $orderData[] = & $list;
+                call_user_func_array('array_multisort',$orderData);
+            }
         }
 
         return $list;
