@@ -37,21 +37,29 @@ class MysqlModel extends DatabaseModel
     /** 建表
      * @param string $table
      * @param array $columns
+     * @param bool $drop
      * @return mixed
      */
-    public function createTable($table, array $columns)
+    public function createTable($table, array $columns,$drop=false)
     {
         // 设置字符集
         $sql = 'SET NAMES utf8';
         $this->query($sql);
         // 删除表
-        $sql = "DROP TABLE IF EXISTS `$table`";
-        $this->query($sql);
+        if($drop){
+            $sql = "DROP TABLE IF EXISTS `$table`";
+            $this->query($sql);
+            $check='';
+        }
+        else{
+            $check=' IF NOT EXISTS ';
+        }
+
         // 设置字符集
         $sql = "SET character_set_client = utf8 ;";
         $this->query($sql);
         // 建表
-        $sql = "CREATE TABLE `$table` (";
+        $sql = "CREATE TABLE $check `$table` (";
 
         $fields=array();
         foreach($columns as $field=>$column){

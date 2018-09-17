@@ -80,9 +80,10 @@ abstract class DatabaseModel
     /** 建表
      * @param string $table
      * @param array $columns
+     * @param bool $drop
      * @return mixed
      */
-    abstract public function createTable($table, array $columns);
+    abstract public function createTable($table, array $columns, $drop=false);
 
     /** 重置 ID
      * @param int $start

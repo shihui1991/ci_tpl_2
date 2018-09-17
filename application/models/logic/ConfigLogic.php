@@ -106,7 +106,10 @@ class ConfigLogic extends LogicModel
             // 实例化模型
             $databaseModel=$this->getDBModel($table);
             // 建表
-            $databaseModel->createTable($table,$data['columns']);
+            $result = $databaseModel->createTable($table,$data['columns'],true);
+            if(false == $result){
+                continue;
+            }
             // 导入数据
             $result = $databaseModel->batchInsertUpdate($data['list']);
             if($result < 1){

@@ -58,12 +58,17 @@ abstract class LogicModel
 
     /** 同步
      * @return int
+     * @throws \Exception
      */
     public function rsync()
     {
         $list = $this->databaseModel->getMany();
         if(empty($list)){
             return 0;
+        }
+        $result = $this->backDB->createTable($this->backDB->table,$this->dataModel->getColumns(),false);
+        if(false == $result){
+            throw new \Exception('建表失败',EXIT_DATABASE);
         }
         $result = $this->backDB->batchInsertUpdate($list);
 

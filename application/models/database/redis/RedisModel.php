@@ -48,11 +48,16 @@ class RedisModel extends DatabaseModel
     /** 建表
      * @param string $table
      * @param array $columns
+     * @param bool $drop
      * @return mixed
      */
-    public function createTable($table, array $columns)
+    public function createTable($table, array $columns, $drop=false)
     {
+        if($drop){
+            $this->truncate();
+        }
 
+        return true;
     }
 
     /** 重置 ID
@@ -292,6 +297,7 @@ class RedisModel extends DatabaseModel
                 $key=$this->table.':'.$key;
             }
             $data=$this->dbModel->hGetAll($key);
+            ksort($data);
             $list[]=$data;
         }
         if(empty($list)){
@@ -583,6 +589,9 @@ class RedisModel extends DatabaseModel
 
             $keys[]=$key;
         }
+        if(empty($keys)){
+            return true;
+        }
         $result=$this->dbModel->del($keys);
 
         return $result;
@@ -604,7 +613,11 @@ class RedisModel extends DatabaseModel
         }
 
         $keys=$this->dbModel->keys($key);
+        if(empty($keys)){
+            return true;
+        }
         $result=$this->dbModel->del($keys);
+
         return $result;
     }
 }
