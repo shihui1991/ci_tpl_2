@@ -434,12 +434,20 @@ if(!function_exists('getDirAllDirOrFile')){
         }
         // 遍历目录
         $result=array();
+        clearstatcache(); // 清理文件信息缓存
         while (false !== ($file = readdir($handle))){
             if(in_array($file,array('.','..'))){
                 continue;
             }
             $path = $dir.'/'.$file;
+            $realPath=$realDir.'/'.$file;
             $isDir=is_dir($path);
+            if($isDir){
+                $size=disk_total_space($realPath);
+            }
+            else{
+                $size=filesize($realPath);
+            }
 
             $result[]=array(
                 'File'=>$file,
@@ -447,8 +455,9 @@ if(!function_exists('getDirAllDirOrFile')){
                 'Dir'=>$dir,
                 'Path'=>$path,
                 'RealDir'=>$realDir,
-                'RealPath'=>$realDir.'/'.$file,
-                'Updated'=>date('Y-m-d H:i:s',filemtime($realDir.'/'.$file)),
+                'RealPath'=>$realPath,
+                'Size'=>$size,
+                'Updated'=>date('Y-m-d H:i:s',filemtime($realPath)),
             );
 
             if($isDir){
@@ -487,11 +496,13 @@ if(!function_exists('getDirAllFile')){
         }
         // 遍历目录
         $result=array();
+        clearstatcache(); // 清理文件信息缓存
         while (false !== ($file = readdir($handle))){
             if(in_array($file,array('.','..'))){
                 continue;
             }
             $path = $dir.'/'.$file;
+            $realPath=$realDir.'/'.$file;
             $isDir=is_dir($path);
 
             if($isDir){
@@ -499,14 +510,17 @@ if(!function_exists('getDirAllFile')){
                 $result = array_merge($result,$array);
             }else{
                 $pathinfo=pathinfo($file);
+
+                $size=filesize($realPath);
                 $result[]=array(
                     'File'=>$file,
                     'Ext'=>$pathinfo['extension'],
                     'Dir'=>$dir,
                     'Path'=>$path,
                     'RealDir'=>$realDir,
-                    'RealPath'=>$realDir.'/'.$file,
-                    'Updated'=>date('Y-m-d H:i:s',filemtime($realDir.'/'.$file)),
+                    'RealPath'=>$realPath,
+                    'Size'=>$size,
+                    'Updated'=>date('Y-m-d H:i:s',filemtime($realPath)),
                 );
             }
         }

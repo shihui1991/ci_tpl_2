@@ -24,6 +24,7 @@
                             <thead>
                             <tr>
                                 <th>文件</th>
+                                <th>大小</th>
                                 <th>更新时间</th>
                                 <th>操作</th>
                             </tr>
@@ -33,6 +34,7 @@
                                 <?php foreach($data['List'] as $i=>$row):?>
                                     <tr data-tt-id="<?php echo $row['Path']; ?>" data-tt-parent-id="<?php echo $row['Dir']; ?>">
                                         <td><?php echo $row['File'];?></td>
+                                        <td><?php echo $row['Size'];?></td>
                                         <td><?php echo $row['Updated'];?></td>
                                         <td>
                                             <?php if(!$row['IsDir']):?>
