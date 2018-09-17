@@ -41,7 +41,7 @@
         </ul>
         <div class="layui-tab-content" style="padding:0 0 10px 0;">
             <div class="layui-tab-item layui-show">
-                <ul class="layui-nav layui-nav-tree layui-bg-cyan" id="nav-menu" lay-filter="nav-menu" lay-shrink="all" style="width: 100%;">
+                <ul class="layui-nav layui-nav-tree layui-bg-cyan" id="nav-menu" lay-filter="nav-menu" style="width: 100%;">
 
                 </ul>
             </div>
