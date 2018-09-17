@@ -46,7 +46,8 @@ class Log extends Auth
             throw new Exception('文件不存在',EXIT_UNKNOWN_FILE);
         }
         if(is_dir($file)){
-            $result = exec('rm -rf '.$file);
+            exec('rm -rf '.$file);
+            $result = true;
         }
         else{
             $result = unlink($file);
