@@ -442,12 +442,7 @@ if(!function_exists('getDirAllDirOrFile')){
             $path = $dir.'/'.$file;
             $realPath=$realDir.'/'.$file;
             $isDir=is_dir($path);
-            if($isDir){
-                $size=disk_total_space($realPath);
-            }
-            else{
-                $size=filesize($realPath);
-            }
+            $size=makeFileSize(filesize($realPath));
 
             $result[]=array(
                 'File'=>$file,
@@ -511,7 +506,7 @@ if(!function_exists('getDirAllFile')){
             }else{
                 $pathinfo=pathinfo($file);
 
-                $size=filesize($realPath);
+                $size=makeFileSize(filesize($realPath));
                 $result[]=array(
                     'File'=>$file,
                     'Ext'=>$pathinfo['extension'],
@@ -526,6 +521,26 @@ if(!function_exists('getDirAllFile')){
         }
         // 关闭目录
         closedir($handle);
+
+        return $result;
+    }
+}
+
+if(!function_exists('makeFileSize')){
+    /** 文件大小转换
+     * @param int $size
+     * @param int $digits
+     * @return string
+     */
+    function makeFileSize($size, $digits=2){
+        $unit= array('','K','M','G','T','P');
+        $base= 1024;
+        $i = floor(log($size,$base));
+        $n = count($unit);
+        if($i >= $n){
+            $i=$n-1;
+        }
+        $result = round($size/pow($base,$i),$digits).' '.$unit[$i] . 'B';
 
         return $result;
     }
