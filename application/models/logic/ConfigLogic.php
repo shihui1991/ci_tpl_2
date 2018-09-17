@@ -69,6 +69,18 @@ class ConfigLogic extends LogicModel
         return $databaseModel;
     }
 
+    /** 获取备份数据库模型
+     * @param string $table
+     * @return mixed
+     */
+    public function getBackDBModel($table)
+    {
+        $args['table'] = $table;
+        eval("\$backDBModel = \\{$this->tplBackDB}::instance(\$table,\$args);");
+
+        return $backDBModel;
+    }
+
     /** 获取数据模型
      * @param string $table
      * @param array $columns
@@ -184,5 +196,40 @@ class ConfigLogic extends LogicModel
         return $list;
     }
 
+    /** 同步所有快捷配置数据
+     * @throws \Exception
+     */
+    public function rsyncAll()
+    {
+        $list = $this->getAll();
+        if(!empty($list)){
+            foreach($list as $row){
+                $this->rsyncData($row);
+            }
+        }
+    }
 
+    /** 同步快捷配置数据
+     * @param array $config
+     * @return int
+     * @throws \Exception
+     */
+    public function rsyncData(array $config)
+    {
+        // 实例化模型
+        $databaseModel=$this->getDBModel($config['Table']);
+        $backDBModel=$this->getBackDBModel($config['Table']);
+        // 同步
+        $list = $databaseModel->getMany();
+        if(empty($list)){
+            return 0;
+        }
+        $result = $backDBModel->createTable($config['Table'],$config['Columns'],false);
+        if(false == $result){
+            throw new \Exception('建表失败',EXIT_DATABASE);
+        }
+        $result = $backDBModel->batchInsertUpdate($list);
+
+        return $result;
+    }
 }
