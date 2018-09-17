@@ -108,6 +108,7 @@ class ApiData extends DataModel
             'State',
             'Infos',
             'Created',
+            'Updated',
         );
     }
 

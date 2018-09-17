@@ -156,4 +156,25 @@ trait CheckUnique
         }
         return true;
     }
+
+    /**   验证 Instance 是否唯一
+     * @param array $data
+     * @return bool
+     */
+    public function checkInstanceUnique(array $data)
+    {
+        if(!empty($data['Instance'])){
+            $where=array(
+                array('Instance','eq',$data['Instance']),
+            );
+            if(!empty($data['Id'])){
+                $where[]=array('Id','!=',$data['Id']);
+            }
+            $count=$this->databaseModel->getCount($where);
+            if($count > 0){
+                return false;
+            }
+        }
+        return true;
+    }
 }

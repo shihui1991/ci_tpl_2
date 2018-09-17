@@ -98,6 +98,7 @@ class MasterData extends DataModel
             'Token',
             'State',
             'Created',
+            'Updated',
         );
     }
 

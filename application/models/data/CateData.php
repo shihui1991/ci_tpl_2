@@ -107,6 +107,7 @@ class CateData extends DataModel
             'Display',
             'Infos',
             'Created',
+            'Updated',
         );
     }
 

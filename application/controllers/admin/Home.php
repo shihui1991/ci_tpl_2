@@ -77,22 +77,4 @@ class Home extends Auth
         $tpls=array();
         $this->_response($data,$code,$msg,$url,$tpls);
     }
-
-    /**
-     * 数据同步
-     */
-    public function rsync()
-    {
-        \models\logic\ApiLogic::instance()->rsync();
-        \models\logic\MasterLogic::instance()->rsync();
-        \models\logic\MenuLogic::instance()->rsync();
-        \models\logic\RoleLogic::instance()->rsync();
-
-        $data=array();
-        $code=EXIT_SUCCESS;
-        $msg='请求成功';
-        $url='';
-        $tpls=array();
-        $this->_response($data,$code,$msg,$url,$tpls);
-    }
 }

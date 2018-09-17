@@ -1,47 +1,39 @@
 <?php
 /**
- *  Source 数据模型
+ *  Rsync 数据模型
  * @user 罗仕辉
- * @create 2018-09-12
+ * @create 2018-09-17
  */
 
 namespace models\data;
 
-class SourceData extends DataModel
+class RsyncData extends DataModel
 {
     // 字段详情 field => [field,name,alias,attr,rules]
     public $columns=array(
         'Id' => array(
             'field' => 'Id',
-            'name'  => '资源ID',
-            'alias' => 'SourceId',
+            'name'  => '同步ID',
+            'alias' => 'RsyncId',
             'attr'  => 'int',
-            'desc'  => "int(10) unsigned NOT NULL PRIMARY KEY AUTO_INCREMENT COMMENT '资源ID'",
+            'desc'  => "int(10) unsigned NOT NULL PRIMARY KEY AUTO_INCREMENT COMMENT '同步ID'",
             'rules' => 'trim|required|max_length[10]|is_natural',
         ),
         'Name' => array(
             'field' => 'Name',
             'name'  => '名称',
-            'alias' => 'SourceName',
+            'alias' => 'RsyncName',
             'attr'  => 'string',
             'desc'  => "varchar(255) NOT NULL COMMENT ' 名称'",
             'rules' => 'trim|required|max_length[255]',
         ),
-        'Url' => array(
-            'field' => 'Url',
-            'name'  => '资源地址',
-            'alias' => 'SourceUrl',
+        'Instance' => array(
+            'field' => 'Instance',
+            'name'  => '实例',
+            'alias' => 'RsyncInstance',
             'attr'  => 'string',
-            'desc'  => "varchar(255) NOT NULL COMMENT ' 资源地址'",
+            'desc'  => "varchar(255) NOT NULL COMMENT ' 实例'",
             'rules' => 'trim|required|max_length[255]',
-        ),
-        'Cloud' => array(
-            'field' => 'Cloud',
-            'name'  => '云地址',
-            'alias' => 'CloudUrl',
-            'attr'  => 'string',
-            'desc'  => "varchar(255) DEFAULT NULL COMMENT '云存储地址'",
-            'rules' => 'trim|max_length[255]',
         ),
         'Infos' => array(
             'field' => 'Infos',
@@ -76,8 +68,7 @@ class SourceData extends DataModel
     {
         return array(
             'Name',
-            'Url',
-            'Cloud',
+            'Instance',
             'Infos',
             'Created',
             'Updated',
@@ -92,8 +83,7 @@ class SourceData extends DataModel
         return array(
             'Id',
             'Name',
-            'Url',
-            'Cloud',
+            'Instance',
             'Infos',
             'Updated',
         );

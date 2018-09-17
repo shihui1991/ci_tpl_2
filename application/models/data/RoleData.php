@@ -89,6 +89,7 @@ class RoleData extends DataModel
             'MenuIds',
             'Infos',
             'Created',
+            'Updated',
         );
     }
 

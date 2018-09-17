@@ -134,6 +134,7 @@ class MenuData extends DataModel
             'Sort',
             'Infos',
             'Created',
+            'Updated',
         );
     }
 
