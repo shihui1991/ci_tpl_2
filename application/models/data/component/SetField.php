@@ -15,7 +15,7 @@ trait SetField
      * @param array $data
      * @return bool|mixed|string
      */
-    public function SetPasswordField($value,$data=array())
+    public function setPasswordField($value,$data=array())
     {
         $value=password_hash($value,PASSWORD_DEFAULT);
 
@@ -27,10 +27,38 @@ trait SetField
      * @param array $data
      * @return string
      */
-    public function SetTokenField($value,$data=array())
+    public function setTokenField($value,$data=array())
     {
         if(empty($value)){
             $value=createGuid();
+        }
+
+        return $value;
+    }
+
+    /** 处理 Guid
+     * @param $value
+     * @param array $data
+     * @return string
+     */
+    public function setGuidField($value,$data=array())
+    {
+        if(empty($value)){
+            $value=createGuid();
+        }
+
+        return $value;
+    }
+
+    /** 处理 Instance
+     * @param $value
+     * @param array $data
+     * @return string
+     */
+    public function setInstanceField($value,$data=array())
+    {
+        if(!empty($value)){
+            $value=str_replace('\\','/',$value);
         }
 
         return $value;

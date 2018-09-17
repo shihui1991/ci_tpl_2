@@ -9,5 +9,17 @@ namespace models\data\component;
 
 trait GetField
 {
+    /** 格式化 Instance
+     * @param $value
+     * @param array $data
+     * @return string
+     */
+    public function getInstanceField($value,$data=array())
+    {
+        if(!empty($value)){
+            $value=str_replace('/','\\',$value);
+        }
 
+        return $value;
+    }
 }
