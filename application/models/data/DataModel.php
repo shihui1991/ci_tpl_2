@@ -32,9 +32,8 @@ abstract class DataModel
     /**
      *  初始化，整理字段
      */
-    public function __construct(array $columns = array())
+    public function __construct()
     {
-        $this->setColumns($columns);
         // 字段详情
         foreach($this->columns as $field=>$column) {
             $this->fields[] = $field;
@@ -49,13 +48,13 @@ abstract class DataModel
      * @param array $columns
      * @return DataModel
      */
-    public static function instance($k = 0, array $columns = array())
+    public static function instance($k = 0)
     {
         if(empty($k)){
             $k=get_called_class();
         }
         if(empty(static::$objs[$k])){
-            static::$objs[$k] = new static($columns);
+            static::$objs[$k] = new static();
         }
 
         return static::$objs[$k];
@@ -71,16 +70,6 @@ abstract class DataModel
         }
         if(isset(static::$objs[$k])){
             unset(static::$objs[$k]);
-        }
-    }
-
-    /** 设置字段
-     * @param array $columns
-     */
-    public function setColumns(array $columns = array())
-    {
-        if(!empty($columns)){
-            $this->columns=$columns;
         }
     }
 

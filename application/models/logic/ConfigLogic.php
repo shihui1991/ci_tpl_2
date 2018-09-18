@@ -16,11 +16,6 @@ use models\validator\ConfigValidator;
 
 class ConfigLogic extends LogicModel
 {
-    protected $tplDB;
-    protected $tplBackDB;
-    protected $tplData;
-    protected $tplValidator;
-
     public function __construct()
     {
         parent::__construct();
@@ -34,11 +29,6 @@ class ConfigLogic extends LogicModel
 
         $this->dataModel = ConfigData::instance();
         $this->validatorModel = ConfigValidator::instance();
-
-        $this->tplDB = ConfigRedis::class;
-        $this->tplBackDB = ConfigMysql::class;
-        $this->tplData = ConfigData::class;
-        $this->tplValidator = ConfigValidator::class;
     }
 
     /**  验证 唯一
@@ -57,50 +47,26 @@ class ConfigLogic extends LogicModel
         return true;
     }
 
-    /** 获取数据库模型
+    /** 通过 Table 获取数据
      * @param string $table
-     * @return mixed
+     * @return array
      */
-    public function getDBModel($table)
+    public function getRowByTable($table)
     {
-        $args['table'] = $table;
-        eval("\$databaseModel = \\{$this->tplDB}::instance(\$table,\$args);");
+        $where=array(
+            array('Table','eq',$table),
+        );
+        $row=$this->databaseModel->getOne($where);
+        if(empty($row['Id'])){
+            return array();
+        }
+        if($this->isFormat){
+            $result=$this->dataModel->format($row,$this->isAlias);
+        }else{
+            $result=$row;
+        }
 
-        return $databaseModel;
-    }
-
-    /** 获取备份数据库模型
-     * @param string $table
-     * @return mixed
-     */
-    public function getBackDBModel($table)
-    {
-        $args['table'] = $table;
-        eval("\$backDBModel = \\{$this->tplBackDB}::instance(\$table,\$args);");
-
-        return $backDBModel;
-    }
-
-    /** 获取数据模型
-     * @param string $table
-     * @param array $columns
-     * @return mixed
-     */
-    public function getDataModel($table, array $columns)
-    {
-        eval("\$dataModel = \\{$this->tplData}::instance(\$table,\$columns);");
-
-        return $dataModel;
-    }
-
-    /** 获取验证模型
-     * @param string $table
-     */
-    public function getValidatorModel($table)
-    {
-        eval("\$validatorModel = \\{$this->tplValidator}::instance(\$table);");
-
-        return $validatorModel;
+        return $result;
     }
 
     /** 批量更新配置
@@ -115,18 +81,6 @@ class ConfigLogic extends LogicModel
         // 批量导入数据
         $configList=array();
         foreach($dataList as $table => $data){
-            // 实例化模型
-            $databaseModel=$this->getDBModel($table);
-            // 建表
-            $result = $databaseModel->createTable($table,$data['columns'],true);
-            if(false == $result){
-                continue;
-            }
-            // 导入数据
-            $result = $databaseModel->batchInsertUpdate($data['list']);
-            if($result < 1){
-                continue;
-            }
             // 添加配置
             // 获取现有
             $where=array(
@@ -149,6 +103,8 @@ class ConfigLogic extends LogicModel
                 $config = array_merge($config,$update);
             }
             $configList[]=$config;
+            // 导入数据
+            TplLogic::instance($table)->importData($data['list']);
         }
         // 添加、更新配置表
         if(empty($configList)){
@@ -174,12 +130,7 @@ class ConfigLogic extends LogicModel
         if(empty($config['Id'])){
             throw new \Exception('配置不存在',EXIT_USER_INPUT);
         }
-        // 实例化配置模型
-        $databaseModel=$this->getDBModel($config['Table']);
-        // 获取数据
-        $list = $databaseModel->getMany();
-        // 输入 Excel
-        Excel::instance()->exportConfig($list,$config['Columns'],$config['Table'],true);
+        TplLogic::instance($config['Table'])->download();
     }
 
     /** 获取配置数据
@@ -188,10 +139,7 @@ class ConfigLogic extends LogicModel
      */
     public function getDataList($table)
     {
-        // 实例化配置模型
-        $databaseModel=$this->getDBModel($table);
-        // 获取数据
-        $list = $databaseModel->getMany();
+        $list=TplLogic::instance($table)->getAll();
 
         return $list;
     }
@@ -211,24 +159,11 @@ class ConfigLogic extends LogicModel
 
     /** 同步快捷配置数据
      * @param array $config
-     * @return int
      * @throws \Exception
      */
     public function rsyncData(array $config)
     {
-        // 实例化模型
-        $databaseModel=$this->getDBModel($config['Table']);
-        $backDBModel=$this->getBackDBModel($config['Table']);
-        // 同步
-        $list = $databaseModel->getMany();
-        if(empty($list)){
-            return 0;
-        }
-        $result = $backDBModel->createTable($config['Table'],$config['Columns'],false);
-        if(false == $result){
-            throw new \Exception('建表失败',EXIT_DATABASE);
-        }
-        $result = $backDBModel->batchInsertUpdate($list);
+        $result = TplLogic::instance($config['Table'])->rsync();
 
         return $result;
     }

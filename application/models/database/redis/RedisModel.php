@@ -14,9 +14,9 @@ class RedisModel extends DatabaseModel
 {
     public $dbConfigFile='redis';       // 数据库配置文件
 
-    public function __construct(array $args=array())
+    public function __construct()
     {
-        parent::__construct($args);
+        parent::__construct();
 
         // 加载配置
         $this->CI->load->config($this->dbConfigFile,TRUE);
@@ -46,12 +46,11 @@ class RedisModel extends DatabaseModel
     }
 
     /** 建表
-     * @param string $table
      * @param array $columns
      * @param bool $drop
      * @return mixed
      */
-    public function createTable($table, array $columns, $drop=false)
+    public function createTable(array $columns, $drop=false)
     {
         if($drop){
             $this->truncate();

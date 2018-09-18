@@ -20,38 +20,23 @@ abstract class DatabaseModel
 
     static protected $objs;
 
-    public function __construct(array $args=array())
+    public function __construct()
     {
-        if(isset($args['dbConfigFile'])){
-            $this->dbConfigFile=$args['dbConfigFile'];
-        }
-        if(isset($args['dbConfigName'])){
-            $this->dbConfigName=$args['dbConfigName'];
-        }
-        if(isset($args['db'])){
-            $this->db=$args['db'];
-        }
-        if(isset($args['table'])){
-            $this->table=$args['table'];
-        }
-        if(isset($args['primaryKey'])){
-            $this->primaryKey=$args['primaryKey'];
-        }
-
         $this->CI = & get_instance();
 
     }
 
     /**  获取实例
+     * @param string $k
      * @return DatabaseModel
      */
-    public static function instance($k=0,array $args=array())
+    public static function instance($k=0)
     {
         if(empty($k)){
             $k=get_called_class();
         }
         if(empty(static::$objs[$k])){
-            static::$objs[$k] = new static($args);
+            static::$objs[$k] = new static();
         }
 
         return static::$objs[$k];
@@ -78,12 +63,11 @@ abstract class DatabaseModel
     abstract public function query($cmd, $arguments=array());
 
     /** 建表
-     * @param string $table
      * @param array $columns
      * @param bool $drop
      * @return mixed
      */
-    abstract public function createTable($table, array $columns, $drop=false);
+    abstract public function createTable(array $columns, $drop=false);
 
     /** 重置 ID
      * @param int $start

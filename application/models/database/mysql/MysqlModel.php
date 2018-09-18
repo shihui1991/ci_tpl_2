@@ -13,9 +13,9 @@ class MysqlModel extends DatabaseModel
 {
     public $dbConfigFile='database';       // 数据库配置文件
 
-    public function __construct(array $args=array())
+    public function __construct()
     {
-        parent::__construct($args);
+        parent::__construct();
 
         // 连接数据库
         $this->dbModel=$this->CI->load->database($this->dbConfigName,true);
@@ -35,19 +35,18 @@ class MysqlModel extends DatabaseModel
     }
 
     /** 建表
-     * @param string $table
      * @param array $columns
      * @param bool $drop
      * @return mixed
      */
-    public function createTable($table, array $columns,$drop=false)
+    public function createTable(array $columns,$drop=false)
     {
         // 设置字符集
         $sql = 'SET NAMES utf8';
         $this->query($sql);
         // 删除表
         if($drop){
-            $sql = "DROP TABLE IF EXISTS `$table`";
+            $sql = "DROP TABLE IF EXISTS `{$this->table}`";
             $this->query($sql);
             $check='';
         }
@@ -59,14 +58,14 @@ class MysqlModel extends DatabaseModel
         $sql = "SET character_set_client = utf8 ;";
         $this->query($sql);
         // 建表
-        $sql = "CREATE TABLE $check `$table` (";
+        $sql = "CREATE TABLE $check `{$this->table}` (";
 
         $fields=array();
         foreach($columns as $field=>$column){
             $fields[]="`$field` {$column['desc']}";
         }
         $sql .= implode(',',$fields);
-        $sql .= ") ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='$table';";
+        $sql .= ") ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='{$this->table}';";
 
         $result = $this->query($sql);
 

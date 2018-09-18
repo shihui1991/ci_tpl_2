@@ -110,7 +110,7 @@ class MasterLogic extends LogicModel
             throw new \Exception('用户不存在',EXIT_USER_INPUT);
         }
         if($data['Token'] != $master['Token']){
-            throw new \Exception('请重新登录',EXIT_USER_INPUT);
+            throw new \Exception('账号已在其他设备登录',EXIT_USER_INPUT);
         }
         if(STATE_OFF == $master['State']){
             throw new \Exception('用户已禁用',EXIT_USER_INPUT);

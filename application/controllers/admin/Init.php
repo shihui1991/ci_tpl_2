@@ -31,8 +31,6 @@ class Init extends Base
     {
         // 登录验证失败强制跳转
         if(isset($_SESSION['redirect'])){
-            $code=EXIT_CONFIG;
-            $msg='请重新登录';
             $url=$_SESSION['redirect'];
             unset($_SESSION['redirect']);
         }
