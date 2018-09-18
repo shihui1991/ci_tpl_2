@@ -222,16 +222,23 @@ EEE;
         $datetime=date('Y-m-d H:i:s');
         $reqUrl=$this->requestUrl;
         $ip=$this->input->ip_address();
+        $get=json_encode($this->input->get());
+        $post=json_encode($this->input->post());
+        $stream=urldecode($this->input->raw_input_stream);
         // 记录内容
         $record=<<<"EEE"
         
 【产生时间】--> $datetime
 【访问 IP 】--> $ip
-【请求地址】--> $reqUrl
 【异常类型】--> $type
 【异常信息】--> $msg
 【异常文件】--> $file
 【异常行号】--> $line
+【请求地址】--> $reqUrl
+【请求数据】↓
+【  Get 】$get
+【 Post 】$post
+【Stream】$stream
 -------------------------------------------------
 
 EEE;
