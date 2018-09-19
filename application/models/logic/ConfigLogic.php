@@ -72,16 +72,16 @@ class ConfigLogic extends LogicModel
     /** 批量更新配置
      * @param string $file
      * @return bool|int
+     * @throws \Exception
      * @throws \PHPExcel_Reader_Exception
      */
     public function update($file)
     {
         // 读取 excel
         $dataList=Excel::instance()->getAllConfigDataList($file);
-        // 批量导入数据
+        // 批量导入配置表数据
         $configList=array();
         foreach($dataList as $table => $data){
-            // 添加配置
             // 获取现有
             $where=array(
                 array('Table','eq',$table),
@@ -103,14 +103,19 @@ class ConfigLogic extends LogicModel
                 $config = array_merge($config,$update);
             }
             $configList[]=$config;
-            // 导入数据
-            TplLogic::instance($table)->importData($data['list']);
         }
         // 添加、更新配置表
         if(empty($configList)){
-            return false;
+            throw new \Exception('配置为空',EXIT_USER_INPUT);
         }
         $result = $this->databaseModel->batchInsertUpdate($configList);
+        if($result < 1){
+            throw new \Exception('导入配置表失败',EXIT_DATABASE);
+        }
+        // 导入配置数据
+        foreach($dataList as $table=>$data){
+            TplLogic::instance($table)->importData($data['list']);
+        }
 
         return $result;
     }

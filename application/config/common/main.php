@@ -23,3 +23,7 @@ defined('ADMIN_YES')      OR define('ADMIN_YES', 1);    // 超管 - 是
 // 排序顺序
 defined('ORDER_BY_ASC')       OR define('ORDER_BY_ASC', 'ASC');      // 排序顺序 - 升序
 defined('ORDER_BY_DESC')      OR define('ORDER_BY_DESC', 'DESC');    // 排序顺序 - 降序
+
+defined('UPLOAD_DIR')        OR define('UPLOAD_DIR', 'uploads');      // 上传目录
+defined('DOWNLOAD_DIR')      OR define('DOWNLOAD_DIR', 'download');   // 下载目录
+defined('CONFIG_UPLOAD_DIR') OR define('CONFIG_UPLOAD_DIR', 'configFile');   // 配置文件上传目录

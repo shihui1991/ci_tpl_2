@@ -56,9 +56,9 @@ class CateLogic extends LogicModel
         $orderBy=array(
             'Group'=>ORDER_BY_ASC,
             'Sort'=>ORDER_BY_ASC,
-            'Constant'=>ORDER_BY_ASC,
             'Value'=>ORDER_BY_ASC,
             'Display'=>ORDER_BY_DESC,
+            'Constant'=>ORDER_BY_ASC,
         );
         $list=$this->databaseModel->getMany($where,$select,$orderBy);
         if(empty($list)){
@@ -106,9 +106,9 @@ class CateLogic extends LogicModel
         $orderBy=array(
             'Group'=>ORDER_BY_ASC,
             'Sort'=>ORDER_BY_ASC,
-            'Constant'=>ORDER_BY_ASC,
             'Value'=>ORDER_BY_ASC,
             'Display'=>ORDER_BY_DESC,
+            'Constant'=>ORDER_BY_ASC,
         );
         $list=$this->databaseModel->getMany($where,$select,$orderBy);
         // 文件头
@@ -117,13 +117,14 @@ class CateLogic extends LogicModel
 /**
  *  动态配置
  */
- 
+
 FFF;
         // 文件体
         if(!empty($list)){
             $list = new ListIterator($list);
             foreach($list as $row){
                 $str .= <<<"FFF"
+
 /* {$row['Group']} - {$row['Name']} */
 defined('{$row['Constant']}')      OR define('{$row['Constant']}', '{$row['Value']}');
 
