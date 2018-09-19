@@ -78,7 +78,7 @@ class CateData extends DataModel
         'Created' => array(
             'field' => 'Created',
             'name'  => '创建时间',
-            'alias' => 'ApiCreated',
+            'alias' => 'CateCreated',
             'attr'  => 'datetime',
             'desc'  => "datetime DEFAULT NULL COMMENT '创建时间'",
             'rules' => 'trim|max_length[255]',
@@ -86,7 +86,7 @@ class CateData extends DataModel
         'Updated' => array(
             'field' => 'Updated',
             'name'  => '更新时间',
-            'alias' => 'ApiUpdated',
+            'alias' => 'CateUpdated',
             'attr'  => 'datetime',
             'desc'  => "datetime DEFAULT NULL COMMENT '更新时间'",
             'rules' => 'trim|max_length[255]',
