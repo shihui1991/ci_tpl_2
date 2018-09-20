@@ -144,11 +144,9 @@ function uploadFile(obj) {
     if(files && files.length){
         $.each(files,function (i,file) {
             var formdata=new FormData();
-            if(!savename){
-                savename=file.name;
-            }
+
             formdata.append('SavePath',savepath);
-            formdata.append('SaveName',savename);
+            formdata.append('SaveName',file.name);
             formdata.append('Overwrite',overwrite);
             formdata.append('UploadName',uploadname);
             formdata.append(uploadname,file);
