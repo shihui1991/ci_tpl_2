@@ -27,6 +27,7 @@ class File extends Auth
             'Path'=>UPLOAD_DIR,
             'RealDir'=>realpath('./'),
             'RealPath'=>realpath(UPLOAD_DIR),
+            'Size'=>'0B',
             'Updated'=>date('Y-m-d H:i:s',filemtime(realpath(UPLOAD_DIR))),
         );
         $upload = getDirAllDirOrFile(UPLOAD_DIR);
@@ -39,6 +40,7 @@ class File extends Auth
             'Path'=>DOWNLOAD_DIR,
             'RealDir'=>realpath('./'),
             'RealPath'=>realpath(DOWNLOAD_DIR),
+            'Size'=>'0B',
             'Updated'=>date('Y-m-d H:i:s',filemtime(realpath(DOWNLOAD_DIR))),
         );
         $download = getDirAllDirOrFile(DOWNLOAD_DIR);
