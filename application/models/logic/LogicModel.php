@@ -57,20 +57,32 @@ abstract class LogicModel
     }
 
     /** 同步
+     * @param string $act
      * @return int
      * @throws \Exception
      */
-    public function rsync()
+    public function rsync($act='backup')
     {
-        $list = $this->databaseModel->getMany();
+        // 备份
+        if('backup' == $act){
+            $db1=$this->databaseModel;
+            $db2=$this->backDB;
+        }
+        // 还原
+        else{
+            $db1=$this->backDB;
+            $db2=$this->databaseModel;
+        }
+
+        $list = $db1->getMany();
         if(empty($list)){
             return 0;
         }
-        $result = $this->backDB->createTable($this->dataModel->getColumns(),false);
+        $result = $db2->createTable($this->dataModel->getColumns(),false);
         if(false == $result){
             throw new \Exception('建表失败',EXIT_DATABASE);
         }
-        $result = $this->backDB->batchInsertUpdate($list);
+        $result = $db2->batchInsertUpdate($list);
 
         return $result;
     }

@@ -167,6 +167,7 @@ trait CheckUnique
             $data['Instance']=str_replace('\\','/',$data['Instance']);
             $where=array(
                 array('Instance','eq',$data['Instance']),
+                array('Method','eq',$data['Method']),
             );
             if(!empty($data['Id'])){
                 $where[]=array('Id','!=',$data['Id']);

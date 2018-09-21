@@ -22,10 +22,7 @@ class CateLogic extends LogicModel
         // redis 为主，mysql 备份
         $this->databaseModel = CateRedis::instance();
         $this->backDB = CateMysql::instance();
-        // mysql 为主，redis 备份
-//        $this->databaseModel = CateMysql::instance();
-//        $this->backDB = CateRedis::instance();
-        
+
         $this->dataModel = CateData::instance();
         $this->validatorModel = CateValidator::instance();
     }

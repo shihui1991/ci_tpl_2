@@ -22,10 +22,6 @@ class RsyncLogic extends LogicModel
         // redis 为主，mysql 备份
         $this->databaseModel = RsyncRedis::instance();
         $this->backDB = RsyncMysql::instance();
-        // mysql 为主，redis 备份
-//        $this->databaseModel = RsyncMysql::instance();
-//        $this->backDB = RsyncRedis::instance();
-
 
         $this->dataModel = RsyncData::instance();
         $this->validatorModel = RsyncValidator::instance();

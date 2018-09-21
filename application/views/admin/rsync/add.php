@@ -31,6 +31,13 @@
                             </div>
 
                             <div class="layui-form-item">
+                                <label class="layui-form-label">方法：</label>
+                                <div class="layui-input-block">
+                                    <input type="text" name="Method" required  lay-verify="required" placeholder=""  class="layui-input">
+                                </div>
+                            </div>
+
+                            <div class="layui-form-item">
                                 <label class="layui-form-label">说明：</label>
                                 <div class="layui-input-block">
                                     <textarea name="Infos" class="layui-textarea"></textarea>

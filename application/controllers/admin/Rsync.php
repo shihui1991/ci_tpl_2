@@ -143,8 +143,12 @@ class Rsync extends Auth
     /** 同步
      * @throws Exception
      */
-    public function module()
+    public function act()
     {
+        if(empty($this->inputData['Act']) || !in_array($this->inputData['Act'],array('backup','restore'))){
+            throw new Exception('操作错误',EXIT_USER_INPUT);
+        }
+        $act=$this->inputData['Act'];
         // 全部
         if(empty($this->inputData['Id'])){
             $list=$this->logicModel->getAll();
@@ -162,7 +166,7 @@ class Rsync extends Auth
             throw new Exception('没有添加同步模块',EXIT_DATABASE);
         }
         foreach($list as $row){
-            eval($row['Instance'].';');
+            eval("{$row['Instance']}->{$row['Method']}('{$act}');");
         }
 
         $data=array();

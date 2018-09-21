@@ -22,9 +22,6 @@ class ApiLogic extends LogicModel
         // redis 为主，mysql 备份
         $this->databaseModel = ApiRedis::instance();
         $this->backDB = ApiMysql::instance();
-        // mysql 为主，redis 备份
-//        $this->databaseModel = ApiMysql::instance();
-//        $this->backDB = ApiRedis::instance();
 
         $this->dataModel = ApiData::instance();
         $this->validatorModel = ApiValidator::instance();

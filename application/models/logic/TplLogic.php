@@ -27,9 +27,6 @@ class TplLogic extends LogicModel
         // redis 为主，mysql 备份
         $this->tplDB = TplRedis::class;
         $this->tplBackDB = TplMysql::class;
-        // mysql 为主，redis 备份
-//        $this->tplDB = TplMysql::class;
-//        $this->tplBackDB = TplRedis::class;
 
         $this->tplData = TplData::class;
         $this->tplValidator = TplValidator::class;

@@ -35,6 +35,14 @@ class RsyncData extends DataModel
             'desc'  => "varchar(255) NOT NULL COMMENT ' 实例'",
             'rules' => 'trim|required|max_length[255]',
         ),
+        'Method' => array(
+            'field' => 'Method',
+            'name'  => '操作方法',
+            'alias' => 'RsyncMethod',
+            'attr'  => 'string',
+            'desc'  => "varchar(255) NOT NULL COMMENT ' 操作方法'",
+            'rules' => 'trim|required|max_length[255]',
+        ),
         'Infos' => array(
             'field' => 'Infos',
             'name'  => '说明',
@@ -69,6 +77,7 @@ class RsyncData extends DataModel
         return array(
             'Name',
             'Instance',
+            'Method',
             'Infos',
             'Created',
             'Updated',
@@ -84,6 +93,7 @@ class RsyncData extends DataModel
             'Id',
             'Name',
             'Instance',
+            'Method',
             'Infos',
             'Updated',
         );

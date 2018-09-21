@@ -22,9 +22,6 @@ class RoleLogic extends LogicModel
         // redis 为主，mysql 备份
         $this->databaseModel = RoleRedis::instance();
         $this->backDB = RoleMysql::instance();
-        // mysql 为主，redis 备份
-//        $this->databaseModel = RoleMysql::instance();
-//        $this->backDB = RoleRedis::instance();
 
         $this->dataModel = RoleData::instance();
         $this->validatorModel = RoleValidator::instance();

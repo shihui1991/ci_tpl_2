@@ -23,9 +23,6 @@ class ConfigLogic extends LogicModel
         // redis 为主，mysql 备份
         $this->databaseModel = ConfigRedis::instance();
         $this->backDB = ConfigMysql::instance();
-        // mysql 为主，redis 备份
-//        $this->databaseModel = ConfigMysql::instance();
-//        $this->backDB = ConfigRedis::instance();
 
         $this->dataModel = ConfigData::instance();
         $this->validatorModel = ConfigValidator::instance();
@@ -150,25 +147,27 @@ class ConfigLogic extends LogicModel
     }
 
     /** 同步所有快捷配置数据
+     * @param string $act
      * @throws \Exception
      */
-    public function rsyncAll()
+    public function rsyncAll($act='backup')
     {
         $list = $this->getAll();
         if(!empty($list)){
             foreach($list as $row){
-                $this->rsyncData($row);
+                $this->rsyncData($row,$act);
             }
         }
     }
 
     /** 同步快捷配置数据
      * @param array $config
+     * @param string $act
      * @throws \Exception
      */
-    public function rsyncData(array $config)
+    public function rsyncData(array $config,$act='backup')
     {
-        $result = TplLogic::instance($config['Table'])->rsync();
+        $result = TplLogic::instance($config['Table'])->rsync($act);
 
         return $result;
     }

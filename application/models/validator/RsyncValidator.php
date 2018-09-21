@@ -18,6 +18,7 @@ class RsyncValidator extends ValidatorModel
         return array(
             'Name',
             'Instance',
+            'Method',
             'Infos',
         );
     }
@@ -31,6 +32,7 @@ class RsyncValidator extends ValidatorModel
             'Id',
             'Name',
             'Instance',
+            'Method',
             'Infos',
         );
     }
