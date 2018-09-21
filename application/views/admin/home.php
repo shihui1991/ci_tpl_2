@@ -125,8 +125,8 @@
         layer.ready(function () {
             layer.open({
                 type:1
-                //,skin:'layui-layer-lan'
-                ,area: ['300px', '600px']
+                ,skin:'layui-layer-lan'
+                ,area: ['270px', '100%']
                 ,offset:'l'
                 ,closeBtn:0
                 ,shade:0
