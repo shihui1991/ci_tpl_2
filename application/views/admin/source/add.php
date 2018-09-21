@@ -28,7 +28,7 @@
                                     图片资源：
                                     <a class="layui-btn layui-btn-warm layui-btn-sm btn-upload">
                                         点击上传
-                                        <input type="file" accept="image/*" name="UploadFile" data-field="Url" data-savepath="source" data-savename="" data-overwrite="true" onchange="uploadImg(this)">
+                                        <input type="file" accept="image/*" name="UploadFile" data-field="Url" data-savepath="source" data-overwrite="true" onchange="uploadImg(this)">
                                     </a>
                                 </label>
                                 <div class="layui-input-block uploaded-box">

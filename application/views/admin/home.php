@@ -141,6 +141,7 @@
                 ,btnAlign: 'c'
                 ,yes:function (index,layero) {
                     layer.closeAll('iframe');
+                    layer.min(index);
                 }
                 ,btn2:function (index,layero) {
                     ajaxSubmit('/admin/welcome/logout',{},'get');
@@ -158,7 +159,6 @@
                             window.close();
                         }
                     }
-                    return false;
                 }
             });
         });

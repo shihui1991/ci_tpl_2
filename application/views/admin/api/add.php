@@ -93,7 +93,7 @@
                                     响应示例：
                                     <a class="layui-btn layui-btn-warm layui-btn-sm btn-upload">
                                         点击上传
-                                        <input type="file" accept="image/*" name="UploadFile" multiple data-field="Example[]" data-savepath="api" data-savename="" data-overwrite="true" onchange="uploadImg(this)">
+                                        <input type="file" accept="image/*" name="UploadFile" multiple data-field="Example[]" data-savepath="api" data-overwrite="true" onchange="uploadImg(this)">
                                     </a>
                                 </label>
                                 <div class="layui-input-block uploaded-box">

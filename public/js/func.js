@@ -131,7 +131,6 @@ function uploadFile(obj) {
     var multi=btn.prop('multiple');
     var field=btn.data('field');
     var savepath=btn.data('savepath');
-    var savename=btn.data('savename');
     var overwrite=btn.data('overwrite');
     var uploadname=btn.attr('name');
     var files=obj.files;
@@ -144,7 +143,6 @@ function uploadFile(obj) {
     if(files && files.length){
         $.each(files,function (i,file) {
             var formdata=new FormData();
-
             formdata.append('SavePath',savepath);
             formdata.append('SaveName',file.name);
             formdata.append('Overwrite',overwrite);
