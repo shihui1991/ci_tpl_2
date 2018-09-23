@@ -103,6 +103,7 @@ class ConfigData extends DataModel
         return array(
             'Id',
             'Name',
+            'Columns',
             'Infos',
             'Updated',
         );

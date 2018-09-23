@@ -48,7 +48,12 @@ class Menu extends Auth
      */
     public function all()
     {
-        $list=$this->logicModel->getAll();
+        $params=array();
+        $orderBy=array(
+            'Sort'=>ORDER_BY_ASC,
+            'Id'=>ORDER_BY_ASC,
+        );
+        $list=$this->logicModel->getAll($params,$orderBy);
 
         $data=array(
             'List'=>$list,

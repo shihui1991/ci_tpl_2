@@ -72,6 +72,17 @@ class MysqlModel extends DatabaseModel
         return $result;
     }
 
+    /** 删除表
+     * @return mixed
+     */
+    public function dropTable()
+    {
+        $sql = "DROP TABLE IF EXISTS `{$this->table}`";
+        $result = $this->query($sql);
+
+        return $result;
+    }
+
     /** 重置 ID
      * @param int $start
      * @return mixed

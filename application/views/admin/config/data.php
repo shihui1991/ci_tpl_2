@@ -12,8 +12,17 @@
                     <li class="">
                         <a href="/admin/config/file">配置文件</a>
                     </li>
+                    <li class="">
+                        <a href="/admin/config/add">添加配置</a>
+                    </li>
+                    <li class="">
+                        <a href="/admin/config/edit?Id=<?php echo $data['ConfigId'];?>">修改配置</a>
+                    </li>
                     <li class="layui-this">
-                        <a href="/admin/config/data?Id=<?php echo $data['Id'];?>">配置数据</a>
+                        <a href="/admin/config/data?ConfigId=<?php echo $data['ConfigId'];?>">配置数据</a>
+                    </li>
+                    <li class="">
+                        <a href="/admin/config/insert?ConfigId=<?php echo $data['ConfigId'];?>">添加数据</a>
                     </li>
                 </ul>
                 <div class="layui-tab-content">
@@ -29,6 +38,7 @@
                                         <?php echo $column['attr'];?>
                                     </th>
                                 <?php endforeach;?>
+                                <th>操作</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -39,6 +49,12 @@
                                         <?php foreach($data['Config']['Columns'] as $field=>$column):?>
                                             <td><?php echo $row[$field];?></td>
                                         <?php endforeach;?>
+                                        <td>
+                                            <div class="layui-btn-group">
+                                                <a class="layui-btn layui-btn-xs" href="/admin/config/modify?ConfigId=<?php echo $data['ConfigId'];?>&Id=<?php echo $row['Id'];?>">编辑</a>
+                                                <a class="layui-btn layui-btn-xs layui-btn-danger" data-confirm="确定要删除吗？" onclick="btnAct(this);" data-action="/admin/config/delete?ConfigId=<?php echo $data['ConfigId'];?>&Ids=<?php echo $row['Id'];?>">删除</a>
+                                            </div>
+                                        </td>
                                     </tr>
                                 <?php endforeach;?>
                             <?php endif;?>

@@ -42,7 +42,7 @@ class TplRedis extends RedisModel
      * @return RedisModel
      * @throws \Exception
      */
-    static public function instance($table, array $args, $k=0)
+    static public function instance($table='', array $args=array(), $k=0)
     {
         if(empty($k)){
             $k=get_called_class();

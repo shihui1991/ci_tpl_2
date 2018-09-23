@@ -69,6 +69,11 @@ abstract class DatabaseModel
      */
     abstract public function createTable(array $columns, $drop=false);
 
+    /** 删除表
+     * @return mixed
+     */
+    abstract public function dropTable();
+
     /** 重置 ID
      * @param int $start
      * @return bool

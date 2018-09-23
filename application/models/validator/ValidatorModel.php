@@ -61,7 +61,11 @@ abstract class ValidatorModel
         }
         else{
             $method='vali'.ucfirst($method).'Fields';
-            $fields=$this->$method();
+            if(method_exists($this,$method)){
+                $fields=$this->$method();
+            }else{
+                $fields=array_column($columns,'field');
+            }
         }
 
         // 设置验证规则

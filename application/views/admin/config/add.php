@@ -11,33 +11,25 @@
                     <li class="">
                         <a href="/admin/config/file">配置文件</a>
                     </li>
-                    <li class="">
-                        <a href="/admin/config/add">添加配置</a>
-                    </li>
                     <li class="layui-this">
-                        <a href="/admin/config/edit?Id=<?php echo $data['Id']; ?>">修改配置</a>
-                    </li>
-                    <li class="">
-                        <a href="/admin/config/data?ConfigId=<?php echo $data['Id'];?>">配置数据</a>
+                        <a href="/admin/config/add">添加配置</a>
                     </li>
                 </ul>
                 <div class="layui-tab-content">
                     <div class="layui-tab-item layui-show">
-                        <form class="layui-form " action="/admin/config/edit" method="post" onsubmit="return false;">
-
-                            <input type="hidden" name="Id" value="<?php echo $data['Id']?>">
+                        <form class="layui-form " action="/admin/config/add" method="post" onsubmit="return false;">
 
                             <div class="layui-form-item">
                                 <label class="layui-form-label">表名：</label>
                                 <div class="layui-input-block">
-                                    <input type="text" name="Table" value="<?php echo $data['List']['Table'];?>" readonly class="layui-input">
+                                    <input type="text" name="Table" value="" required  lay-verify="required" placeholder="" class="layui-input">
                                 </div>
                             </div>
                             
                             <div class="layui-form-item">
                                 <label class="layui-form-label">名称：</label>
                                 <div class="layui-input-block">
-                                    <input type="text" name="Name" value="<?php echo $data['List']['Name'];?>" required  lay-verify="required" placeholder=""  class="layui-input">
+                                    <input type="text" name="Name" value="" required  lay-verify="required" placeholder="" class="layui-input">
                                 </div>
                             </div>
 
@@ -57,38 +49,7 @@
                                         </tr>
                                         </thead>
                                         <tbody>
-                                        <?php $index=0; ?>
-                                        <?php if(!empty($data['List']['Columns'])):?>
-                                            <?php foreach($data['List']['Columns'] as $column):?>
-                                                <tr>
-                                                    <td><input type="text" name="Columns[<?php echo $index;?>][field]" value="<?php echo $column['field'];?>" class="layui-input"></td>
-                                                    <td><input type="text" name="Columns[<?php echo $index;?>][name]" value="<?php echo $column['name'];?>" class="layui-input"></td>
-                                                    <td><input type="text" name="Columns[<?php echo $index;?>][alias]" value="<?php echo $column['alias'];?>" class="layui-input"></td>
-                                                    <td>
-                                                        <select name="Columns[<?php echo $index;?>][attr]">
-                                                            <option value="int" <?php if('int' == $column['attr']){echo ' selected';}?>> int </option>
-                                                            <option value="float" <?php if('float' == $column['attr']){echo ' selected';}?>> float </option>
-                                                            <option value="double" <?php if('double' == $column['attr']){echo ' selected';}?>> double </option>
-                                                            <option value="string" <?php if('string' == $column['attr']){echo ' selected';}?>> string </option>
-                                                            <option value="array" <?php if('array' == $column['attr']){echo ' selected';}?>> array </option>
-                                                            <option value="json" <?php if('json' == $column['attr']){echo ' selected';}?>> json </option>
-                                                            <option value="date" <?php if('date' == $column['attr']){echo ' selected';}?>> date </option>
-                                                            <option value="datetime" <?php if('datetime' == $column['attr']){echo ' selected';}?>> datetime </option>
-                                                        </select>
-                                                    </td>
-                                                    <td><input type="text" name="Columns[<?php echo $index;?>][desc]" value="<?php echo $column['desc'];?>" class="layui-input"></td>
-                                                    <td><input type="text" name="Columns[<?php echo $index;?>][rules]" value="<?php echo $column['rules'];?>" class="layui-input"></td>
-                                                    <td>
-                                                        <div class="layui-btn-group">
-                                                            <a class="layui-btn layui-btn-xs layui-btn-danger" onclick="removeField(this);">删除</a>
-                                                            <a class="layui-btn layui-btn-xs layui-btn-primary" onclick="moveUp(this);" title="上移">上移</a>
-                                                            <a class="layui-btn layui-btn-xs layui-btn-normal" onclick="moveDown(this);" title="下移">下移</a>
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                                <?php $index++; ?>
-                                            <?php endforeach;?>
-                                        <?php endif;?>
+
                                         </tbody>
                                     </table>
                                 </div>
@@ -97,7 +58,7 @@
                             <div class="layui-form-item">
                                 <label class="layui-form-label">说明：</label>
                                 <div class="layui-input-block">
-                                    <textarea name="Infos" class="layui-textarea"><?php echo $data['List']['Infos'];?></textarea>
+                                    <textarea name="Infos" class="layui-textarea"></textarea>
                                 </div>
                             </div>
 
@@ -125,15 +86,14 @@
             return false;
         });
     });
-
-    var index=<?php echo $index; ?>;
+    var index=0;
     // 添加字段
     function addField(obj) {
         var btn=$(obj);
         var table=btn.parents('table:first');
         var tbody=table.find('tbody');
         var dom='';
-
+        
         dom += '<tr>' +
             '    <td><input type="text" name="Columns['+index+'][field]" value="" class="layui-input"></td>' +
             '    <td><input type="text" name="Columns['+index+'][name]" value="" class="layui-input"></td>' +
@@ -192,4 +152,5 @@
             tr.next().after(tr.get());
         }
     }
+
 </script>

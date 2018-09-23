@@ -132,6 +132,30 @@ abstract class LogicModel
         return $where;
     }
 
+    /** 转换查询字段
+     * @param array $select
+     * @return array
+     */
+    public function trunsSelect(array $select=array())
+    {
+        if(empty($select)){
+            return array();
+        }
+        $fields=$this->dataModel->getFields();
+        $result=array();
+        foreach($select as $key){
+            $field=$this->dataModel->getRealField($key);
+            if(false == $field){
+                $field=$key;
+            }
+            if(in_array($field,$fields)){
+                $result[]=$field;
+            }
+        }
+
+        return $result;
+    }
+
     /** 将请求参数转换为排序条件
      * @param array $params
      * @return array
@@ -182,6 +206,7 @@ abstract class LogicModel
     public function getListByPage($page=1, $perPage=DEFAULT_PERPAGE, array $params=array(), array $order=array(), array $select=array())
     {
         $where=$this->trunsParamsToWhere($params);
+        $select=$this->trunsSelect($select);
         $orderBy=$this->trunsParamsToOrderBy($order);
         $offset = $perPage * ($page - 1);
         $list=$this->databaseModel->getMany($where, $select, $orderBy, $perPage, $offset);
@@ -203,13 +228,47 @@ abstract class LogicModel
     }
 
     /** 获取全部
+     * @param array $params
+     * @param array $order
+     * @param array $select
      * @return mixed
      */
-    public function getAll(array $params=array())
+    public function getAll(array $params=array(), array $order=array(), array $select=array())
     {
         $where=$this->trunsParamsToWhere($params);
+        $select=$this->trunsSelect($select);
+        $orderBy=$this->trunsParamsToOrderBy($order);
 
-        $list=$this->databaseModel->getMany($where);
+        $list=$this->databaseModel->getMany($where,$select,$orderBy);
+        if(empty($list)){
+            return array();
+        }
+
+        $result=array();
+        if($this->isFormat){
+            $list=new ListIterator($list);
+            foreach($list as $row){
+                $result[]=$this->dataModel->format($row,$this->isAlias);
+            }
+        }else{
+            $result = $list;
+        }
+
+        return $result;
+    }
+
+    /** 通过 ID 获取列表
+     * @param array $ids
+     * @param array $select
+     * @param array $orderBy
+     * @return array
+     */
+    public function getListByIds(array $ids, $select=array(), $orderBy=array())
+    {
+        $select=$this->trunsSelect($select);
+        $orderBy=$this->trunsParamsToOrderBy($orderBy);
+
+        $list = $this->databaseModel->getListByKeys($ids,$select,$orderBy);
         if(empty($list)){
             return array();
         }
@@ -247,6 +306,16 @@ abstract class LogicModel
         return $result;
     }
 
+    /** 通过 ID 删除数据
+     * @param array $ids
+     * @return mixed
+     */
+    public function delByIds(array $ids)
+    {
+        $result = $this->databaseModel->deleteByKeys($ids);
+
+        return $result;
+    }
 
     /**  表单添加
      * @param array $input

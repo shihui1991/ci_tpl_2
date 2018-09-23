@@ -169,7 +169,11 @@ abstract class DataModel
         }
         else{
             $method='fill'.ucfirst($method).'Fields';
-            $fields=$this->$method();
+            if(method_exists($this,$method)){
+                $fields=$this->$method();
+            }else{
+                $fields=$this->fields;
+            }
         }
         if(empty($fields)){
             return array();

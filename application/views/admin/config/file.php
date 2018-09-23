@@ -12,14 +12,18 @@
                     <li class="layui-this">
                         <a href="/admin/config/file">配置文件</a>
                     </li>
-                    <li class="layui-btn layui-btn-warm btn-upload">
-                        上传配置文件
-                        <input type="file" accept="application/vnd.ms-excel" name="UploadFile" data-field="File" data-savepath="<?php echo CONFIG_UPLOAD_DIR;?>" data-overwrite="true" onchange="uploadConfig(this)">
+                    <li class="">
+                        <a href="/admin/config/add">添加配置</a>
                     </li>
                 </ul>
                 <div class="layui-tab-content">
                     <div class="layui-tab-item layui-show">
-
+                        <div class="layui-btn-group">
+                            <a class="layui-btn layui-btn-warm btn-upload">
+                                上传配置文件
+                                <input type="file" accept="application/vnd.ms-excel" name="UploadFile" data-field="File" data-savepath="<?php echo CONFIG_UPLOAD_DIR;?>" data-overwrite="true" onchange="uploadConfig(this)">
+                            </a>
+                        </div>
                         <table class="layui-table treetable">
                             <thead>
                             <tr>

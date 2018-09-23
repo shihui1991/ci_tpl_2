@@ -58,59 +58,13 @@ class MenuLogic extends LogicModel
         $where=array(
             array('ParentId','eq',$parentId),
         );
-        $select=array();
         $orderBy=array(
             'Sort'=>ORDER_BY_ASC,
             'Id'=>ORDER_BY_ASC,
         );
-        $list=$this->databaseModel->getMany($where,$select,$orderBy);
-        if(empty($list)){
-            return array();
-        }
-        $list=new ListIterator($list);
-        $result=array();
-        foreach($list as $row){
-            if($this->isFormat){
-                $result[]=$this->dataModel->format($row,$this->isAlias);
-            }else{
-                $result[] = $row;
-            }
-        }
+        $list=$this->getAll($where,$orderBy);
 
-        return $result;
-    }
-
-    /** 获取全部
-     * @return mixed
-     */
-    public function getAll(array $params=array())
-    {
-        $where=$this->trunsParamsToWhere($params);
-        $select=array();
-        $orderBy=array(
-            'Sort'=>ORDER_BY_ASC,
-            'Id'=>ORDER_BY_ASC,
-        );
-        $list=$this->databaseModel->getMany($where,$select,$orderBy);
-        if(empty($list)){
-            return array();
-        }
-
-        $result=array();
-        if($this->isFormat){
-            $list=new ListIterator($list);
-            foreach($list as $row){
-                if($this->isFormat){
-                    $result[]=$this->dataModel->format($row,$this->isAlias);
-                }else{
-                    $result[] = $row;
-                }
-            }
-        }else{
-            $result = $list;
-        }
-
-        return $result;
+        return $list;
     }
 
     /** 通过 Url 获取菜单

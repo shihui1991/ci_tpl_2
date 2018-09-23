@@ -51,7 +51,7 @@ class TplLogic extends LogicModel
      * @return LogicModel
      * @throws \Exception
      */
-    static public function instance($table, $k=0)
+    static public function instance($table='', $k=0)
     {
         if(empty($k)){
             $k=get_called_class();
@@ -66,7 +66,7 @@ class TplLogic extends LogicModel
      * @param string $table
      * @param string $k
      */
-    public function _unset($table, $k = 0)
+    public function _unset($table='', $k = 0)
     {
         if(empty($k)){
             $k=get_called_class();

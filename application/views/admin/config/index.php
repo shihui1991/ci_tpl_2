@@ -12,6 +12,9 @@
                     <li class="">
                         <a href="/admin/config/file">配置文件</a>
                     </li>
+                    <li class="">
+                        <a href="/admin/config/add">添加配置</a>
+                    </li>
                 </ul>
                 <div class="layui-tab-content">
                     <div class="layui-tab-item layui-show">
@@ -56,7 +59,7 @@
                                         <td>
                                             <div class="layui-btn-group">
                                                 <a class="layui-btn layui-btn-xs" href="/admin/config/edit?Id=<?php echo $row['Id'];?>">编辑</a>
-                                                <a class="layui-btn layui-btn-xs" href="/admin/config/data?Id=<?php echo $row['Id'];?>">查看</a>
+                                                <a class="layui-btn layui-btn-xs" href="/admin/config/data?ConfigId=<?php echo $row['Id'];?>">查看</a>
                                                 <a class="layui-btn layui-btn-xs" href="/admin/config/download?Id=<?php echo $row['Id'];?>" target="_blank">下载</a>
                                             </div>
                                         </td>

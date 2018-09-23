@@ -59,6 +59,19 @@ class RedisModel extends DatabaseModel
         return true;
     }
 
+    /** 删除表
+     * @return bool
+     */
+    public function dropTable()
+    {
+        $this->truncate();
+
+        $table=empty($this->table)?'Id':$this->table;
+        $result = $this->dbModel->hDel('Id',$table);
+
+        return $result;
+    }
+
     /** 重置 ID
      * @param int $start
      * @return bool

@@ -63,4 +63,24 @@ trait SetField
 
         return $value;
     }
+
+    /** 处理 Columns
+     * @param string $value
+     * @param array $data
+     * @return array|false|mixed|string
+     */
+    public function setColumnsField($value, $data=array())
+    {
+        if(empty($value)){
+            return $value;
+        }
+        $value=json_decode($value,true);
+        $result=array();
+        foreach($value as $key=>$val){
+            $result[$val['field']]=$val;
+        }
+        $result=json_encode($result);
+
+        return $result;
+    }
 }
