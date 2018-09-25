@@ -39,10 +39,10 @@
                                     <table class="layui-table">
                                         <thead>
                                         <tr>
-                                            <th>字段</th>
+                                            <th width="120">字段</th>
                                             <th>字段名</th>
                                             <th>字段映射</th>
-                                            <th>属性</th>
+                                            <th width="100">属性</th>
                                             <th>属性描述</th>
                                             <th>验证规则</th>
                                             <th><a class="layui-btn layui-btn-xs layui-btn-normal" onclick="addField(this);">添加字段</a></th>
@@ -110,8 +110,8 @@
             '            <option value="datetime"> datetime </option>' +
             '        </select>' +
             '    </td>' +
-            '    <td><input type="text" name="Columns['+index+'][desc]" value="" class="layui-input"></td>' +
-            '    <td><input type="text" name="Columns['+index+'][rules]" value="" class="layui-input"></td>' +
+            '    <td><textarea name="Columns['+index+'][desc]" class="layui-textarea"></textarea></td>' +
+            '    <td><textarea name="Columns['+index+'][rules]" class="layui-textarea"></textarea></td>' +
             '    <td>' +
             '        <div class="layui-btn-group">' +
             '             <a class="layui-btn layui-btn-xs layui-btn-danger" onclick="removeField(this);">删除</a>' +
