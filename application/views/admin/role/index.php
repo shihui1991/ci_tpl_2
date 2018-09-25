@@ -15,7 +15,8 @@
                         <table class="layui-table treetable">
                             <thead>
                             <tr>
-                                <th>Id - 名称</th>
+                                <th>Id</th>
+                                <th>名称</th>
                                 <th>是否超管</th>
                                 <th>说明</th>
                                 <th>操作</th>
@@ -25,7 +26,8 @@
                             <?php if(!empty($data['List'])): ?>
                                 <?php foreach($data['List'] as $row): ?>
                                     <tr data-tt-id="<?php echo $row['Id']; ?>" data-tt-parent-id="<?php echo $row['ParentId']; ?>" data-tt-branch="true">
-                                        <td><?php echo $row['Id']; ?> - <?php echo $row['Name']; ?></td>
+                                        <td><?php echo $row['Id']; ?></td>
+                                        <td><?php echo $row['Name']; ?></td>
                                         <td><?php echo STATE_ON==$row['Admin'] ? '是' : '否'; ?></td>
                                         <td><?php echo $row['Infos']; ?></td>
                                         <td>
@@ -56,6 +58,8 @@
         ,initialState :"collapsed"
         ,stringCollapse:'关闭'
         ,stringExpand:'展开'
+        ,clickableNodeNames: true
+        ,column: 1
         ,onNodeExpand: function() {
             var node = this;
             var treeObj=$('tr[data-tt-id='+node.id+']').parents('table.treetable:first');
@@ -75,7 +79,8 @@
                     var childs='';
                     $.each(ajaxResp.data.List,function(i,data){
                         childs +='<tr data-tt-id="'+data.Id+'" data-tt-parent-id="'+data.ParentId+'" data-tt-branch="true">'+
-                            '    <td>'+data.Id+' - '+data.Name+'</td>'+
+                            '    <td>'+data.Id+'</td>'+
+                            '    <td>'+data.Name+'</td>'+
                             '    <td>'+(1==data.Admin?'是':'否')+'</td>'+
                             '    <td>'+data.Infos+'</td>'+
                             '    <td>'+

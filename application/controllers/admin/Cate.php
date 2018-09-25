@@ -147,6 +147,37 @@ class Cate extends Auth
         }
     }
 
+    /** 查看内容
+     * @throws Exception
+     */
+    public function file()
+    {
+        $file = realpath(APPPATH.'config/common/conf.php');
+        if(false == $file){
+            throw new Exception('文件不存在',EXIT_UNKNOWN_FILE);
+        }
+        // 逐行读取
+        $list=array();
+        $handle = fopen($file, "r") or exit("不能打开文件");
+        while(!feof($handle))
+        {
+            $list[] = fgets($handle);
+        }
+        fclose($handle);
+
+        $data=array(
+            'Updated'=>filemtime($file),
+            'List'=>$list,
+        );
+        $code=EXIT_SUCCESS;
+        $msg='请求成功';
+        $url='';
+        $tpls=array(
+            'admin/cate/file',
+        );
+        $this->_response($data,$code,$msg,$url,$tpls);
+    }
+
     /** 更新配置文件 config/common/conf.php
      * @throws Exception
      */

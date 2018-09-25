@@ -26,26 +26,33 @@
                 </ul>
                 <div class="layui-tab-content">
                     <div class="layui-tab-item layui-show">
-                        <form class="layui-form " action="/admin/config/insert?ConfigId=<?php echo $data['ConfigId'];?>" method="post" onsubmit="return false;">
+                        <fieldset class="layui-elem-field">
+                            <legend><?php echo $data['Config']['Table']; ?> <span class="layui-badge-rim"><?php echo $data['Config']['Name']; ?></span></legend>
 
-                            <?php if(!empty($data['Config'])): ?>
-                                <?php foreach($data['Config']['Columns'] as $column): ?>
+                            <div class="layui-field-box">
+                                <form class="layui-form " action="/admin/config/insert?ConfigId=<?php echo $data['ConfigId'];?>" method="post" onsubmit="return false;">
+
+                                    <?php if(!empty($data['Config'])): ?>
+                                        <?php foreach($data['Config']['Columns'] as $column): ?>
+                                            <div class="layui-form-item">
+                                                <label class="layui-form-label"><?php echo $column['name']; ?>：</label>
+                                                <div class="layui-input-block">
+                                                    <input type="text" name="<?php echo $column['field']; ?>" value="" placeholder="" class="layui-input">
+                                                </div>
+                                            </div>
+                                        <?php endforeach; ?>
+                                    <?php endif; ?>
+
+
                                     <div class="layui-form-item">
-                                        <label class="layui-form-label"><?php echo $column['name']; ?>：</label>
                                         <div class="layui-input-block">
-                                            <input type="text" name="<?php echo $column['field']; ?>" value="" placeholder="" class="layui-input">
+                                            <button class="layui-btn" lay-submit lay-filter="formSubmit">保存</button>
                                         </div>
                                     </div>
-                                <?php endforeach; ?>
-                            <?php endif; ?>
-
-
-                            <div class="layui-form-item">
-                                <div class="layui-input-block">
-                                    <button class="layui-btn" lay-submit lay-filter="formSubmit">保存</button>
-                                </div>
+                                </form>
                             </div>
-                        </form>
+                        </fieldset>
+
                     </div>
                 </div>
             </div>

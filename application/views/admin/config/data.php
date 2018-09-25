@@ -27,40 +27,45 @@
                 </ul>
                 <div class="layui-tab-content">
                     <div class="layui-tab-item layui-show">
+                        <fieldset class="layui-elem-field">
+                            <legend><?php echo $data['Config']['Table']; ?> <span class="layui-badge-rim"><?php echo $data['Config']['Name']; ?></span></legend>
 
-                        <table class="layui-table">
-                            <thead>
-                            <tr>
-                                <?php foreach($data['Config']['Columns'] as $field=>$column):?>
-                                    <th>
-                                        <?php echo $field;?><br>
-                                        <?php echo $column['name'];?><br>
-                                        <?php echo $column['attr'];?>
-                                    </th>
-                                <?php endforeach;?>
-                                <th>操作</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-
-                            <?php if(!empty($data['List'])):?>
-                                <?php foreach($data['List'] as $row):?>
+                            <div class="layui-field-box">
+                                <table class="layui-table">
+                                    <thead>
                                     <tr>
                                         <?php foreach($data['Config']['Columns'] as $field=>$column):?>
-                                            <td><?php echo $row[$field];?></td>
+                                            <th>
+                                                <?php echo $field;?><br>
+                                                <?php echo $column['name'];?><br>
+                                                <?php echo $column['attr'];?>
+                                            </th>
                                         <?php endforeach;?>
-                                        <td>
-                                            <div class="layui-btn-group">
-                                                <a class="layui-btn layui-btn-xs" href="/admin/config/modify?ConfigId=<?php echo $data['ConfigId'];?>&Id=<?php echo $row['Id'];?>">编辑</a>
-                                                <a class="layui-btn layui-btn-xs layui-btn-danger" data-confirm="确定要删除吗？" onclick="btnAct(this);" data-action="/admin/config/delete?ConfigId=<?php echo $data['ConfigId'];?>&Ids=<?php echo $row['Id'];?>">删除</a>
-                                            </div>
-                                        </td>
+                                        <th>操作</th>
                                     </tr>
-                                <?php endforeach;?>
-                            <?php endif;?>
+                                    </thead>
+                                    <tbody>
 
-                            </tbody>
-                        </table>
+                                    <?php if(!empty($data['List'])):?>
+                                        <?php foreach($data['List'] as $row):?>
+                                            <tr>
+                                                <?php foreach($data['Config']['Columns'] as $field=>$column):?>
+                                                    <td><?php echo $row[$field];?></td>
+                                                <?php endforeach;?>
+                                                <td>
+                                                    <div class="layui-btn-group">
+                                                        <a class="layui-btn layui-btn-xs" href="/admin/config/modify?ConfigId=<?php echo $data['ConfigId'];?>&Id=<?php echo $row['Id'];?>">编辑</a>
+                                                        <a class="layui-btn layui-btn-xs layui-btn-danger" data-confirm="确定要删除吗？" onclick="btnAct(this);" data-action="/admin/config/delete?ConfigId=<?php echo $data['ConfigId'];?>&Ids=<?php echo $row['Id'];?>">删除</a>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        <?php endforeach;?>
+                                    <?php endif;?>
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </fieldset>
 
                     </div>
                 </div>

@@ -62,7 +62,7 @@ class Base extends CI_Controller
         // 获取 post 输入
         $post=$this->input->post();
         // 获取 stream 输入
-        $stream=(array)json_decode(urldecode(file_get_contents('php://input')),true);
+        $stream=(array)json_decode(urldecode($this->input->raw_input_stream),true);
         // 数据合并
         $input=array_merge($get,$post,$stream);
         return $input;

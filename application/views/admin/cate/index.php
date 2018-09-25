@@ -14,20 +14,14 @@
                 <ul class="layui-tab-title">
                     <li class="layui-this">分类列表</li>
                     <li class="">
+                        <a href="/admin/cate/file">配置文件</a>
+                    </li>
+                    <li class="">
                         <a href="/admin/cate/add">添加分类</a>
                     </li>
                 </ul>
                 <div class="layui-tab-content">
                     <div class="layui-tab-item layui-show">
-
-                        <div class="layui-btn-group">
-                            <button class="layui-btn layui-btn-danger" type="button" onclick="updateConf()">
-                                <i class="layui-icon layui-icon-refresh"></i>
-                                更新【常量配置文件】
-                            </button>
-
-                        </div>
-                        <br>
 
                         <?php if(!empty($data['List'])): ?>
 
@@ -91,18 +85,3 @@
         </div>
     </div>
 </div>
-
-<script>
-    function updateConf() {
-        var yes = confirm('确定要更新【常量配置文件】么？');
-        if(yes){
-            // 下载TS文件
-            ajaxSubmit('/admin/cate/update',{},'get');
-            if(!ajaxResp || "undefined" === typeof ajaxResp){
-                alert('网络开小差了');
-            }else{
-                alert(ajaxResp.msg);
-            }
-        }
-    }
-</script>

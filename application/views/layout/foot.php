@@ -1,4 +1,12 @@
 <style>
+    .layui-fixbar{
+        opacity: 0.3;
+        filter:Alpha(opacity=30);
+    }
+    .layui-fixbar:hover{
+        opacity: 1;
+        filter:Alpha(opacity=100);
+    }
     .layui-fixbar li{
         display: list-item;
         width: 35px;
@@ -23,21 +31,6 @@
 
         $('.layui-fixbar').find('li').html('');
     });
-
-    var bodyTop=$('#body-top');
-
-    function renderTop() {
-        if(window.pageYOffset){
-            bodyTop.css('display','list-item');
-        }else{
-            bodyTop.css('display','none');
-        }
-    }
-    renderTop();
-    $(document).scroll(function (e) {
-        renderTop();
-    });
-
 </script>
 </body>
 </html>

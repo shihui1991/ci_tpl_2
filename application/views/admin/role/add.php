@@ -44,7 +44,8 @@
                                     <table class="layui-table treetable">
                                         <thead>
                                         <tr>
-                                            <th>Id - 名称</th>
+                                            <th>Id</th>
+                                            <th>名称</th>
                                             <th>路由地址</th>
                                             <th><input type="checkbox" id="check-all" onclick="allCheckOrCancel(this);" lay-ignore><label for="check-all"> 全选/取消 </label></th>
                                         </tr>
@@ -118,6 +119,8 @@
                     ,initialState :"collapsed"//默认打开所有节点
                     ,stringCollapse:'关闭'
                     ,stringExpand:'展开'
+                    ,clickableNodeNames: true
+                    ,column: 1
                 });
                 form.render();
             }
@@ -141,7 +144,8 @@
         $.each(group.childs,function (i,data) {
             if(1 == data.Ctrl){
                 dom +='<tr data-tt-id="'+data.Id+'" data-tt-parent-id="'+data.ParentId+'">' +
-                    '    <td>'+data.Id+' - '+data.Name+'</td>' +
+                    '    <td>'+data.Id+'</td>' +
+                    '    <td>'+data.Name+'</td>' +
                     '    <td>'+data.Url+'</td>' +
                     '    <td><input type="checkbox" name="MenuIds[]" value="'+data.Id+'" id="id-'+data.Id+'" data-id="'+data.Id+'" data-parent-id="'+data.ParentId+'" onclick="upDown(this)" lay-ignore></td>' +
                     '</tr>';

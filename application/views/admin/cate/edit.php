@@ -9,6 +9,9 @@
                         <a href="/admin/cate">分类列表</a>
                     </li>
                     <li class="">
+                        <a href="/admin/cate/file">配置文件</a>
+                    </li>
+                    <li class="">
                         <a href="/admin/cate/add">添加分类</a>
                     </li>
                     <li class="layui-this">

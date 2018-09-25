@@ -15,7 +15,8 @@
                         <table class="layui-table treetable">
                             <thead>
                             <tr>
-                                <th>Id - 名称</th>
+                                <th>Id</th>
+                                <th>名称</th>
                                 <th>路由地址</th>
                                 <th>限制</th>
                                 <th>显示</th>
@@ -28,7 +29,8 @@
                             <?php if(!empty($data['List'])): ?>
                                 <?php foreach($data['List'] as $row): ?>
                                     <tr data-tt-id="<?php echo $row['Id']; ?>" data-tt-parent-id="<?php echo $row['ParentId']; ?>" data-tt-branch="true">
-                                        <td><?php echo $row['Id']; ?> - <?php echo $row['Icon']; ?> <?php echo $row['Name']; ?></td>
+                                        <td><?php echo $row['Id']; ?></td>
+                                        <td><?php echo $row['Icon']; ?> <?php echo $row['Name']; ?></td>
                                         <td><?php echo $row['Url']; ?></td>
                                         <td><?php echo STATE_ON==$row['Ctrl'] ? '限制' : '不限'; ?></td>
                                         <td><?php echo STATE_ON==$row['Display'] ? '显示' : '隐藏'; ?></td>
@@ -62,6 +64,8 @@
         ,initialState :"collapsed"
         ,stringCollapse:'关闭'
         ,stringExpand:'展开'
+        ,clickableNodeNames: true
+        ,column: 1
         ,onNodeExpand: function() {
             var node = this;
             var treeObj=$('tr[data-tt-id='+node.id+']').parents('table.treetable:first');
@@ -81,7 +85,8 @@
                     var childs='';
                     $.each(ajaxResp.data.List,function(i,data){
                         childs +='<tr data-tt-id="'+data.Id+'" data-tt-parent-id="'+data.ParentId+'" data-tt-branch="true">'+
-                            '    <td>'+data.Id+' - '+data.Icon+' '+data.Name+'</td>'+
+                            '    <td>'+data.Id+'</td>'+
+                            '    <td>'+data.Icon+' '+data.Name+'</td>'+
                             '    <td>'+data.Url+'</td>'+
                             '    <td>'+(0==data.Ctrl?'不限':'限制')+'</td>'+
                             '    <td>'+(1==data.Display?'显示':'隐藏')+'</td>'+
