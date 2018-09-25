@@ -44,8 +44,8 @@
                                             <?php if(!$row['IsDir']):?>
                                                 <div class="layui-btn-group">
                                                     <a class="layui-btn layui-btn-xs" data-confirm="确定要更新配置【<?php echo $row['File'];?>】吗？" onclick="btnAct(this);" data-action="/admin/config/update?File=<?php echo $row['Path'];?>">更新</a>
-                                                    <a class="layui-btn layui-btn-xs" href="/<?php echo $row['Path'];?>" target="_blank">下载</a>
-                                                    <a class="layui-btn layui-btn-xs" data-confirm="确定要删除配置【<?php echo $row['File'];?>】吗？" onclick="btnAct(this);" data-action="/admin/config/remove?File=<?php echo $row['Path'];?>">删除</a>
+                                                    <a class="layui-btn layui-btn-xs layui-btn-normal" href="/<?php echo $row['Path'];?>" target="_blank">下载</a>
+                                                    <a class="layui-btn layui-btn-xs layui-btn-danger" data-confirm="确定要删除配置【<?php echo $row['File'];?>】吗？" onclick="btnAct(this);" data-action="/admin/config/remove?File=<?php echo $row['Path'];?>">删除</a>
                                                 </div>
                                             <?php endif;?>
                                         </td>

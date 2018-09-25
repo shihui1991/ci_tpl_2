@@ -58,8 +58,8 @@
                                         <td><?php echo $row['Infos'];?></td>
                                         <td>
                                             <div class="layui-btn-group">
-                                                <a class="layui-btn layui-btn-xs" href="/admin/config/edit?Id=<?php echo $row['Id'];?>">编辑</a>
-                                                <a class="layui-btn layui-btn-xs" href="/admin/config/data?ConfigId=<?php echo $row['Id'];?>">查看</a>
+                                                <a class="layui-btn layui-btn-xs layui-btn-primary" href="/admin/config/edit?Id=<?php echo $row['Id'];?>">编辑</a>
+                                                <a class="layui-btn layui-btn-xs layui-btn-normal" href="/admin/config/data?ConfigId=<?php echo $row['Id'];?>">查看</a>
                                                 <a class="layui-btn layui-btn-xs" href="/admin/config/download?Id=<?php echo $row['Id'];?>" target="_blank">下载</a>
                                             </div>
                                         </td>

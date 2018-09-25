@@ -182,11 +182,21 @@
                     ]
                     ,shade: 0
                     ,maxmin: true
-                    ,title: name
+                    ,title: [name,'font-size:20px;']
                     ,content: url
                     ,zIndex: layer.zIndex //重点1
                     ,success: function(layero){
                         layer.setTop(layero); //重点2
+                    }
+                    ,moveEnd:function (layero) {
+                        var pos=layero.offset();
+                        var index=layero.attr('times');
+                        if(0 === pos.top){
+                            layer.full(index);
+                        }
+                        else if(pos.top < 0){
+                            layer.restore(index);
+                        }
                     }
                 });
             }

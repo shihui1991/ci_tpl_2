@@ -39,7 +39,7 @@
                                         <td>
                                             <div class="layui-btn-group">
                                                 <a class="layui-btn layui-btn-xs" href="/admin/menu/add?ParentId=<?php echo $row['Id']; ?>">添加子菜单</a>
-                                                <a class="layui-btn layui-btn-xs" href="/admin/menu/edit?Id=<?php echo $row['Id']; ?>">编辑</a>
+                                                <a class="layui-btn layui-btn-xs layui-btn-normal" href="/admin/menu/edit?Id=<?php echo $row['Id']; ?>">编辑</a>
                                             </div>
                                         </td>
                                     </tr>
@@ -95,7 +95,7 @@
                             '    <td>'+
                             '        <div class="layui-btn-group">'+
                             '            <a class="layui-btn layui-btn-xs" href="/admin/menu/add?ParentId='+data.Id+'">添加子菜单</a>'+
-                            '            <a class="layui-btn layui-btn-xs" href="/admin/menu/edit?Id='+data.Id+'">编辑</a>'+
+                            '            <a class="layui-btn layui-btn-xs layui-btn-normal" href="/admin/menu/edit?Id='+data.Id+'">编辑</a>'+
                             '        </div>'+
                             '    </td>'+
                             '</tr>';
