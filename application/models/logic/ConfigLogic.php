@@ -118,32 +118,14 @@ class ConfigLogic extends LogicModel
     }
 
     /** 下载配置 Excel
-     * @param array $input
+     * @param string $table
      * @throws \Exception
      * @throws \PHPExcel_Reader_Exception
      * @throws \PHPExcel_Writer_Exception
      */
-    public function download(array $input)
+    public function download($table)
     {
-        if(empty($input['Id'])){
-            throw new \Exception('请选择一项',EXIT_USER_INPUT);
-        }
-        $config=$this->isFormat(true)->getRowById($input['Id']);
-        if(empty($config['Id'])){
-            throw new \Exception('配置不存在',EXIT_USER_INPUT);
-        }
-        TplLogic::instance($config['Table'])->download();
-    }
-
-    /** 获取配置数据
-     * @param string $table
-     * @return mixed
-     */
-    public function getDataList($table)
-    {
-        $list=TplLogic::instance($table)->getAll();
-
-        return $list;
+        TplLogic::instance($table)->exportConfig();
     }
 
     /** 同步所有快捷配置数据

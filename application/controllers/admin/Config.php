@@ -249,10 +249,22 @@ class Config extends Auth
 
     /**
      *  下载配置
+     * @throws Exception
      */
     public function download()
     {
-        $this->logicModel->download($this->inputData);
+        if(empty($this->inputData['Id'])){
+            throw new Exception('请选择一项',EXIT_USER_INPUT);
+        }
+        $select=array(
+            'Id',
+            'Table',
+        );
+        $config=$this->logicModel->getRowById($this->inputData['Id'],$select);
+        if(empty($config['Id'])){
+            throw new Exception('配置不存在',EXIT_USER_INPUT);
+        }
+        $this->logicModel->download($config['Table']);
     }
 
     /** 获取配置数据
@@ -268,12 +280,13 @@ class Config extends Auth
         if(empty($config['Id'])){
             throw new Exception('配置不存在',EXIT_USER_INPUT);
         }
-        $dataList=$this->logicModel->getDataList($config['Table']);
+        $tplLogic=\models\logic\TplLogic::instance($config['Table']);
+        $list=$tplLogic->isFormat(false)->getAll();
 
         $data=array(
             'ConfigId'=>$configId,
             'Config'=>$config,
-            'List'=>$dataList,
+            'List'=>$list,
         );
         $code=EXIT_SUCCESS;
         $msg='请求成功';
@@ -325,7 +338,7 @@ class Config extends Auth
             }
             $tplLogic=\models\logic\TplLogic::instance($config['Table']);
             // 添加
-            $newRow=$tplLogic->add($this->inputData);
+            $newRow=$tplLogic->isFormat(false)->add($this->inputData);
 
             $data=array(
                 'ConfigId'=>$configId,
@@ -360,7 +373,7 @@ class Config extends Auth
                 throw new Exception('请选择数据',EXIT_USER_INPUT);
             }
             $id=(int)$this->inputData['Id'];
-            $row=$tplLogic->getRowById($id);
+            $row=$tplLogic->isFormat(false)->getRowById($id);
             if(empty($row['Id'])){
                 throw new Exception('数据不存在',EXIT_DATABASE);
             }
@@ -391,7 +404,7 @@ class Config extends Auth
             }
             $tplLogic=\models\logic\TplLogic::instance($config['Table']);
 
-            $updated=$tplLogic->edit($this->inputData);
+            $updated=$tplLogic->isFormat(false)->edit($this->inputData);
 
             $data=array(
                 'ConfigId'=>$configId,

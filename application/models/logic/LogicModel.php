@@ -7,6 +7,7 @@
 
 namespace models\logic;
 
+use libraries\Excel;
 use libraries\ListIterator;
 use models\logic\component\CheckUnique;
 
@@ -288,11 +289,13 @@ abstract class LogicModel
 
     /** 通过 ID 获取数据
      * @param int $id
+     * @param array $select
      * @return mixed
      */
-    public function getRowById($id)
+    public function getRowById($id, array $select=array())
     {
-        $row=$this->databaseModel->getOneByKey($id);
+        $select=$this->trunsSelect($select);
+        $row=$this->databaseModel->getOneByKey($id,$select);
         if(empty($row)){
             return array();
         }
@@ -388,5 +391,37 @@ abstract class LogicModel
         }
 
         return $result;
+    }
+
+    /** 导入数据
+     * @param array $list
+     * @return bool|int
+     */
+    public function importData(array $list)
+    {
+        // 建表
+        $result = $this->databaseModel->createTable($this->dataModel->getColumns(),true);
+        if(false == $result){
+            return false;
+        }
+        if(empty($list)){
+            return 0;
+        }
+        // 导入数据
+        $result = $this->databaseModel->batchInsertUpdate($list);
+
+        return $result;
+    }
+
+    /** 导出Excel
+     * @throws \PHPExcel_Reader_Exception
+     * @throws \PHPExcel_Writer_Exception
+     */
+    public function exportConfig()
+    {
+        // 获取数据
+        $list = $this->databaseModel->getMany();
+        // 输入 Excel
+        Excel::instance()->exportConfig($list,$this->dataModel->getColumns(),$this->databaseModel->table,true);
     }
 }

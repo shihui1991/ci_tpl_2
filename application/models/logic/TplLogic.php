@@ -7,7 +7,6 @@
 
 namespace models\logic;
 
-use libraries\Excel;
 use libraries\ListIterator;
 use models\data\TplData;
 use models\database\mysql\TplMysql;
@@ -134,37 +133,5 @@ class TplLogic extends LogicModel
         eval("\$validatorModel = \\{$this->tplValidator}::instance(\$table,\$k);");
 
         return $validatorModel;
-    }
-
-    /** 导入数据
-     * @param array $list
-     * @return bool|int
-     */
-    public function importData(array $list)
-    {
-        // 建表
-        $result = $this->databaseModel->createTable($this->dataModel->getColumns(),true);
-        if(false == $result){
-            return false;
-        }
-        if(empty($list)){
-            return 0;
-        }
-        // 导入数据
-        $result = $this->databaseModel->batchInsertUpdate($list);
-
-        return $result;
-    }
-
-    /** 导出Excel
-     * @throws \PHPExcel_Reader_Exception
-     * @throws \PHPExcel_Writer_Exception
-     */
-    public function download()
-    {
-        // 获取数据
-        $list = $this->databaseModel->getMany();
-        // 输入 Excel
-        Excel::instance()->exportConfig($list,$this->dataModel->getColumns(),$this->databaseModel->table,true);
     }
 }
