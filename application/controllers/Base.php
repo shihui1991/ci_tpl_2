@@ -183,7 +183,11 @@ class Base extends CI_Controller
         $get=json_encode($this->input->get());
         $post=json_encode($this->input->post());
         $stream=urldecode($this->input->raw_input_stream);
-        $output=json_encode($data);
+        if('/admin/log/info' == $reqUrl){
+            $output='';
+        }else{
+            $output=json_encode($data);
+        }
         // 记录内容
         $record=<<<"EEE"
 
