@@ -513,13 +513,22 @@ class RedisModel extends DatabaseModel
 
     /**  批量插入或更新
      * @param array $list
+     * @param array $fields
      * @return int 返回条数
      */
-    public function batchInsertUpdate(array $list)
+    public function batchInsertUpdate(array $list,array $fields=array())
     {
         $result=0;
+        $list=new ListIterator($list);
         foreach($list as $data){
-            $id = $this->insert($data);
+            $row=array();
+            if(!empty($fields)){
+                foreach($fields as $field){
+                    $value=isset($data[$field])?$data[$field]:null;
+                    $row[$field]=$value;
+                }
+            }
+            $id = $this->insert($row);
             if(false === $id){
                 return false;
             }
@@ -565,6 +574,7 @@ class RedisModel extends DatabaseModel
     public function batchUpdate(array $list, array $whereFields, array $updateFields)
     {
         $result=0;
+        $list=new ListIterator($list);
         foreach($list as $data){
             // 条件
             $where=array();

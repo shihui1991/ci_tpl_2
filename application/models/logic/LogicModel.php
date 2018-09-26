@@ -83,7 +83,7 @@ abstract class LogicModel
         if(false == $result){
             throw new \Exception('建表失败',EXIT_DATABASE);
         }
-        $result = $db2->batchInsertUpdate($list);
+        $result = $db2->batchInsertUpdate($list,$this->dataModel->fields);
 
         return $result;
     }

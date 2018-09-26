@@ -183,9 +183,10 @@ abstract class DatabaseModel
 
     /**  批量插入或更新
      * @param array $list
+     * @param array $fields
      * @return int 返回条数
      */
-    abstract public function batchInsertUpdate(array $list);
+    abstract public function batchInsertUpdate(array $list, array $fields=array());
 
     /**  更新数据
      * @param array $data
