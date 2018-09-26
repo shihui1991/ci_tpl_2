@@ -522,7 +522,9 @@ class RedisModel extends DatabaseModel
         $list=new ListIterator($list);
         foreach($list as $data){
             $row=array();
-            if(!empty($fields)){
+            if(empty($fields)){
+                $row=$data;
+            }else{
                 foreach($fields as $field){
                     $value=isset($data[$field])?$data[$field]:null;
                     $row[$field]=$value;
@@ -530,7 +532,7 @@ class RedisModel extends DatabaseModel
             }
             $id = $this->insert($row);
             if(false === $id){
-                return false;
+                continue;
             }
             $result++;
         }
