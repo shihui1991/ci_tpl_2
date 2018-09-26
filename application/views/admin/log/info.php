@@ -14,17 +14,9 @@
                 <div class="layui-tab-content">
                     <div class="layui-tab-item layui-show">
 
-                        <fieldset class="layui-elem-field">
-                            <legend><?php echo $data['File']; ?> <span class="layui-badge-rim"><?php echo date('Y-m-d H:i:s',$data['Updated']); ?></span></legend>
-
-                            <div class="layui-field-box">
-                                <pre class="layui-code">
-<?php foreach($data['List'] as $row): ?>
-<?php echo htmlspecialchars($row); ?>
-<?php endforeach; ?>
-                                </pre>
-                            </div>
-                        </fieldset>
+                        <pre class="layui-code" lay-title="<?php echo $data['File']; ?>" lay-encode="true" lay-about="false">
+<?php echo htmlspecialchars($data['Content']); ?>
+                        </pre>
 
                     </div>
                 </div>
@@ -36,6 +28,9 @@
 
 <script>
     layui.use('code', function(){ //加载code模块
-        layui.code(); //引用code方法
+        layui.code({
+            about:false
+            , encode:true
+        });
     });
 </script>

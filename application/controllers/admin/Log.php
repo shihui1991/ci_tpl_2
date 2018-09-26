@@ -108,18 +108,18 @@ class Log extends Auth
             throw new Exception('文件不存在',EXIT_UNKNOWN_FILE);
         }
         // 逐行读取
-        $list=array();
+        $content='';
         $handle = fopen($file, "r") or exit("不能打开文件");
         while(!feof($handle))
         {
-            $list[] = fgets($handle);
+            $content .= fgets($handle);
         }
         fclose($handle);
 
         $data=array(
             'File'=>$file,
             'Updated'=>filemtime($file),
-            'List'=>$list,
+            'Content'=>$content,
         );
         $code=EXIT_SUCCESS;
         $msg='请求成功';
