@@ -32,8 +32,8 @@
                                         <td><?php echo $row['Id']; ?></td>
                                         <td><?php echo $row['Icon']; ?> <?php echo $row['Name']; ?></td>
                                         <td><?php echo $row['Url']; ?></td>
-                                        <td><?php echo STATE_ON==$row['Ctrl'] ? '限制' : '不限'; ?></td>
-                                        <td><?php echo STATE_ON==$row['Display'] ? '显示' : '隐藏'; ?></td>
+                                        <td><?php echo YES==$row['Ctrl'] ? '限制' : '不限'; ?></td>
+                                        <td><?php echo YES==$row['Display'] ? '显示' : '隐藏'; ?></td>
                                         <td><?php echo STATE_ON==$row['State'] ? '开启' : '禁用'; ?></td>
                                         <td><?php echo $row['Sort']; ?></td>
                                         <td>

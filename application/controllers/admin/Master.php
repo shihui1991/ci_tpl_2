@@ -32,7 +32,7 @@ class Master extends Auth
             $perPage=(int)$this->inputData['PerPage'];
         }
         // 查询条数
-        $total=$this->logicModel->getTotoal();
+        $total=$this->logicModel->getTotal();
         // 获取列表
         $list=$this->logicModel->getListByPage($page, $perPage);
         // 生成分页条

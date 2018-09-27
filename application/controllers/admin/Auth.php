@@ -44,7 +44,7 @@ class Auth extends Init
             throw new \Exception('功能已禁用',EXIT_CONFIG);
         }
         if(ADMIN_NO == $this->master['IsAdmin']
-            && STATE_ON == $this->menu['Ctrl']
+            && YES == $this->menu['Ctrl']
             && !in_array($this->menu['Id'],$this->master['MenuIds'])){
 
             throw new \Exception('未授权',EXIT_CONFIG);

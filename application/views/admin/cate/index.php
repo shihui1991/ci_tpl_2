@@ -57,7 +57,7 @@
                                                         <td><?php echo $row['Value']; ?></td>
                                                         <td><?php echo $row['Constant']; ?></td>
                                                         <td><?php echo $row['Sort']; ?></td>
-                                                        <td><?php echo STATE_ON == $row['Display'] ? '显示' : '隐藏'; ?></td>
+                                                        <td><?php echo YES == $row['Display'] ? '显示' : '隐藏'; ?></td>
                                                         <td>
                                                             <div class="layui-btn-group">
                                                                 <a class="layui-btn layui-btn-xs" href="/admin/cate/edit?Id=<?php echo $row['Id']; ?>">编辑</a>

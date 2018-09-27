@@ -188,7 +188,7 @@ abstract class LogicModel
      * @param array $params
      * @return mixed
      */
-    public function getTotoal(array $params=array())
+    public function getTotal(array $params=array())
     {
         $where=$this->trunsParamsToWhere($params);
         $result=$this->databaseModel->getCount($where);

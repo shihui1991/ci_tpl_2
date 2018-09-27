@@ -12,6 +12,10 @@ defined('VALUE_LEFT_EQ_RIGHT')   OR define('VALUE_LEFT_EQ_RIGHT', 0);   // 两�
 defined('VALUE_LEFT_GT_RIGHT')   OR define('VALUE_LEFT_GT_RIGHT', 1);   // 两值比较结果 - 左大于右
 defined('VALUE_LEFT_LT_RIGHT')   OR define('VALUE_LEFT_LT_RIGHT', -1);  // 两值比较结果 - 左小于右
 
+// 是否
+defined('NO')    OR define('NO', 0);    // 是否 - 否
+defined('YES')   OR define('YES', 1);   // 是否 - 是
+
 // 状态
 defined('STATE_OFF')    OR define('STATE_OFF', 0);  // 状态 - 关闭
 defined('STATE_ON')     OR define('STATE_ON', 1);   // 状态 - 开启

@@ -50,7 +50,7 @@ class Source extends Auth
         $args['Url']=$url;
 
         // 查询条数
-        $total=$this->logicModel->getTotoal($params);
+        $total=$this->logicModel->getTotal($params);
         // 获取列表
         $list=$this->logicModel->getListByPage($page, $perPage,$params);
         // 生成分页条

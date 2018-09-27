@@ -91,7 +91,7 @@ class Base extends CI_Controller
         if(empty($this->inputData['SavePath'])){
             $savePath= '/'.UPLOAD_DIR.'/'.date('Ymd');
         }else{
-            $savePath='/'.UPLOAD_DIR.'/'.str_replace('/','_',trim($this->inputData['SavePath']));
+            $savePath='/'.UPLOAD_DIR.'/'.str_replace(' ','_',trim($this->inputData['SavePath']));
         }
         $savePath=str_replace(' ','_',trim($savePath));
         $path='.'.$savePath;

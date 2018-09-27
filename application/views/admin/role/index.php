@@ -28,7 +28,7 @@
                                     <tr data-tt-id="<?php echo $row['Id']; ?>" data-tt-parent-id="<?php echo $row['ParentId']; ?>" data-tt-branch="true">
                                         <td><?php echo $row['Id']; ?></td>
                                         <td><?php echo $row['Name']; ?></td>
-                                        <td><?php echo STATE_ON==$row['Admin'] ? '是' : '否'; ?></td>
+                                        <td><?php echo YES==$row['Admin'] ? '是' : '否'; ?></td>
                                         <td><?php echo $row['Infos']; ?></td>
                                         <td>
                                             <div class="layui-btn-group">
