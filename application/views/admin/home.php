@@ -182,6 +182,7 @@
                     ]
                     ,shade: 0
                     ,maxmin: true
+                    ,moveOut: true
                     ,title: [name,'font-size:20px;']
                     ,content: url
                     ,zIndex: layer.zIndex //重点1
