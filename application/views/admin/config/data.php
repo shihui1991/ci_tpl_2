@@ -38,6 +38,7 @@
                                             <th>
                                                 <?php echo $field;?><br>
                                                 <?php echo $column['name'];?><br>
+                                                <?php echo $column['alias'];?><br>
                                                 <?php echo $column['attr'];?>
                                             </th>
                                         <?php endforeach;?>

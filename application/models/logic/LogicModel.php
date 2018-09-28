@@ -127,7 +127,7 @@ abstract class LogicModel
                 $field=$param[0];
             }
             if(in_array($field,$fields)){
-                $where[]=array($param[0],$param[1],$param[2]);
+                $where[]=array($field,$param[1],$param[2]);
             }
         }
         return $where;
