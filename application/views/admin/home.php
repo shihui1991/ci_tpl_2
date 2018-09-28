@@ -192,11 +192,17 @@
                     ,moveEnd:function (layero) {
                         var pos=layero.offset();
                         var index=layero.attr('times');
-                        if(0 === pos.top){
+                        if(pos.top < -30){
                             layer.full(index);
                         }
-                        else if(pos.top < 0){
-                            layer.restore(index);
+                    }
+                    ,full:function (layero) {
+                        layero.offset({top:0,left:0});
+                    }
+                    ,restore:function (layero) {
+                        var pos=layero.offset();
+                        if(pos.top < -30){
+                            layero.offset({top:0,left:pos.left});
                         }
                     }
                 });
