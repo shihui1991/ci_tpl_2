@@ -123,7 +123,7 @@ class RedisModel extends DatabaseModel
                         if(!in_array($where[1],$array)){
                             continue;
                         }
-                        $str="{$data[$where[0]]} $where[1] $where[2]";
+                        $str="'{$data[$where[0]]}' $where[1] '$where[2]'";
                         eval("\$result=$str;");
                 }
             }else{
@@ -147,12 +147,14 @@ class RedisModel extends DatabaseModel
         if(!empty($list)){
             // 默认 Id 顺序排序
             $ids=array_column($list,'Id');
-            $orderData=array(
-                $ids,
-                SORT_ASC,
-                &$list,
-            );
-            call_user_func_array('array_multisort',$orderData);
+            if(!empty($ids)){
+                $orderData=array(
+                    $ids,
+                    SORT_ASC,
+                    &$list,
+                );
+                call_user_func_array('array_multisort',$orderData);
+            }
             // 条件排序
             if(!empty($orderBy)){
                 $orderData=array();
