@@ -18,12 +18,18 @@ class ComposerStaticInitf9d7a83db86c1442ef41b9040b72127c
         ),
         'W' => 
         array (
+            'Workerman\\' => 10,
             'Webmozart\\Assert\\' => 17,
         ),
         'S' => 
         array (
             'Symfony\\Polyfill\\Ctype\\' => 23,
             'Symfony\\Component\\Yaml\\' => 23,
+        ),
+        'P' => 
+        array (
+            'Psr\\SimpleCache\\' => 16,
+            'PhpOffice\\PhpSpreadsheet\\' => 25,
         ),
         'D' => 
         array (
@@ -39,6 +45,10 @@ class ComposerStaticInitf9d7a83db86c1442ef41b9040b72127c
             1 => __DIR__ . '/..' . '/phpdocumentor/reflection-docblock/src',
             2 => __DIR__ . '/..' . '/phpdocumentor/type-resolver/src',
         ),
+        'Workerman\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/workerman/workerman',
+        ),
         'Webmozart\\Assert\\' => 
         array (
             0 => __DIR__ . '/..' . '/webmozart/assert/src',
@@ -50,6 +60,14 @@ class ComposerStaticInitf9d7a83db86c1442ef41b9040b72127c
         'Symfony\\Component\\Yaml\\' => 
         array (
             0 => __DIR__ . '/..' . '/symfony/yaml',
+        ),
+        'Psr\\SimpleCache\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/psr/simple-cache/src',
+        ),
+        'PhpOffice\\PhpSpreadsheet\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/phpoffice/phpspreadsheet/src/PhpSpreadsheet',
         ),
         'Doctrine\\Instantiator\\' => 
         array (

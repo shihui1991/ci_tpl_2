@@ -264,7 +264,7 @@ EEE;
         }
 
         $this->_response($data,$code,$msg,$url,$tpls);
-        exit;
+        die();
     }
 
     /**
