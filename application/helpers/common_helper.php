@@ -547,3 +547,16 @@ if(!function_exists('makeFileSize')){
         return $result;
     }
 }
+
+
+if(!function_exists('makeBillNo')){
+    /** 生成 20 位时间订单号
+     * @return string
+     */
+    function makeBillNo()
+    {
+        $billNo = date('ymdHis').substr(implode(NULL, array_map('ord', str_split(substr(uniqid(), 7, 13), 1))), 0, 8);
+
+        return $billNo;
+    }
+}
