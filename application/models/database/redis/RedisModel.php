@@ -123,7 +123,7 @@ class RedisModel extends DatabaseModel
                         if(!in_array($where[1],$array)){
                             continue;
                         }
-                        $str="{$data[$where[0]]} $where[1] $where[2]";
+                        $str="'{$data[$where[0]]}' {$where[1]} '{$where[2]}'";
                         eval("\$result=$str;");
                 }
             }else{

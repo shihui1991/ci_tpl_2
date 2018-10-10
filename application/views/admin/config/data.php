@@ -51,7 +51,7 @@
                                         <?php foreach($data['List'] as $row):?>
                                             <tr>
                                                 <?php foreach($data['Config']['Columns'] as $field=>$column):?>
-                                                    <td><?php echo $row[$field];?></td>
+                                                    <td><?php echo isset($row[$field])?$row[$field]:'';?></td>
                                                 <?php endforeach;?>
                                                 <td>
                                                     <div class="layui-btn-group">
