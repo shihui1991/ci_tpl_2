@@ -232,15 +232,18 @@ abstract class LogicModel
      * @param array $params
      * @param array $order
      * @param array $select
+     * @param int $limit
+     * @param int $offset
+     * @param bool $distinct
      * @return mixed
      */
-    public function getAll(array $params=array(), array $order=array(), array $select=array())
+    public function getAll(array $params=array(), array $order=array(), array $select=array(),$limit=0, $offset=0, $distinct=false)
     {
         $where=$this->trunsParamsToWhere($params);
         $select=$this->trunsSelect($select);
         $orderBy=$this->trunsParamsToOrderBy($order);
 
-        $list=$this->databaseModel->getMany($where,$select,$orderBy);
+        $list=$this->databaseModel->getMany($where,$select,$orderBy,$limit,$offset,$distinct);
         if(empty($list)){
             return array();
         }
