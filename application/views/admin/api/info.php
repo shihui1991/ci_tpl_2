@@ -143,7 +143,7 @@
                         <div class="layui-form-item">
                             <label class="layui-form-label"><?php echo $request['VarName'];?>：</label>
                             <div class="layui-input-block">
-                                <input type="text" name="<?php echo $request['VarName'];?>" placeholder="<?php echo $request['Name'];?>"  class="layui-input">
+                                <input type="text" name="<?php echo $request['VarName'];?>" placeholder="【<?php echo $request['Required'];?>】<?php echo $request['Name'];?>"  class="layui-input">
                             </div>
                         </div>
                     <?php endforeach;?>
