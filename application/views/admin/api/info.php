@@ -99,7 +99,7 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td>响应示例：</td>
+                                <td><a class="layui-btn layui-btn-sm layui-btn-normal" onclick="test()" title="点击测试">响应示例</a>：</td>
                                 <td>
                                     <ul class="img-box">
                                         <?php if(!empty($data['List']['Example'])):?>
@@ -133,11 +133,40 @@
     </div>
 </div>
 
+<div id="test" style="display: none;">
+    <fieldset class="layui-elem-field">
+        <legend>请求参数</legend>
+        <div class="layui-field-box">
+            <form class="layui-form" id="text-form" action="<?php echo $data['List']['Url'];?>" method="post" onsubmit="return false;">
+                <?php if(!empty($requestList)): ?>
+                    <?php foreach($requestList as $k=>$request):?>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label"><?php echo $request['VarName'];?>：</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="<?php echo $request['VarName'];?>" placeholder="<?php echo $request['Name'];?>"  class="layui-input">
+                            </div>
+                        </div>
+                    <?php endforeach;?>
+                <?php endif;?>
+            </form>
+        </div>
+    </fieldset>
+
+    <fieldset class="layui-elem-field">
+        <legend>响应结果</legend>
+        <div class="layui-field-box">
+<pre id="test-response">
+
+</pre>
+        </div>
+    </fieldset>
+</div>
+
 <link rel="stylesheet" href="/treetable/treetable.min.css" />
 <script src="/treetable/jquery.treetable.min.js"></script>
 
-<link rel="stylesheet" href="/viewer/jquery-0.6.0/viewer.min.css">
-<script src="/viewer/jquery-0.6.0/viewer.min.js"></script>
+<link rel="stylesheet" href="/viewer/viewer.min.css">
+<script src="/viewer/viewer.min.js"></script>
 <script src="/js/upload-images.js"></script>
 
 <script>
@@ -148,4 +177,44 @@
         , stringExpand: '展开'
     });
 
+    function test() {
+        layui.use(['form','layer'], function(){
+            var form = layui.form;
+            var layer = layui.layer;
+
+            // 打开导航
+            layer.ready(function () {
+                layer.open({
+                    type:1
+                    ,skin:'layui-layer-lan'
+                    ,area: ['60%', '80%']
+                    ,offset:'c'
+                    ,closeBtn:1
+                    ,shade:0
+                    ,maxmin:true
+                    ,moveOut: true
+                    ,title:['<?php echo $data['List']['Name'];?>','text-align: center;']
+                    ,content:$('#test')
+                    ,btn:['提交测试','取消']
+                    ,btnAlign: 'c'
+                    ,yes:function (index,layero) {
+                        var formObj=$('#text-form');
+                        var url = formObj.attr('action');
+                        var data = formObj.serialize();
+                        var dom='';
+                        ajaxSubmit(url,data,'post');
+                        if(!ajaxResp || "undefined" === typeof ajaxResp){
+                            dom = '请求失败';
+                        }else{
+                            dom = JSON.stringify(ajaxResp,null,4)
+                        }
+                        $('#test-response').html(dom);
+                    }
+                    ,btn2:function (index,layero) {
+
+                    }
+                });
+            });
+        });
+    }
 </script>
