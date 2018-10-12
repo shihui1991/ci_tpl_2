@@ -16,6 +16,7 @@
                     </li>
                     <li class="layui-this">
                         详情
+                        <span class="layui-badge" onclick="test()" title="点击调试">在线调试</span>
                     </li>
                 </ul>
                 <div class="layui-tab-content">
@@ -99,7 +100,7 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td><a class="layui-btn layui-btn-sm layui-btn-normal" onclick="test()" title="点击测试">响应示例</a>：</td>
+                                <td>响应示例：</td>
                                 <td>
                                     <ul class="img-box">
                                         <?php if(!empty($data['List']['Example'])):?>
