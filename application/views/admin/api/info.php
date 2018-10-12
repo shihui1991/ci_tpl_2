@@ -154,7 +154,7 @@
     </fieldset>
 
     <fieldset class="layui-elem-field">
-        <legend>响应结果</legend>
+        <legend>响应结果 - <?php echo API_BASE_URL.$data['List']['Url'];?></legend>
         <div class="layui-field-box">
 <pre id="test-response">
 
