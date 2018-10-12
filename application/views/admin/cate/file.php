@@ -25,7 +25,7 @@
                                 更新配置文件
                             </a>
                         </div>
-                        <pre class="layui-code" lay-title="conf.php" lay-encode="true" lay-about="false">
+                        <pre class="layui-code" lay-title="conf.php - <?php echo date('Y-m-d H:i:s',$data['Updated']); ?>" lay-encode="true" lay-about="false">
 <?php echo htmlspecialchars($data['Content']); ?>
                             </pre>
                     </div>
