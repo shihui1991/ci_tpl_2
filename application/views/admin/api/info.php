@@ -194,7 +194,7 @@
                     ,shade:0
                     ,maxmin:true
                     ,moveOut: true
-                    ,title:['<?php echo $data['List']['Name'];?>','text-align: center;']
+                    ,title:['<?php echo API_BASE_URL.$data['List']['Name'];?>','text-align: center;']
                     ,content:$('#test')
                     ,btn:['提交测试','取消']
                     ,btnAlign: 'c'

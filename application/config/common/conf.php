@@ -83,3 +83,6 @@ defined('DEFAULT_PERPAGE')      OR define('DEFAULT_PERPAGE', '15');
 
 /* 默认配置项 - 后台操作等待最长时间（秒） */
 defined('OPERAT_WAIT_TIME')      OR define('OPERAT_WAIT_TIME', '36000');
+
+/* 默认配置项 - 接口基本URL */
+defined('API_BASE_URL')      OR define('API_BASE_URL', '');
