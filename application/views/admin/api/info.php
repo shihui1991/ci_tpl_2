@@ -189,7 +189,7 @@
                     type:1
                     ,skin:'layui-layer-lan'
                     ,area: ['60%', '80%']
-                    ,offset:'c'
+                    ,offset:'auto'
                     ,closeBtn:1
                     ,shade:0
                     ,maxmin:true
