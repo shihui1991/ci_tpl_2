@@ -138,7 +138,7 @@
     <fieldset class="layui-elem-field">
         <legend>请求参数</legend>
         <div class="layui-field-box">
-            <form class="layui-form" id="text-form" action="<?php echo $data['List']['Url'];?>" method="post" onsubmit="return false;">
+            <form class="layui-form" id="text-form" action="<?php echo API_BASE_URL.$data['List']['Url'];?>" method="post" onsubmit="return false;">
                 <?php if(!empty($requestList)): ?>
                     <?php foreach($requestList as $k=>$request):?>
                         <div class="layui-form-item">
@@ -194,7 +194,7 @@
                     ,shade:0
                     ,maxmin:true
                     ,moveOut: true
-                    ,title:['<?php echo API_BASE_URL.$data['List']['Name'];?>','text-align: center;']
+                    ,title:['<?php echo $data['List']['Name'];?>','text-align: center;']
                     ,content:$('#test')
                     ,btn:['提交测试','取消']
                     ,btnAlign: 'c'
