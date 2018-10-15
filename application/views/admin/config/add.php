@@ -297,7 +297,7 @@
     function moveUp(obj) {
         var tr=$(obj).parents('tr:first');
         var tbody=tr.parents('tbody:first');
-        var trIndex=tr.index();console.log(tr);
+        var trIndex=tr.index();
         if(trIndex){
             tr.prev().before(tr.get());
         }
