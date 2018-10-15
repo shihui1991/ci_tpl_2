@@ -136,7 +136,7 @@
 
 <div id="test" style="display: none;">
     <fieldset class="layui-elem-field">
-        <legend>请求参数</legend>
+        <legend>请求参数 - <?php echo API_BASE_URL.$data['List']['Url'];?></legend>
         <div class="layui-field-box">
             <form class="layui-form" id="text-form" action="<?php echo API_BASE_URL.$data['List']['Url'];?>" method="post" onsubmit="return false;">
                 <?php if(!empty($requestList)): ?>
@@ -154,7 +154,7 @@
     </fieldset>
 
     <fieldset class="layui-elem-field">
-        <legend>响应结果 - <?php echo API_BASE_URL.$data['List']['Url'];?></legend>
+        <legend>响应结果</legend>
         <div class="layui-field-box">
 <pre id="test-response">
 
