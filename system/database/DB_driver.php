@@ -981,9 +981,6 @@ abstract class CI_DB_driver {
 	 */
 	public function compile_binds($sql, $binds)
 	{
-        if(empty($binds)){
-            return $sql;
-        }
 		if (empty($this->bind_marker) OR strpos($sql, $this->bind_marker) === FALSE)
 		{
 			return $sql;
@@ -999,6 +996,9 @@ abstract class CI_DB_driver {
 			$binds = array_values($binds);
 			$bind_count = count($binds);
 		}
+        if(0 === $bind_count){
+            return $sql;
+        }
 
 		// We'll need the marker length later
 		$ml = strlen($this->bind_marker);
