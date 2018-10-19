@@ -205,7 +205,12 @@ class Base extends CI_Controller
 -------------------------------------------------
 
 EEE;
-        recordLog($record,'response');
+        $urlArr=explode('/',$reqUrl);
+        $dir='';
+        if(isset($urlArr[1])){
+            $dir = $urlArr[1];
+        }
+        recordLog($record,$dir.'Response');
         // 响应数据
         $this->outputData=array(
             'data'=>$data,
