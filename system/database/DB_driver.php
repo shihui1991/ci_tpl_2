@@ -996,7 +996,7 @@ abstract class CI_DB_driver {
 			$binds = array_values($binds);
 			$bind_count = count($binds);
 		}
-        if(0 === $bind_count){
+        if(0 == $bind_count){
             return $sql;
         }
 

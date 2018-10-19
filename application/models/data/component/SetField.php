@@ -50,20 +50,6 @@ trait SetField
         return $value;
     }
 
-    /** 处理 Instance
-     * @param $value
-     * @param array $data
-     * @return string
-     */
-    public function setInstanceField($value,$data=array())
-    {
-        if(!empty($value)){
-            $value=str_replace('\\','/',$value);
-        }
-
-        return $value;
-    }
-
     /** 处理 Columns
      * @param string $value
      * @param array $data

@@ -109,7 +109,7 @@ if(!function_exists('batchInsertOrUpdateSql')){
             $temp_values=array();
             foreach ($inserts as $insert){
                 $temp=isset($value[$insert]) && !is_null($value[$insert])?(string)$value[$insert]:null;
-                $temp = addcslashes($temp,"'");
+                $temp = addslashes($temp);
                 $temp_values[]="'".$temp."'";
             }
             $temp_values=implode(',',$temp_values);
@@ -200,7 +200,7 @@ if(!function_exists('batchUpdateSql')){
             $temp_values=array();
             foreach ($inserts as $insert){
                 $temp=isset($value[$insert]) && !is_null($value[$insert])?(string)$value[$insert]:null;
-                $temp = addcslashes($temp,"'");
+                $temp = addslashes($temp);
                 $temp_values[]="'".$temp."'";
             }
             $temp_values=implode(',',$temp_values);
