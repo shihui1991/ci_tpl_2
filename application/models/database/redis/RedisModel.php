@@ -603,7 +603,7 @@ class RedisModel extends DatabaseModel
      */
     public function delete($where=array())
     {
-        $list=$this->getMany(array(),$where);
+        $list=$this->getMany($where);
 
         $keys=array();
         $list=new ListIterator($list);
