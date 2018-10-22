@@ -123,7 +123,7 @@ class RedisModel extends DatabaseModel
                         if(!in_array($where[1],$array)){
                             continue;
                         }
-                        $str="'{$data[$where[0]]}' $where[1] '$where[2]'";
+                        $str="'{$data[$where[0]]}' {$where[1]} '{$where[2]}'";
                         eval("\$result=$str;");
                 }
             }else{
@@ -197,8 +197,41 @@ class RedisModel extends DatabaseModel
         return $result;
     }
 
-    /**  获取列表
-     * @param array $where
+    /** 获取 key 匹配式
+     * @return string
+     */
+    public function getKeyPattern()
+    {
+        if(!empty($this->table)){
+            if(!empty($this->primaryKey)){
+                $pattern=$this->table.':*';
+            }else{
+                $pattern=$this->table;
+            }
+        }else{
+            $pattern='*';
+        }
+
+        return $pattern;
+    }
+
+    /** 获取全部键名
+     * @return array
+     */
+    public function getAllKeys()
+    {
+        $pattern = $this->getKeyPattern();
+        $keys=$this->dbModel->keys($pattern);
+        if(empty($keys)){
+            return array();
+        }
+        sort($keys);
+
+        return $keys;
+    }
+
+    /** 处理列表
+     * @param array $list
      * @param array $select
      * @param array $orderBy
      * @param int $limit
@@ -206,38 +239,8 @@ class RedisModel extends DatabaseModel
      * @param bool $distinct
      * @return array
      */
-    public function getMany($where=array(), $select=array(), $orderBy=array(), $limit=0, $offset=0,$distinct=false)
+    public function dealList($list=array(), $select=array(), $orderBy=array(), $limit=0, $offset=0, $distinct=false)
     {
-        if(!empty($this->table)){
-            if(!empty($this->primaryKey)){
-                $k=$this->table.':*';
-            }else{
-                $k=$this->table;
-            }
-        }else{
-            $k='*';
-        }
-        $keys=$this->dbModel->keys($k);
-        if(empty($keys)){
-            return array();
-        }
-        sort($keys);
-        $keys=new ListIterator($keys); // 使用迭代器
-
-        $list=array();
-        foreach($keys as $key){
-            $data=$this->dbModel->hGetAll($key);
-
-            // 查询条件
-            if(!empty($where)){
-                $result=$this->dealWhere($where,$data);
-                if(false == $result){
-                    continue;
-                }
-            }
-            ksort($data);
-            $list[]=$data;
-        }
         if(empty($list)){
             return array();
         }
@@ -259,6 +262,39 @@ class RedisModel extends DatabaseModel
         }
 
         return $list;
+    }
+
+    /**  获取列表
+     * @param array $where
+     * @param array $select
+     * @param array $orderBy
+     * @param int $limit
+     * @param int $offset
+     * @param bool $distinct
+     * @return array
+     */
+    public function getMany($where=array(), $select=array(), $orderBy=array(), $limit=0, $offset=0,$distinct=false)
+    {
+        $keys = $this->getAllKeys();
+        $keys=new ListIterator($keys); // 使用迭代器
+
+        $list=array();
+        foreach($keys as $key){
+            $data=$this->dbModel->hGetAll($key);
+
+            // 查询条件
+            if(!empty($where)){
+                $result=$this->dealWhere($where,$data);
+                if(false == $result){
+                    continue;
+                }
+            }
+            ksort($data);
+            $list[]=$data;
+        }
+        $result = $this->dealList($list,$select,$orderBy,$limit,$offset,$distinct);
+
+        return $result;
     }
 
     /**  获取数据
@@ -628,17 +664,7 @@ class RedisModel extends DatabaseModel
      */
     public function truncate()
     {
-        if(!empty($this->table)){
-            if(!empty($this->primaryKey)){
-                $key=$this->table.':*';
-            }else{
-                $key=$this->table;
-            }
-        }else{
-            $key='*';
-        }
-
-        $keys=$this->dbModel->keys($key);
+        $keys=$this->getAllKeys();
         if(empty($keys)){
             return true;
         }
