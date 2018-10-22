@@ -75,7 +75,9 @@ abstract class LogicModel
             $db2=$this->databaseModel;
         }
 
-        $list = $db1->getMany();
+        $where=array();
+        $select=$this->dataModel->fields;
+        $list = $db1->getMany($where,$select);
         if(empty($list)){
             return 0;
         }
@@ -83,7 +85,7 @@ abstract class LogicModel
         if(false == $result){
             throw new \Exception('建表失败',EXIT_DATABASE);
         }
-        $result = $db2->batchInsertUpdate($list,$this->dataModel->fields);
+        $result = $db2->batchInsertUpdate($list);
 
         return $result;
     }

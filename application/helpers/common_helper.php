@@ -104,11 +104,13 @@ if(!function_exists('batchInsertOrUpdateSql')){
         //数据分页
         $num=100;
         $page_values=array();
-        foreach ($values as $k=>$value){
-            $p=ceil(($k+1)/$num);
+        $values=array_values($values);
+        $count = count($values);
+        for($i=0;$i<$count;$i++){
+            $p=ceil(($i+1)/$num);
             $temp_values=array();
             foreach ($inserts as $insert){
-                $temp=isset($value[$insert]) && !is_null($value[$insert])?(string)$value[$insert]:null;
+                $temp=isset($values[$i][$insert]) && !is_null($values[$i][$insert])?(string)$values[$i][$insert]:null;
                 $temp = addslashes($temp);
                 $temp_values[]="'".$temp."'";
             }
@@ -130,11 +132,11 @@ if(!function_exists('batchInsertOrUpdateSql')){
 
         // 生成sql
         $sqls=array();
-        foreach($page_values as $p=>$value){
-            $sql_values=implode(',',$value);
-            $sqls[$p]='insert into `'.$table.'` ('.$sql_inserts.') values '.$sql_values;
+        for($i=0;$i<$p;$i++){
+            $sql_values=implode(',',$page_values[$i+1]);
+            $sqls[$i]='insert into `'.$table.'` ('.$sql_inserts.') values '.$sql_values;
             if(!empty($updates)){
-                $sqls[$p] .=' on duplicate key update '.$sql_updates;
+                $sqls[$i] .=' on duplicate key update '.$sql_updates;
             }
         }
         return $sqls;
@@ -195,11 +197,13 @@ if(!function_exists('batchUpdateSql')){
         //数据分页
         $num=100;
         $page_values=array();
-        foreach ($values as $k=>$value){
-            $p=ceil(($k+1)/$num);
+        $values=array_values($values);
+        $count = count($values);
+        for($i=0;$i<$count;$i++){
+            $p=ceil(($i+1)/$num);
             $temp_values=array();
             foreach ($inserts as $insert){
-                $temp=isset($value[$insert]) && !is_null($value[$insert])?(string)$value[$insert]:null;
+                $temp=isset($values[$i][$insert]) && !is_null($values[$i][$insert])?(string)$values[$i][$insert]:null;
                 $temp = addslashes($temp);
                 $temp_values[]="'".$temp."'";
             }
@@ -207,8 +211,8 @@ if(!function_exists('batchUpdateSql')){
             $page_values[$p][]='('.$temp_values.')';
         }
         //插入数据 sql
-        foreach($page_values as $p=>$value){
-            $sql_values=implode(',',$value);
+        for($i=0;$i<$p;$i++){
+            $sql_values=implode(',',$page_values[$i+1]);
             $sqls[]='insert into '.$temp_table.' ('.$sql_inserts.') values '.$sql_values;
         }
         /* ++++++++++ 批量更新 ++++++++++ */

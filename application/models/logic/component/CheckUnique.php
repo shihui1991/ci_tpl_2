@@ -164,7 +164,6 @@ trait CheckUnique
     public function checkInstanceUnique(array $data)
     {
         if(!empty($data['Instance'])){
-            $data['Instance']=str_replace('\\','/',$data['Instance']);
             $where=array(
                 array('Instance','eq',$data['Instance']),
                 array('Method','eq',$data['Method']),
