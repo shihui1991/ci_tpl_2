@@ -104,7 +104,7 @@ class MenuData extends DataModel
             'name'  => '创建时间',
             'alias' => 'MenuCreated',
             'attr'  => 'datetime',
-            'desc'  => "datetime DEFAULT NULL COMMENT '创建时间'",
+            'desc'  => "varchar(20) DEFAULT NULL COMMENT '创建时间'",
             'rules' => 'trim|max_length[255]',
         ),
         'Updated' => array(
@@ -112,7 +112,7 @@ class MenuData extends DataModel
             'name'  => '更新时间',
             'alias' => 'MenuUpdated',
             'attr'  => 'datetime',
-            'desc'  => "datetime DEFAULT NULL COMMENT '更新时间'",
+            'desc'  => "varchar(20) DEFAULT NULL COMMENT '更新时间'",
             'rules' => 'trim|max_length[255]',
         ),
     );

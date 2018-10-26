@@ -492,7 +492,7 @@ class RedisModel extends DatabaseModel
             foreach($this->primaryKey as $field){
                 $temp[]=$data[$field];
             }
-            $key=implode('_',$temp);
+            $key=implode(':',$temp);
         }else{
             $key=$data[$this->primaryKey];
         }
@@ -640,6 +640,9 @@ class RedisModel extends DatabaseModel
     public function delete($where=array())
     {
         $list=$this->getMany($where);
+        if(empty($list)){
+            return 0;
+        }
 
         $keys=array();
         $list=new ListIterator($list);

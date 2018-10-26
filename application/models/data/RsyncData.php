@@ -56,7 +56,7 @@ class RsyncData extends DataModel
             'name'  => '创建时间',
             'alias' => 'RsyncCreated',
             'attr'  => 'datetime',
-            'desc'  => "datetime DEFAULT NULL COMMENT '创建时间'",
+            'desc'  => "varchar(20) DEFAULT NULL COMMENT '创建时间'",
             'rules' => 'trim|max_length[255]',
         ),
         'Updated' => array(
@@ -64,7 +64,7 @@ class RsyncData extends DataModel
             'name'  => '更新时间',
             'alias' => 'RsyncUpdated',
             'attr'  => 'datetime',
-            'desc'  => "datetime DEFAULT NULL COMMENT '更新时间'",
+            'desc'  => "varchar(20) DEFAULT NULL COMMENT '更新时间'",
             'rules' => 'trim|max_length[255]',
         ),
     );
