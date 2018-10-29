@@ -29,7 +29,7 @@
                                     <tr>
                                         <td><?php echo $row['Id']; ?></td>
                                         <td><?php echo $row['Realname']; ?></td>
-                                        <td><?php echo $row['RoleId']; ?></td>
+                                        <td><?php echo $row['RoleName']; ?></td>
                                         <td><?php echo $row['Account']; ?></td>
                                         <td><?php echo STATE_ON==$row['State'] ? '开启' : '禁用'; ?></td>
                                         <td>

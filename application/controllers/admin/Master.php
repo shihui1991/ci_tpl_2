@@ -34,7 +34,7 @@ class Master extends Auth
         // 查询条数
         $total=$this->logicModel->getTotal();
         // 获取列表
-        $list=$this->logicModel->getListByPage($page, $perPage);
+        $list=$this->logicModel->getListWithInfoByPage($page, $perPage);
         // 生成分页条
         $baseUrl='/admin/master';
         $links=$this->_makePageLinks($baseUrl,$total,$perPage);

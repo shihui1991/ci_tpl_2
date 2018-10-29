@@ -116,7 +116,7 @@
                 $('#menu-ids').append(dom);
                 $(".treetable").treetable({
                     expandable: true // 展示
-                    ,initialState :"collapsed"//默认打开所有节点
+                    ,initialState :"expanded"//默认打开所有节点
                     ,stringCollapse:'关闭'
                     ,stringExpand:'展开'
                     ,clickableNodeNames: true

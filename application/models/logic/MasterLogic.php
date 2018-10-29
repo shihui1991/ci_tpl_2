@@ -22,6 +22,8 @@ class MasterLogic extends LogicModel
         // redis 为主，mysql 备份
         $this->databaseModel = MasterRedis::instance();
         $this->backDB = MasterMysql::instance();
+//        $this->databaseModel = MasterMysql::instance();
+//        $this->backDB = MasterRedis::instance();
 
         $this->dataModel = MasterData::instance();
         $this->validatorModel = MasterValidator::instance();
@@ -41,6 +43,56 @@ class MasterLogic extends LogicModel
         }
 
         return true;
+    }
+
+    /** 查询分页列表
+     * @param int $page
+     * @param int $perPage
+     * @param array $params
+     * @param array $order
+     * @param array $select
+     * @return array
+     */
+    public function getListWithInfoByPage($page=1, $perPage=DEFAULT_PERPAGE, array $params=array(), array $order=array(), array $select=array())
+    {
+        // 获取列表
+        $where=$this->trunsParamsToWhere($params);
+        $select=array(
+            'Id',
+            'Realname',
+            'RoleId',
+            'Account',
+            'State',
+        );
+        $select=$this->trunsSelect($select);
+        $orderBy=$this->trunsParamsToOrderBy($order);
+        $offset = $perPage * ($page - 1);
+        $list=$this->databaseModel->getMany($where, $select, $orderBy, $perPage, $offset);
+        if(empty($list)){
+            return array();
+        }
+        // 获取角色
+        $roleIds=array_column($list,'RoleId','Id');
+        $where=array(
+            array('Id','in',$roleIds),
+        );
+        $orderBy=array();
+        $select=array(
+            'Id',
+            'Name',
+        );
+        $roleList=RoleLogic::instance()->getAll($where,$orderBy,$select);
+        $roleNames=array_column($roleList,'Name','Id');
+        // 整理数据
+        $result = array();
+        foreach($list as $row){
+            $row = $this->dataModel->format($row);
+            $row['RoleName']=$roleNames[$row['RoleId']];
+
+            $result[]=$row;
+        }
+
+        return $result;
     }
 
     /** 登录
