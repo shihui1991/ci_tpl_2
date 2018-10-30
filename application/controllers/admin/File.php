@@ -19,32 +19,24 @@ class File extends Auth
      */
     public function index()
     {
-        // 上传目录
-        $list[]=array(
-            'File'=>UPLOAD_DIR,
-            'IsDir'=>1,
-            'Dir'=>'./',
-            'Path'=>UPLOAD_DIR,
-            'RealDir'=>realpath('./'),
-            'RealPath'=>realpath(UPLOAD_DIR),
-            'Size'=>'0B',
-            'Updated'=>date('Y-m-d H:i:s',filemtime(realpath(UPLOAD_DIR))),
+        $dirs=array(
+            UPLOAD_DIR,  // 上传目录
+            DOWNLOAD_DIR,// 下载目录
         );
-        $upload = getDirAllDirOrFile(UPLOAD_DIR);
-        $list=array_merge($list,$upload);
-        // 下载目录
-        $list[]=array(
-            'File'=>DOWNLOAD_DIR,
-            'IsDir'=>1,
-            'Dir'=>'./',
-            'Path'=>DOWNLOAD_DIR,
-            'RealDir'=>realpath('./'),
-            'RealPath'=>realpath(DOWNLOAD_DIR),
-            'Size'=>'0B',
-            'Updated'=>date('Y-m-d H:i:s',filemtime(realpath(DOWNLOAD_DIR))),
-        );
-        $download = getDirAllDirOrFile(DOWNLOAD_DIR);
-        $list=array_merge($list,$download);
+        foreach($dirs as $dir){
+            $list[]=array(
+                'File'=>$dir,
+                'IsDir'=>1,
+                'Dir'=>'./',
+                'Path'=>$dir,
+                'RealDir'=>realpath('./'),
+                'RealPath'=>realpath($dir),
+                'Size'=>'0B',
+                'Updated'=>date('Y-m-d H:i:s',filemtime(realpath($dir))),
+            );
+            $upload = getDirAllDirOrFile($dir);
+            $list=array_merge($list,$upload);
+        }
 
         $data=array(
             'List'=>$list,
