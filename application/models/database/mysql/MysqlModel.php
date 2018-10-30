@@ -42,7 +42,7 @@ class MysqlModel extends DatabaseModel
     public function createTable(array $columns,$drop=false)
     {
         // 设置字符集
-        $sql = 'SET NAMES utf8';
+        $sql = 'SET NAMES utf8mb4';
         $this->query($sql);
         // 删除表
         if($drop){
@@ -55,7 +55,7 @@ class MysqlModel extends DatabaseModel
         }
 
         // 设置字符集
-        $sql = "SET character_set_client = utf8 ;";
+        $sql = "SET character_set_client = utf8mb4 ;";
         $this->query($sql);
         // 建表
         $sql = "CREATE TABLE $check `{$this->table}` (";
@@ -65,7 +65,7 @@ class MysqlModel extends DatabaseModel
             $fields[]="`$field` {$column['desc']}";
         }
         $sql .= implode(',',$fields);
-        $sql .= ") ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='{$this->table}';";
+        $sql .= ") ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='{$this->table}';";
 
         $result = $this->query($sql);
 
