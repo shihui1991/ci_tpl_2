@@ -251,7 +251,12 @@ EEE;
 -------------------------------------------------
 
 EEE;
-        recordLog($record,'exception');
+        $urlArr=explode('/',$reqUrl);
+        $dir='';
+        if(isset($urlArr[1])){
+            $dir = $urlArr[1];
+        }
+        recordLog($record,$dir.'exception');
 
         $data=array();
         $code=EXIT_ERROR;
