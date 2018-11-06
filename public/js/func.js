@@ -184,19 +184,16 @@ function appendOpt(url,post,type,value,id) {
                 layer.msg(ajaxResp.msg,{icon:2});
             }
             else{
-                if(ajaxResp.data.List.length>0){
-                    var dom='';
-                    $.each(ajaxResp.data.List,function(i,data){
-                        var selected='';
-                        if(value == data[key]){
-                            selected='selected';
-                        }
-                        dom +='<option value="'+data[key]+'" '+selected+'> '+data[val]+' </option>';
-                    });
-                    $('#'+id).append(dom);
-                    form.render();
-                }
-
+                var dom='';
+                $.each(ajaxResp.data.List,function(i,data){
+                    var selected='';
+                    if(value == data[key]){
+                        selected='selected';
+                    }
+                    dom +='<option value="'+data[key]+'" '+selected+'> '+data[val]+' </option>';
+                });
+                $('#'+id).append(dom);
+                form.render();
             }
         }
     });
@@ -225,20 +222,17 @@ function appendCheckbox(url,post,type,values,id,name) {
                 layer.msg(ajaxResp.msg,{icon:2});
             }
             else{
-                if(ajaxResp.data.List.length>0){
-                    var dom='';
-                    $.each(ajaxResp.data.List,function(i,data){
-                        var checked='';
-                        if($.inArray(data[key],values) > -1){
-                            checked='checked';
-                        }
-                        dom +='<input type="checkbox" name="'+name+'" value="'+data[key]+'" title="'+data[val]+'" '+checked+'>';
-                    });
+                var dom='';
+                $.each(ajaxResp.data.List,function(i,data){
+                    var checked='';
+                    if($.inArray(data[key],values) > -1){
+                        checked='checked';
+                    }
+                    dom +='<input type="checkbox" name="'+name+'" value="'+data[key]+'" title="'+data[val]+'" '+checked+'>';
+                });
 
-                    $('#'+id).append(dom);
-                    form.render();
-                }
-
+                $('#'+id).append(dom);
+                form.render();
             }
         }
     });
