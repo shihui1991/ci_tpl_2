@@ -390,12 +390,6 @@ if(!function_exists('formatArray')){
         }
         $result=array();
         foreach($array as $key=>$val){
-            // 格式化 键名
-            if(is_numeric($key)){
-                $key=(int)$key;
-            }else{
-                $key=(string)$key;
-            }
             // 格式化 值
             if(is_array($val)){
                 $val=formatArray($val);

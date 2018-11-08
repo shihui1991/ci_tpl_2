@@ -210,7 +210,7 @@ EEE;
         if(isset($urlArr[1])){
             $dir = $urlArr[1];
         }
-        recordLog($record,$dir.'Response');
+        recordLog($record,$dir.'_response');
         // 响应数据
         $this->outputData=array(
             'data'=>$data,
@@ -256,7 +256,7 @@ EEE;
         if(isset($urlArr[1])){
             $dir = $urlArr[1];
         }
-        recordLog($record,$dir.'exception');
+        recordLog($record,$dir.'_exception');
 
         $data=array();
         $code=EXIT_ERROR;

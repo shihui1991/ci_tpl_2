@@ -2,7 +2,7 @@
 /**
  *  初始化
  * @user 罗仕辉
- * @create 2018-09-08
+ * @create 2018-10-15
  */
 
 require_once APPPATH.'controllers/Base.php';
@@ -14,6 +14,15 @@ class Init extends Base
     {
         parent::__construct();
 
+        $ip = $this->input->ip_address();
+        $whiteIps=array(
+            '0.0.0.0',
+            '127.0.0.1',
+            '::1',
+        );
+        if(!is_cli() && !in_array($ip,$whiteIps)){
+            show_404();
+        }
     }
 
     /**  响应输出
@@ -27,7 +36,6 @@ class Init extends Base
     {
         parent::_response($data,$code,$msg,$url,$tpls);
 
-        $resp=json_encode($this->outputData);
-        echo $resp;
+        echo $msg.PHP_EOL;
     }
 }

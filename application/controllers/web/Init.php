@@ -29,7 +29,7 @@ class Init extends Base
 
         if(empty($url)){
             if(empty($tpls)){
-                echo '<script>alert("'.$msg.'");history.back();</script>';
+                echo '<script>alert("'.$msg.'");location=document.referrer;</script>';
             }else{
                 $this->load->view('layout/head',$this->outputData);
 
