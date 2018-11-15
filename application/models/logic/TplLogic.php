@@ -75,16 +75,6 @@ class TplLogic extends LogicModel
         }
     }
 
-    /**  验证 唯一
-     * @param array $data
-     * @return bool
-     * @throws \Exception
-     */
-    public function checkUnique(array $data)
-    {
-        return true;
-    }
-
     /** 获取数据库模型
      * @param string $table
      * @param string $k

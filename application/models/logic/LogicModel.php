@@ -57,6 +57,16 @@ abstract class LogicModel
         }
     }
 
+    /**  验证 唯一
+     * @param array $data
+     * @return bool
+     * @throws \Exception
+     */
+    public function checkUnique(array $data)
+    {
+        return true;
+    }
+
     /** 同步
      * @param string $act
      * @return int

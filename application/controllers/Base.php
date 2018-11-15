@@ -55,7 +55,7 @@ class Base extends CI_Controller
     /**  获取请求输入数据
      * @return array
      */
-    public function _getInputData()
+    protected function _getInputData()
     {
         // 获取 get 输入
         $get=$this->input->get();
@@ -71,7 +71,7 @@ class Base extends CI_Controller
     /** 获取 XSS 安全过滤后的请求输入数据
      * @return array
      */
-    public function _getInputXssCleanData()
+    protected function _getInputXssCleanData()
     {
         $data=$this->_getInputData();
         $data=$this->security->xss_clean($data);
@@ -82,7 +82,7 @@ class Base extends CI_Controller
      * @return array|bool|int
      * @throws Exception
      */
-    public function _upload()
+    protected function _upload()
     {
         // 上传配置
         $config=array();
@@ -170,7 +170,7 @@ class Base extends CI_Controller
      * @param string $url 重定向地址
      * @param array $tpls 响应模板
      */
-    public function _response(array $data=array(),$code=EXIT_SUCCESS,$msg='请求成功',$url='', $tpls=array())
+    protected function _response(array $data=array(),$code=EXIT_SUCCESS,$msg='请求成功',$url='', $tpls=array())
     {
         // 结束计时
         $this->benchmark->mark('app_end');
