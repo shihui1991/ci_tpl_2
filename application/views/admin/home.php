@@ -172,13 +172,24 @@
             var isRealUrl=url.indexOf('#');
             // 打开窗口
             if(-1 == isRealUrl){
-                layer.open({
+                var w=$(window).width();
+                var h=$(window).height();
+                var width=1000;
+                var height=600;
+                var isFull=false;
+                // 小屏最大化
+                if(w < width || h < height){
+                    isFull = true;
+                    width = w;
+                    height = h;
+                }
+                var i=layer.open({
                     type: 2
                     ,skin:'layui-layer-molv'
-                    ,area: ['1000px', '600px']
+                    ,area: [width+'px', height+'px']
                     ,offset: [
-                        Math.random()*($(window).height()-600)
-                        ,Math.random()*($(window).width()-1000)
+                        Math.random()*(h-height)
+                        ,Math.random()*(w-width)
                     ]
                     ,shade: 0
                     ,maxmin: true
@@ -204,8 +215,15 @@
                         if(pos.top < -30){
                             layero.offset({top:0,left:pos.left});
                         }
+                        if(isFull){
+                            layero.offset({top:0,left:0});
+                        }
                     }
                 });
+                // 小屏最大化
+                if(isFull){
+                    layer.full(i);
+                }
             }
             // 加载菜单
             if(!elem.data('loaded')){
