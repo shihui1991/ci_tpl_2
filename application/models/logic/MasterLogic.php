@@ -242,6 +242,10 @@ class MasterLogic extends LogicModel
             $err=array_shift($vali);
             throw new \Exception($err,EXIT_USER_INPUT);
         }
+        // 验证唯一
+        $data['Id']=$master['Id'];
+        $this->checkUnique($data);
+        // 修改
         $update=$this->dataModel->fill($data,'modify');
         $result = $this->databaseModel->setOneByKey($master['Id'],$update);
         if(false === $result){
