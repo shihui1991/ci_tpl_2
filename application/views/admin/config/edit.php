@@ -42,6 +42,14 @@
                             </div>
 
                             <div class="layui-form-item">
+                                <label class="layui-form-label">单列配置：</label>
+                                <div class="layui-input-block">
+                                    <input type="radio" name="Single" value="0" title="否" <?php if(0 == $data['List']['Single']){echo ' checked';};?>>
+                                    <input type="radio" name="Single" value="1" title="是" <?php if(1 == $data['List']['Single']){echo ' checked';};?>>
+                                </div>
+                            </div>
+
+                            <div class="layui-form-item">
                                 <label class="layui-form-label">字段详情：</label>
                                 <div class="layui-input-block">
                                     <table class="layui-table">
@@ -98,6 +106,14 @@
                                 <label class="layui-form-label">说明：</label>
                                 <div class="layui-input-block">
                                     <textarea name="Infos" class="layui-textarea"><?php echo $data['List']['Infos'];?></textarea>
+                                </div>
+                            </div>
+
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">状态：</label>
+                                <div class="layui-input-block">
+                                    <input type="radio" name="State" value="0" title="弃用" <?php if(0 == $data['List']['State']){echo ' checked';};?>>
+                                    <input type="radio" name="State" value="1" title="开启" <?php if(1 == $data['List']['State']){echo ' checked';};?>>
                                 </div>
                             </div>
 

@@ -35,6 +35,14 @@ class ConfigData extends DataModel
             'desc'  => "varchar(255) DEFAULT NULL COMMENT ' 名称'",
             'rules' => 'trim|max_length[255]',
         ),
+        'Single' => array(
+            'field' => 'Single',
+            'name'  => '单项配置',
+            'alias' => 'ConfigSingle',
+            'attr'  => 'int',
+            'desc'  => "tinyint(1) DEFAULT '0' COMMENT '单列配置，0否，1是'",
+            'rules' => 'trim|required|max_length[1]|is_natural|in_list[0,1]',
+        ),
         'Columns' => array(
             'field' => 'Columns',
             'name'  => '字段详情',
@@ -50,6 +58,14 @@ class ConfigData extends DataModel
             'attr'  => 'string',
             'desc'  => "varchar(255) DEFAULT NULL COMMENT '说明'",
             'rules' => 'trim|max_length[255]',
+        ),
+        'State' => array(
+            'field' => 'State',
+            'name'  => '状态',
+            'alias' => 'ConfigState',
+            'attr'  => 'int',
+            'desc'  => "tinyint(1) DEFAULT '1' COMMENT '状态，0弃用，1在用'",
+            'rules' => 'trim|required|max_length[1]|is_natural|in_list[0,1]',
         ),
         'Created' => array(
             'field' => 'Created',
@@ -77,8 +93,10 @@ class ConfigData extends DataModel
         return array(
             'Table',
             'Name',
+            'Single',
             'Columns',
             'Infos',
+            'State',
             'Created',
             'Updated',
         );
@@ -103,8 +121,10 @@ class ConfigData extends DataModel
         return array(
             'Id',
             'Name',
+            'Single',
             'Columns',
             'Infos',
+            'State',
             'Updated',
         );
     }

@@ -18,8 +18,10 @@ class ConfigValidator extends ValidatorModel
         return array(
             'Table',
             'Name',
+            'Single',
             'Columns',
             'Infos',
+            'State',
         );
     }
 
@@ -31,8 +33,10 @@ class ConfigValidator extends ValidatorModel
         return array(
             'Id',
             'Name',
+            'Single',
             'Columns',
             'Infos',
+            'State',
         );
     }
 

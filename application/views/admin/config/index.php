@@ -44,7 +44,9 @@
                                 <th>Id</th>
                                 <th>表名</th>
                                 <th>名称</th>
+                                <th>单列</th>
                                 <th>说明</th>
+                                <th>状态</th>
                                 <th>操作</th>
                             </tr>
                             </thead>
@@ -55,7 +57,9 @@
                                         <td><?php echo $row['Id'];?></td>
                                         <td><?php echo $row['Table'];?></td>
                                         <td><?php echo $row['Name'];?></td>
+                                        <td><?php echo YES == $row['Single']?'是':'否';?></td>
                                         <td><?php echo $row['Infos'];?></td>
+                                        <td><?php echo YES == $row['State']?'开启':'弃用';?></td>
                                         <td>
                                             <div class="layui-btn-group">
                                                 <a class="layui-btn layui-btn-xs layui-btn-primary" href="/admin/config/edit?Id=<?php echo $row['Id'];?>">编辑</a>

@@ -42,7 +42,7 @@
                                             <div class="layui-form-item">
                                                 <label class="layui-form-label"><?php echo $column['name']; ?>：</label>
                                                 <div class="layui-input-block">
-                                                    <input type="text" name="<?php echo $column['field']; ?>" value="<?php echo isset($data['List'][$column['field']]) ? $data['List'][$column['field']] : '';?>" placeholder="" class="layui-input">
+                                                    <input type="text" name="<?php echo $column['field']; ?>" value="<?php echo isset($data['List'][$column['field']]) ? htmlspecialchars($data['List'][$column['field']]) : '';?>" placeholder="" class="layui-input">
                                                 </div>
                                             </div>
                                         <?php endforeach; ?>

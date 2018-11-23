@@ -291,9 +291,16 @@ class Config extends Auth
         $code=EXIT_SUCCESS;
         $msg='请求成功';
         $url='';
-        $tpls=array(
-            'admin/config/data',
-        );
+        // 单项配置
+        if(YES == $config['Single']){
+            $tpls=array(
+                'admin/config/dataSingle',
+            );
+        }else{
+            $tpls=array(
+                'admin/config/data',
+            );
+        }
         $this->_response($data,$code,$msg,$url,$tpls);
     }
 
