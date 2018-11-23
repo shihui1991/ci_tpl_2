@@ -105,13 +105,14 @@ CREATE TABLE `Config` (
   `Id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `Table` varchar(255) NOT NULL COMMENT '表名',
   `Name` varchar(255) DEFAULT NULL COMMENT '名称',
+  `Single` tinyint(1) DEFAULT '0' COMMENT '单列配置，0否，1是',
   `Columns` text COMMENT '字段详情',
   `Infos` varchar(255) DEFAULT NULL COMMENT '说明',
-  `Created` datetime DEFAULT NULL,
-  `Updated` datetime DEFAULT NULL,
-  PRIMARY KEY (`Id`) USING BTREE,
-  KEY `Table` (`Table`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='快捷配置';
+  `State` tinyint(1) DEFAULT '1' COMMENT '状态，0弃用，1开启',
+  `Created` varchar(20) DEFAULT NULL,
+  `Updated` varchar(20) DEFAULT NULL,
+  PRIMARY KEY (`Id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='快捷配置';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
