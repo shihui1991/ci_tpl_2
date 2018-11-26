@@ -23,13 +23,6 @@
                                 <th>URL</th>
                                 <th>事件ID</th>
                                 <th>状态</th>
-
-                                <?php if(!empty($data['FilterOrders'])): ?>
-                                    <?php foreach($data['FilterOrders'] as $orders): ?>
-                                        <th><?php echo $data['FilterFields'][$orders['Field']];?></th>
-                                    <?php endforeach; ?>
-                                <?php endif; ?>
-
                                 <th>操作</th>
                             </tr>
                             </thead>
@@ -42,13 +35,6 @@
                                         <td><?php echo $row['Url'];?></td>
                                         <td><?php echo $row['EventId'];?></td>
                                         <td><?php echo STATE_ON == $row['State'] ? '开启':'关闭';?></td>
-
-                                        <?php if(!empty($data['FilterOrders'])): ?>
-                                            <?php foreach($data['FilterOrders'] as $orders): ?>
-                                                <td><?php echo $row[$orders['Field']];?></td>
-                                            <?php endforeach; ?>
-                                        <?php endif; ?>
-
                                         <td>
                                             <div class="layui-btn-group">
                                                 <a class="layui-btn layui-btn-xs layui-btn-normal" href="/admin/api/info?Id=<?php echo $row['Id'];?>">查看</a>
