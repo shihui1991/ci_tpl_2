@@ -23,30 +23,20 @@ class Config extends Auth
      */
     public function index()
     {
-        $params=array();
-        $args=array();
-        // 查询参数
-        // Table
-        $table='';
-        if(!empty($this->inputData['Table'])){
-            $table=(string)$this->inputData['Table'];
-            $params[]=array('Table','like',$table);
-        }
-        $args['Table']=$table;
-        // Name
-        $name='';
-        if(!empty($this->inputData['Name'])){
-            $name=(string)$this->inputData['Name'];
-            $params[]=array('Name','like',$name);
-        }
-        $args['Name']=$name;
-        
-        $list = $this->logicModel->getAll();
+        // 处理筛选
+        $filter = $this->logicModel->handleFilter($this->inputData);
+        $params=$filter['Params'];
+        $orderBy=$filter['OrderBy'];
+
+        // 获取列表
+        $list=$this->logicModel->getAll($params,$orderBy);
 
         $data=array(
             'List'=>$list,
+            'FilterUrl'=>$this->requestUrl,
+            'OtherBtns'=>array(),
         );
-        $data=array_merge($args,$data);
+        $data = array_merge($data,$filter);
         
         $code=EXIT_SUCCESS;
         $msg='请求成功';
@@ -281,13 +271,23 @@ class Config extends Auth
             throw new Exception('配置不存在',EXIT_USER_INPUT);
         }
         $tplLogic=\models\logic\TplLogic::instance($config['Table']);
-        $list=$tplLogic->isFormat(false)->getAll();
+        // 处理筛选
+        $filter = $tplLogic->handleFilter($this->inputData);
+        $params=$filter['Params'];
+        $orderBy=$filter['OrderBy'];
+
+        // 获取列表
+        $list=$tplLogic->getAll($params,$orderBy);
 
         $data=array(
             'ConfigId'=>$configId,
             'Config'=>$config,
             'List'=>$list,
+            'FilterUrl'=>$this->requestUrl.'?ConfigId='.$configId,
+            'OtherBtns'=>array(),
         );
+        $data = array_merge($data,$filter);
+
         $code=EXIT_SUCCESS;
         $msg='请求成功';
         $url='';

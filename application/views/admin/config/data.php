@@ -31,6 +31,9 @@
                             <legend><?php echo $data['Config']['Table']; ?> <span class="layui-badge-rim"><?php echo $data['Config']['Name']; ?></span></legend>
 
                             <div class="layui-field-box">
+
+                                <?php require_once VIEWPATH.'layout/search.php'; ?>
+
                                 <table class="layui-table">
                                     <thead>
                                     <tr>

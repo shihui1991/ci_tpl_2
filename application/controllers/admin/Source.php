@@ -31,31 +31,18 @@ class Source extends Auth
         if(!empty($this->inputData['PerPage']) && $this->inputData['PerPage'] > 1){
             $perPage=(int)$this->inputData['PerPage'];
         }
-        $params=array();
-        $args=array();
-        // 查询参数
-        // 名称
-        $name='';
-        if(!empty($this->inputData['Name'])){
-            $name=(string)$this->inputData['Name'];
-            $params[]=array('Name','like',$name);
-        }
-        $args['Name']=$name;
-        // Url
-        $url='';
-        if(!empty($this->inputData['Url'])){
-            $url=(string)$this->inputData['Url'];
-            $params[]=array('Url','like',$url);
-        }
-        $args['Url']=$url;
+        // 处理筛选
+        $filter = $this->logicModel->handleFilter($this->inputData);
+        $params=$filter['Params'];
+        $orderBy=$filter['OrderBy'];
 
         // 查询条数
         $total=$this->logicModel->getTotal($params);
         // 获取列表
-        $list=$this->logicModel->getListByPage($page, $perPage,$params);
+        $list=$this->logicModel->getListByPage($page, $perPage,$params,$orderBy);
+
         // 生成分页条
-        $baseUrl='/admin/source';
-        $links=$this->_makePageLinks($baseUrl,$total,$perPage);
+        $links=$this->_makePageLinks($this->requestUrl,$total,$perPage);
 
         $data=array(
             'Page'=>$page,
@@ -63,8 +50,10 @@ class Source extends Auth
             'Total'=>$total,
             'List'=>$list,
             'Links'=>$links,
+            'FilterUrl'=>$this->requestUrl,
+            'OtherBtns'=>array(),
         );
-        $data=array_merge($args,$data);
+        $data = array_merge($data,$filter);
 
         $code=EXIT_SUCCESS;
         $msg='请求成功';

@@ -12,25 +12,8 @@
                 </ul>
                 <div class="layui-tab-content">
                     <div class="layui-tab-item layui-show">
-                        <form action="/admin/api" class="layui-form">
-                            <div class="layui-form-item">
-                                <div class="layui-inline">
-                                    <label class="layui-form-label">名称：</label>
-                                    <div class="layui-input-inline">
-                                        <input type="text" name="Name" value="<?php echo $data['Name']?>" class="layui-input">
-                                    </div>
-                                </div>
-                                <div class="layui-inline">
-                                    <label class="layui-form-label">接口URL：</label>
-                                    <div class="layui-input-inline">
-                                        <input type="text" name="Url" value="<?php echo $data['Url']?>" class="layui-input">
-                                    </div>
-                                </div>
 
-                                <button class="layui-btn" lay-submit lay-filter="">查询</button>
-                                <a class="layui-btn layui-btn-normal" href="/admin/api">重置</a>
-                            </div>
-                        </form>
+                        <?php require_once VIEWPATH.'layout/search.php'; ?>
 
                         <table class="layui-table">
                             <thead>
@@ -40,6 +23,13 @@
                                 <th>URL</th>
                                 <th>事件ID</th>
                                 <th>状态</th>
+
+                                <?php if(!empty($data['FilterOrders'])): ?>
+                                    <?php foreach($data['FilterOrders'] as $orders): ?>
+                                        <th><?php echo $data['FilterFields'][$orders['Field']];?></th>
+                                    <?php endforeach; ?>
+                                <?php endif; ?>
+
                                 <th>操作</th>
                             </tr>
                             </thead>
@@ -52,6 +42,13 @@
                                         <td><?php echo $row['Url'];?></td>
                                         <td><?php echo $row['EventId'];?></td>
                                         <td><?php echo STATE_ON == $row['State'] ? '开启':'关闭';?></td>
+
+                                        <?php if(!empty($data['FilterOrders'])): ?>
+                                            <?php foreach($data['FilterOrders'] as $orders): ?>
+                                                <td><?php echo $row[$orders['Field']];?></td>
+                                            <?php endforeach; ?>
+                                        <?php endif; ?>
+
                                         <td>
                                             <div class="layui-btn-group">
                                                 <a class="layui-btn layui-btn-xs layui-btn-normal" href="/admin/api/info?Id=<?php echo $row['Id'];?>">查看</a>

@@ -18,25 +18,8 @@
                 </ul>
                 <div class="layui-tab-content">
                     <div class="layui-tab-item layui-show">
-                        <form action="/admin/config" class="layui-form">
-                            <div class="layui-form-item">
-                                <div class="layui-inline">
-                                    <label class="layui-form-label">表名：</label>
-                                    <div class="layui-input-inline">
-                                        <input type="text" name="Table" value="<?php echo $data['Table']?>" class="layui-input">
-                                    </div>
-                                </div>
-                                <div class="layui-inline">
-                                    <label class="layui-form-label">名称：</label>
-                                    <div class="layui-input-inline">
-                                        <input type="text" name="Name" value="<?php echo $data['Name']?>" class="layui-input">
-                                    </div>
-                                </div>
 
-                                <button class="layui-btn" lay-submit lay-filter="">查询</button>
-                                <a class="layui-btn layui-btn-normal" href="/admin/config">重置</a>
-                            </div>
-                        </form>
+                        <?php require_once VIEWPATH.'layout/search.php'; ?>
 
                         <table class="layui-table">
                             <thead>

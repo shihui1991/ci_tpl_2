@@ -22,6 +22,31 @@ abstract class LogicModel
     public $isFormat=true;
     public $isAlias=false;
 
+    public $filterMethods=array(
+        'eq'    => 'eq',
+        'neq'   => '!=',
+        'gt'    => '>',
+        'egt'   => '>=',
+        'lt'    => '<',
+        'elt'   => '<=',
+        'like'  => 'like',
+        'nlike' => 'not like',
+        'in'    => 'in',
+        'nin'   => 'not in',
+    );
+    public $filterMethodsName=array(
+        'eq'    => '等于',
+        'neq'   => '不等于',
+        'gt'    => '大于',
+        'egt'   => '大于或等于',
+        'lt'    => '小于',
+        'elt'   => '小于或等于',
+        'like'  => '类似于',
+        'nlike' => '不类似于',
+        'in'    => '在内',
+        'nin'   => '除外',
+    );
+
     use CheckUnique; // 组件 - 验证唯一
 
     public function __construct()
@@ -120,6 +145,82 @@ abstract class LogicModel
         $this->isAlias = $isAlias;
 
         return $this;
+    }
+
+    /** 处理筛选
+     * @param array $input
+     * @return array
+     */
+    public function handleFilter($input=array())
+    {
+        // 筛选条件
+        $filterParams = array();
+        if(!empty($input['FilterParams'])){
+            $filterParams = $input['FilterParams'];
+        }
+        $params=$this->trunsFilterMethods($filterParams);
+        // 排序方式
+        $filterOrders = array();
+        if(!empty($input['FilterOrders'])){
+            $filterOrders = $input['FilterOrders'];
+        }
+        $orderBy = $this->trunsFilterOrders($filterOrders);
+        $result=array(
+            'Params'=>$params,
+            'OrderBy'=>$orderBy,
+            'FilterFields'=>$this->dataModel->fieldsName,
+            'FilterMethods'=>$this->filterMethodsName,
+            'FilterParams'=>$filterParams,
+            'FilterOrders'=>$filterOrders,
+        );
+
+        return $result;
+    }
+
+    /** 将筛选参数转换为查询条件
+     * @param array $list
+     * @return array
+     */
+    public function trunsFilterMethods($list=array())
+    {
+        if(empty($list)){
+            return array();
+        }
+        $result = array();
+        foreach($list as $row){
+            $field = $row['Field'];
+            $method = $this->filterMethods[$row['Method']];
+            $value = trim($row['Value']);
+
+            if(in_array($method,array('in','not in'))){
+                $value = explode('|',$value);
+            }
+
+            $result[]=array(
+                $field,
+                $method,
+                $value,
+            );
+        }
+
+        return $result;
+    }
+
+    /** 将排序参数转换为排序条件
+     * @param array $list
+     * @return array
+     */
+    public function trunsFilterOrders($list=array())
+    {
+        if(empty($list)){
+            return array();
+        }
+        $result = array();
+        foreach($list as $row){
+            $result[$row['Field']]=$row['By'];
+        }
+
+        return $result;
     }
 
     /** 将请求参数转换为查询条件

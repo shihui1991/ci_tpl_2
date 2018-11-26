@@ -31,56 +31,18 @@ class Api extends Auth
         if(!empty($this->inputData['PerPage']) && $this->inputData['PerPage'] > 1){
             $perPage=(int)$this->inputData['PerPage'];
         }
-        $params=array();
-        $orderBy=array();
-        $args=array();
-        // 查询参数
-        // 名称
-        $name='';
-        if(!empty($this->inputData['Name'])){
-            $name=(string)$this->inputData['Name'];
-            $params[]=array('Name','like',$name);
-        }
-        $args['Name']=$name;
-        // Url
-        $url='';
-        if(!empty($this->inputData['Url'])){
-            $url=(string)$this->inputData['Url'];
-            $params[]=array('Url','like',$url);
-        }
-        $args['Url']=$url;
-        // 状态
-        $state= -1;
-        if(isset($this->inputData['State'])
-            && is_numeric($this->inputData['State'])
-            && in_array($this->inputData['State'],array(STATE_OFF,STATE_ON))){
-
-            $state=(int)$this->inputData['State'];
-            $params[]=array('State','eq',$state);
-        }
-        $args['State']=$state;
-
-        // 排序方式
-        $by=ORDER_BY_ASC;
-        if(!empty($this->inputData['By']) && in_array($this->inputData['By'],array(ORDER_BY_ASC,ORDER_BY_DESC))){
-            $by=(string)$this->inputData['By'];
-        }
-        $args['By']=$by;
-        // 排序字段
-        $order='';
-        if(!empty($this->inputData['Order'])){
-            $order=(string)$this->inputData['Order'];
-            $orderBy[$order]=$by;
-        }
-        $args['Order']=$order;
+        // 处理筛选
+        $filter = $this->logicModel->handleFilter($this->inputData);
+        $params=$filter['Params'];
+        $orderBy=$filter['OrderBy'];
 
         // 查询条数
         $total=$this->logicModel->getTotal($params);
         // 获取列表
         $list=$this->logicModel->getListByPage($page, $perPage,$params,$orderBy);
+
         // 生成分页条
-        $baseUrl='/admin/api';
-        $links=$this->_makePageLinks($baseUrl,$total,$perPage);
+        $links=$this->_makePageLinks($this->requestUrl,$total,$perPage);
 
         $data=array(
             'Page'=>$page,
@@ -88,8 +50,10 @@ class Api extends Auth
             'Total'=>$total,
             'List'=>$list,
             'Links'=>$links,
+            'FilterUrl'=>$this->requestUrl,
+            'OtherBtns'=>array(),
         );
-        $data=array_merge($args,$data);
+        $data = array_merge($data,$filter);
 
         $code=EXIT_SUCCESS;
         $msg='请求成功';
