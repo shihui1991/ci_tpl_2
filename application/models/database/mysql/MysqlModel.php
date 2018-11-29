@@ -19,7 +19,7 @@ class MysqlModel extends DatabaseModel
 
         // 连接数据库
         $this->dbModel=$this->CI->load->database($this->dbConfigName,true);
-        $this->dbConfig=$this->dbModel;
+        $this->dbConfig = json_decode(json_encode($this->dbModel),true);
     }
 
     /** 执行一条原生命令
