@@ -19,11 +19,15 @@ abstract class DatabaseModel
     public $primaryKey;    // 主键
 
     static protected $objs;
+    static protected $connectDBs;
 
     public function __construct()
     {
         $this->CI = & get_instance();
-
+        // 加载配置
+        $this->CI->load->config($this->dbConfigFile,TRUE);
+        $configs=$this->CI->config->item($this->dbConfigFile);
+        $this->dbConfig=$configs[$this->dbConfigName];
     }
 
     /**  获取实例
@@ -32,28 +36,40 @@ abstract class DatabaseModel
      */
     public static function instance($k=0)
     {
+        $obj = new static();
+        // 数据库连接 单例
+        $connectKey = $obj->makeConnectDBKey();
+        if(empty(static::$connectDBs[$connectKey])){
+            $obj->connect();
+            static::$connectDBs[$connectKey] = $obj->dbModel;
+        }else{
+            $obj->dbModel = static::$connectDBs[$connectKey];
+        }
+        // 模型单例
         if(empty($k)){
-            $k=get_called_class();
+            $k = get_called_class();
         }
         if(empty(static::$objs[$k])){
-            static::$objs[$k] = new static();
+            static::$objs[$k] = $obj;
         }
 
         return static::$objs[$k];
     }
 
-    /** 销毁实例
-     * @param string $k
+    /** 生成连接数据库单例键
+     * @return string
      */
-    public function _unset($k = 0)
+    protected function makeConnectDBKey()
     {
-        if(empty($k)){
-            $k=get_called_class();
-        }
-        if(isset(static::$objs[$k])){
-            unset(static::$objs[$k]);
-        }
+        $key = md5($this->dbConfig['hostname'].':'.$this->dbConfig['port'].':'.$this->db);
+
+        return $key;
     }
+
+    /** 连接数据库
+     * @return mixed
+     */
+    abstract public function connect();
 
     /** 执行一条原生命令
      * @param string $cmd

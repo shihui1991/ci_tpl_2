@@ -11,15 +11,19 @@ use models\database\DatabaseModel;
 
 class MysqlModel extends DatabaseModel
 {
-    public $dbConfigFile='database';       // 数据库配置文件
+    public $dbConfigFile='mysql';       // 数据库配置文件
 
     public function __construct()
     {
         parent::__construct();
+    }
 
-        // 连接数据库
-        $this->dbModel=$this->CI->load->database($this->dbConfigName,true);
-        $this->dbConfig = json_decode(json_encode($this->dbModel),true);
+    /** 连接数据库
+     * @return mixed|void
+     */
+    public function connect()
+    {
+        $this->dbModel=$this->CI->load->database($this->dbConfig,true);
     }
 
     /** 执行一条原生命令

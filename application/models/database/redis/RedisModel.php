@@ -17,12 +17,13 @@ class RedisModel extends DatabaseModel
     public function __construct()
     {
         parent::__construct();
+    }
 
-        // 加载配置
-        $this->CI->load->config($this->dbConfigFile,TRUE);
-        $configs=$this->CI->config->item($this->dbConfigFile);
-        $this->dbConfig=$configs[$this->dbConfigName];
-        // 连接数据库
+    /** 连接数据库
+     * @return mixed|void
+     */
+    public function connect()
+    {
         $this->dbModel = new \Redis();
         $this->dbModel->connect($this->dbConfig['hostname'], $this->dbConfig['port'], $this->dbConfig['timeout']);
 

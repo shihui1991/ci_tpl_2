@@ -44,26 +44,23 @@ class TplRedis extends RedisModel
      */
     static public function instance($table='', array $args=array(), $k=0)
     {
+        $obj = new static($args);
+        // 数据库连接 单例
+        $connectKey = $obj->makeConnectDBKey();
+        if(empty(static::$connectDBs[$connectKey])){
+            $obj->connect();
+            static::$connectDBs[$connectKey] = $obj->dbModel;
+        }else{
+            $obj->dbModel = static::$connectDBs[$connectKey];
+        }
+        // 模型单例
         if(empty($k)){
-            $k=get_called_class();
+            $k = get_called_class();
         }
         if(empty(static::$objs[$table][$k])){
-            static::$objs[$table][$k] = new static($args);
+            static::$objs[$table][$k] = $obj;
         }
-        return static::$objs[$table][$k];
-    }
 
-    /** 销毁实例
-     * @param string $table
-     * @param string $k
-     */
-    public function _unset($table='', $k = 0)
-    {
-        if(empty($k)){
-            $k=get_called_class();
-        }
-        if(isset(static::$objs[$table][$k])){
-            unset(static::$objs[$table][$k]);
-        }
+        return static::$objs[$table][$k];
     }
 }
