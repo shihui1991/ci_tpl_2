@@ -29,7 +29,7 @@ trait SetField
      */
     public function setTokenField($value,$data=array())
     {
-        if(empty($value)){
+        if(is_null($value)){
             $value=createGuid();
         }
 
@@ -43,7 +43,7 @@ trait SetField
      */
     public function setGuidField($value,$data=array())
     {
-        if(empty($value)){
+        if(is_null($value)){
             $value=createGuid();
         }
 

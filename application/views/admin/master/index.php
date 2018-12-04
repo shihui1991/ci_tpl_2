@@ -35,6 +35,7 @@
                                         <td>
                                             <div class="layui-btn-group">
                                                 <a class="layui-btn layui-btn-xs" href="/admin/master/edit?Id=<?php echo $row['Id']; ?>">编辑</a>
+                                                <a class="layui-btn layui-btn-xs layui-btn-danger" data-url="/admin/master/unsetPasswd?Id=<?php echo $row['Id']; ?>" onclick="unsetPasswd(this)">重置密码</a>
                                             </div>
                                         </td>
                                     </tr>
@@ -58,3 +59,40 @@
         </div>
     </div>
 </div>
+<script>
+    // 重置密码
+    function unsetPasswd(obj) {
+        layui.use(['layer'], function(){
+            var layer=layui.layer;
+
+            var w=$(window).width();
+            var h=$(window).height();
+            var width=500;
+            var height=300;
+            var isFull=false;
+            // 小屏最大化
+            if(w < width || h < height){
+                isFull = true;
+                width = w;
+                height = h;
+            }
+            var i=layer.open({
+                type: 2
+                ,skin:'layui-layer-molv'
+                ,area: [width+'px', height+'px']
+                ,shade: 0.3
+                ,maxmin: true
+                ,title: '重置密码'
+                ,content: $(obj).data('url')
+                ,zIndex: layer.zIndex //重点1
+                ,success: function(layero){
+                    layer.setTop(layero); //重点2
+                }
+            });
+            // 小屏最大化
+            if(isFull){
+                layer.full(i);
+            }
+        });
+    }
+</script>

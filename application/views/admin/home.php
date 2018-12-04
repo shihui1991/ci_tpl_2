@@ -285,15 +285,22 @@
         layui.use(['layer'], function(){
             var layer=layui.layer;
 
-            layer.open({
+            var w=$(window).width();
+            var h=$(window).height();
+            var width=500;
+            var height=300;
+            var isFull=false;
+            // 小屏最大化
+            if(w < width || h < height){
+                isFull = true;
+                width = w;
+                height = h;
+            }
+            var i=layer.open({
                 type: 2
                 ,skin:'layui-layer-molv'
-                ,area: ['500px', '300px']
-                ,offset: [
-                    Math.random()*($(window).height()-600)
-                    ,Math.random()*($(window).width()-1000)
-                ]
-                ,shade: 0
+                ,area: [width+'px', height+'px']
+                ,shade: 0.3
                 ,maxmin: true
                 ,title: '修改密码'
                 ,content: "/admin/master/editPasswd"
@@ -302,6 +309,10 @@
                     layer.setTop(layero); //重点2
                 }
             });
+            // 小屏最大化
+            if(isFull){
+                layer.full(i);
+            }
         });
     });
 </script>

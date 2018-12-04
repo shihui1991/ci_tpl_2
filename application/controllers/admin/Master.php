@@ -219,4 +219,46 @@ class Master extends Auth
             $this->_response($data,$code,$msg,$url,$tpls);
         }
     }
+
+    /**
+     *  重置密码
+     * @throws Exception
+     */
+    public function unsetPasswd()
+    {
+        // 修改页
+        if('get' == $this->input->method()){
+            if(empty($this->inputData['Id'])){
+                throw new Exception('请选择数据',EXIT_USER_INPUT);
+            }
+            $id=(int)$this->inputData['Id'];
+            $row=$this->logicModel->getRowById($id);
+            if(empty($row['Id'])){
+                throw new Exception('数据不存在',EXIT_DATABASE);
+            }
+
+            $data=array(
+                'Id'=>$id,
+                'List'=>$row,
+            );
+            $code=EXIT_SUCCESS;
+            $msg='请求成功';
+            $url='';
+            $tpls=array(
+                'admin/master/unsetPasswd',
+            );
+            $this->_response($data,$code,$msg,$url,$tpls);
+        }
+        // 保存
+        else{
+            $this->logicModel->unsetPasswd($this->inputData);
+
+            $data=array();
+            $code=EXIT_SUCCESS;
+            $msg='请求成功';
+            $url='';
+            $tpls=array();
+            $this->_response($data,$code,$msg,$url,$tpls);
+        }
+    }
 }

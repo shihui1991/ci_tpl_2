@@ -290,4 +290,25 @@ class MasterLogic extends LogicModel
             throw new \Exception('修改失败',EXIT_DATABASE);
         }
     }
+
+    /**  重置密码
+     * @param array $input
+     * @throws \Exception
+     */
+    public function unsetPasswd(array $input)
+    {
+        // 获取真实字段数据
+        $data=$this->dataModel->getRealRow($input);
+        // 验证模型 验证数据格式
+        $vali=$this->validatorModel->validate($data,$this->dataModel->getColumns(),'unsetPasswd');
+        if(true !== $vali){
+            $err=array_shift($vali);
+            throw new \Exception($err,EXIT_USER_INPUT);
+        }
+        $update=$this->dataModel->fill($data,'unsetPasswd');
+        $result = $this->databaseModel->setOneByKey($data['Id'],$update);
+        if(false === $result){
+            throw new \Exception('修改失败',EXIT_DATABASE);
+        }
+    }
 }

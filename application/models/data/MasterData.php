@@ -150,4 +150,15 @@ class MasterData extends DataModel
             'Updated',
         );
     }
+
+    /** 重置密码 批量赋值字段
+     * @return array
+     */
+    public function fillUnsetPasswdFields()
+    {
+        return array(
+            'Password',
+            'Updated',
+        );
+    }
 }

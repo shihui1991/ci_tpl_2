@@ -80,4 +80,15 @@ class MasterValidator extends ValidatorModel
             'Token',
         );
     }
+
+    /** 重置密码 验证字段
+     * @return array
+     */
+    public function valiUnsetPasswdFields()
+    {
+        return array(
+            'Id',
+            'Password',
+        );
+    }
 }
