@@ -33,11 +33,18 @@
                                     <input type="text" name="Table" value="<?php echo $data['List']['Table'];?>" readonly class="layui-input">
                                 </div>
                             </div>
-                            
+
                             <div class="layui-form-item">
                                 <label class="layui-form-label">名称：</label>
                                 <div class="layui-input-block">
                                     <input type="text" name="Name" value="<?php echo $data['List']['Name'];?>" required  lay-verify="required" placeholder=""  class="layui-input">
+                                </div>
+                            </div>
+
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">主键字段：</label>
+                                <div class="layui-input-block">
+                                    <input type="text" name="PrimaryKey" value="<?php echo $data['List']['PrimaryKey'];?>" placeholder=""  class="layui-input">
                                 </div>
                             </div>
 

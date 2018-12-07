@@ -105,6 +105,7 @@ CREATE TABLE `Config` (
   `Id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `Table` varchar(255) NOT NULL COMMENT '表名',
   `Name` varchar(255) DEFAULT NULL COMMENT '名称',
+  `PrimaryKey` varchar(255) DEFAULT NULL COMMENT '主键字段',
   `Single` tinyint(1) DEFAULT '0' COMMENT '单列配置，0否，1是',
   `Columns` text COMMENT '字段详情',
   `Infos` varchar(255) DEFAULT NULL COMMENT '说明',

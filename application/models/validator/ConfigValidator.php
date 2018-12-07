@@ -18,6 +18,7 @@ class ConfigValidator extends ValidatorModel
         return array(
             'Table',
             'Name',
+            'PrimaryKey',
             'Single',
             'Columns',
             'Infos',
@@ -33,6 +34,7 @@ class ConfigValidator extends ValidatorModel
         return array(
             'Id',
             'Name',
+            'PrimaryKey',
             'Single',
             'Columns',
             'Infos',

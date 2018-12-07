@@ -35,6 +35,14 @@ class ConfigData extends DataModel
             'desc'  => "varchar(255) DEFAULT NULL COMMENT ' 名称'",
             'rules' => 'trim|max_length[255]',
         ),
+        'PrimaryKey' => array(
+            'field' => 'PrimaryKey',
+            'name'  => '主键字段',
+            'alias' => 'ConfigPrimaryKey',
+            'attr'  => 'string',
+            'desc'  => "varchar(255) DEFAULT NULL COMMENT ' 主键字段'",
+            'rules' => 'trim|max_length[255]',
+        ),
         'Single' => array(
             'field' => 'Single',
             'name'  => '单项配置',
@@ -93,6 +101,7 @@ class ConfigData extends DataModel
         return array(
             'Table',
             'Name',
+            'PrimaryKey',
             'Single',
             'Columns',
             'Infos',
@@ -121,6 +130,7 @@ class ConfigData extends DataModel
         return array(
             'Id',
             'Name',
+            'PrimaryKey',
             'Single',
             'Columns',
             'Infos',

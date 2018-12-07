@@ -12,23 +12,14 @@ class TplRedis extends RedisModel
     public $dbConfigName = DB_NAME_REDIS_CONF;  // 数据库配置名
     public $db = DB_INDEX_REDIS_CONF;       // 数据库索引
     public $table = '';         // 数据表
-    public $primaryKey = 'Id';    // 主键索引
+    public $primaryKey = '';    // 主键索引
 
     public function __construct(array $args)
     {
-        if(isset($args['dbConfigFile'])){
-            $this->dbConfigFile=$args['dbConfigFile'];
-        }
-        if(isset($args['dbConfigName'])){
-            $this->dbConfigName=$args['dbConfigName'];
-        }
-        if(isset($args['db'])){
-            $this->db=$args['db'];
-        }
-        if(isset($args['table'])){
+        if(!empty($args['table'])){
             $this->table=$args['table'];
         }
-        if(isset($args['primaryKey'])){
+        if(!empty($args['primaryKey'])){
             $this->primaryKey=$args['primaryKey'];
         }
 

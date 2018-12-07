@@ -19,6 +19,7 @@ class TplLogic extends LogicModel
     protected $tplBackDB;
     protected $tplData;
     protected $tplValidator;
+    protected $tplConfig;
 
 
     public function __construct($table)
@@ -30,8 +31,8 @@ class TplLogic extends LogicModel
         $this->tplData = TplData::class;
         $this->tplValidator = TplValidator::class;
 
-        $config = ConfigLogic::instance()->getRowByTable($table);
-        if(empty($config)){
+        $this->tplConfig = ConfigLogic::instance()->getRowByTable($table);
+        if(empty($this->tplConfig)){
             throw new \Exception('配置表不存在',EXIT_USER_INPUT);
         }
 
@@ -40,7 +41,7 @@ class TplLogic extends LogicModel
         $this->databaseModel = $this->getDBModel($table);
         $this->backDB = $this->getBackDBModel($table);
 
-        $this->dataModel = $this->getDataModel($table,$config['Columns']);
+        $this->dataModel = $this->getDataModel($table,$this->tplConfig['Columns']);
         $this->validatorModel = $this->getValidatorModel($table);
     }
 
@@ -83,6 +84,7 @@ class TplLogic extends LogicModel
     public function getDBModel($table,$k=0)
     {
         $args['table'] = $table;
+        $args['primaryKey'] = $this->tplConfig['PrimaryKey'];
         eval("\$databaseModel = \\{$this->tplDB}::instance(\$table,\$args,\$k);");
 
         return $databaseModel;
@@ -96,6 +98,7 @@ class TplLogic extends LogicModel
     public function getBackDBModel($table,$k=0)
     {
         $args['table'] = $table;
+        $args['primaryKey'] = $this->tplConfig['PrimaryKey'];
         eval("\$backDBModel = \\{$this->tplBackDB}::instance(\$table,\$args,\$k);");
 
         return $backDBModel;

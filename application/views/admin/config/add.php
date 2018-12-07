@@ -34,6 +34,13 @@
                             </div>
 
                             <div class="layui-form-item">
+                                <label class="layui-form-label">主键字段：</label>
+                                <div class="layui-input-block">
+                                    <input type="text" name="PrimaryKey" value="" placeholder="" class="layui-input">
+                                </div>
+                            </div>
+
+                            <div class="layui-form-item">
                                 <label class="layui-form-label">单列配置：</label>
                                 <div class="layui-input-block">
                                     <input type="radio" name="Single" value="0" title="否" checked>
