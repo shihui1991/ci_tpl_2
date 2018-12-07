@@ -378,6 +378,18 @@ if(!function_exists('recordLog')){
     }
 }
 
+if(!function_exists('debugLog')){
+    /** 记录调试信息日志
+     * @param string $log
+     * @param string $fileName
+     */
+    function debugLog($file,$line,$desc,$info, $fileName='debug')
+    {
+        $log="[".date('Y-m-d H:i:s')."][$file][$line][$desc]$info \r\n";
+        recordLog($log,'debug/'.$fileName);
+    }
+}
+
 if(!function_exists('formatArray')){
     /** 格式化数组
      * @param array $array
