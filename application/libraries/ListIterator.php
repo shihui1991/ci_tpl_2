@@ -26,6 +26,17 @@ class ListIterator implements \Iterator
         $this->step  = $step;
     }
 
+    /** 静态方法生成实例
+     * @param array $list
+     * @param int $index
+     * @param int $step
+     * @return ListIterator
+     */
+    static public function instance(array $list, $index=0, $step=1)
+    {
+        return new static($list,$index,$step);
+    }
+
     // 将索引游标指向初始位置
     function rewind() {
         $this->index = $this->first;

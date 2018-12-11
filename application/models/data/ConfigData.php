@@ -9,7 +9,7 @@ namespace models\data;
 
 class ConfigData extends DataModel
 {
-    // 字段详情 field => [field,name,alias,attr,rules]
+    // 字段详情 field => [field,name,alias,attr,desc,rules]
     public $columns=array(
         'Id' => array(
             'field' => 'Id',

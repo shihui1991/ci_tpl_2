@@ -14,7 +14,7 @@ use models\data\component\SetField;
 
 abstract class DataModel
 {
-    public $columns=array();       // 字段详情 field => [field,name,alias,attr,rules]
+    public $columns=array();       // 字段详情 field => [field,name,alias,attr,desc,rules]
     public $fields=array();        // 字段
     public $fieldsName=array();    // 字段名称
     public $fieldsAttr=array();    // 字段属性
