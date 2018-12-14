@@ -117,6 +117,45 @@ class MenuData extends DataModel
         ),
     );
 
+    /** 限制配置
+     * @return array
+     */
+    public function getCtrlConf()
+    {
+        $conf = array(
+            0 => '否',
+            1 => '是',
+        );
+
+        return $conf;
+    }
+
+    /** 显示配置
+     * @return array
+     */
+    public function getDisplayConf()
+    {
+        $conf = array(
+            0 => '隐藏',
+            1 => '显示',
+        );
+
+        return $conf;
+    }
+
+    /** 状态配置
+     * @return array
+     */
+    public function getStateConf()
+    {
+        $conf = array(
+            0 => '禁用',
+            1 => '启用',
+        );
+
+        return $conf;
+    }
+
     /** 添加 批量赋值字段
      * @return array
      */

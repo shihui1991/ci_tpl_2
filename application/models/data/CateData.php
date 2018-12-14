@@ -93,6 +93,19 @@ class CateData extends DataModel
         ),
     );
 
+    /** 显示配置
+     * @return array
+     */
+    public function getDisplayConf()
+    {
+        $conf = array(
+            0 => '隐藏',
+            1 => '显示',
+        );
+
+        return $conf;
+    }
+
     /** 添加 批量赋值字段
      * @return array
      */

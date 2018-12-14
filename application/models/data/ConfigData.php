@@ -93,6 +93,32 @@ class ConfigData extends DataModel
         ),
     );
 
+    /** 单列配置
+     * @return array
+     */
+    public function getSingleConf()
+    {
+        $conf = array(
+            0 => '否',
+            1 => '是',
+        );
+
+        return $conf;
+    }
+
+    /** 状态配置
+     * @return array
+     */
+    public function getStateConf()
+    {
+        $conf = array(
+            0 => '弃用',
+            1 => '在用',
+        );
+
+        return $conf;
+    }
+
     /** 添加 批量赋值字段
      * @return array
      */

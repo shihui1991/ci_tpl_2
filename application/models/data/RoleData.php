@@ -77,6 +77,19 @@ class RoleData extends DataModel
         ),
     );
 
+    /** 超管配置
+     * @return array
+     */
+    public function getAdminConf()
+    {
+        $conf = array(
+            0 => '否',
+            1 => '是',
+        );
+
+        return $conf;
+    }
+
     /** 添加 批量赋值字段
      * @return array
      */

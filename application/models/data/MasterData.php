@@ -85,6 +85,19 @@ class MasterData extends DataModel
         ),
     );
 
+    /** 状态配置
+     * @return array
+     */
+    public function getStateConf()
+    {
+        $conf = array(
+            0 => '禁用',
+            1 => '启用',
+        );
+
+        return $conf;
+    }
+
     /** 添加 批量赋值字段
      * @return array
      */
