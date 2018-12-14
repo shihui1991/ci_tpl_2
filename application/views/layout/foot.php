@@ -4,11 +4,11 @@
         filter:Alpha(opacity=30);
     }
     .layui-fixbar:hover{
-        opacity: 1;
-        filter:Alpha(opacity=100);
+        opacity: 0.8;
+        filter:Alpha(opacity=80);
     }
     .layui-fixbar li{
-        display: list-item;
+        display: list-item !important;
         width: 35px;
         height: 35px;
         line-height: 35px;
