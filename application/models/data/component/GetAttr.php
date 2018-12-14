@@ -90,10 +90,10 @@ trait GetAttr
         if(empty($value)){
             return 0;
         }
-        if(is_string($value)){
-            $value=strtotime($value);
-        }else{
+        if(is_numeric($value)){
             $value=(int)$value;
+        }else{
+            $value=strtotime($value);
         }
         return $value;
     }
@@ -107,10 +107,10 @@ trait GetAttr
         if(empty($value)){
             return 0;
         }
-        if(is_string($value)){
-            $value=strtotime($value);
-        }else{
+        if(is_numeric($value)){
             $value=(int)$value;
+        }else{
+            $value=strtotime($value);
         }
         return $value;
     }

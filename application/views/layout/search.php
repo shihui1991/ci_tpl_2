@@ -28,7 +28,7 @@
                             <div class="layui-form-item filter-item">
                                 <div class="layui-inline">
                                     <div class="layui-input-inline">
-                                        <select name="FilterParams[<?php echo $index; ?>][Field]">
+                                        <select name="FilterParams[<?php echo $index; ?>][Field]" lay-search="">
                                             <?php foreach($data['FilterFields'] as $key=>$value): ?>
                                                 <option value="<?php echo $key; ?>" <?php if($params['Field'] == $key){echo ' selected';}; ?>><?php echo $value; ?></option>
                                             <?php endforeach; ?>
@@ -68,7 +68,7 @@
                             <div class="layui-form-item filter-item">
                                 <div class="layui-inline">
                                     <div class="layui-input-inline">
-                                        <select name="FilterOrders[<?php echo $index; ?>][Field]">
+                                        <select name="FilterOrders[<?php echo $index; ?>][Field]" lay-search="">
                                             <?php foreach($data['FilterFields'] as $key=>$value): ?>
                                                 <option value="<?php echo $key; ?>" <?php if($orders['Field'] == $key){echo ' selected';}; ?>><?php echo $value; ?></option>
                                             <?php endforeach; ?>
@@ -171,7 +171,7 @@
         dom += '<div class="layui-form-item filter-item">' +
             '    <div class="layui-inline">' +
             '        <div class="layui-input-inline">' +
-            '            <select name="FilterParams['+filterIndex+'][Field]">';
+            '            <select name="FilterParams['+filterIndex+'][Field]" lay-search="">';
 
         $.each(fields,function (f,n) {
             dom += '<option value="'+f+'">'+n+'</option>';
@@ -212,7 +212,7 @@
         dom += '<div class="layui-form-item filter-item">' +
             '    <div class="layui-inline">' +
             '        <div class="layui-input-inline">' +
-            '            <select name="FilterOrders['+filterIndex+'][Field]">';
+            '            <select name="FilterOrders['+filterIndex+'][Field]" lay-search="">';
 
         $.each(fields,function (f,n) {
             dom += '<option value="'+f+'">'+n+'</option>';

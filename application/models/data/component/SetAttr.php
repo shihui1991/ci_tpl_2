@@ -103,10 +103,10 @@ trait SetAttr
         if(empty($value)){
             return date('Y-m-d');
         }
-        if(is_string($value)){
-            $value=strtotime($value);
-        }else{
+        if(is_numeric($value)){
             $value=(int)$value;
+        }else{
+            $value=strtotime($value);
         }
         $value = date('Y-m-d',$value);
 
@@ -122,10 +122,10 @@ trait SetAttr
         if(empty($value)){
             return date('Y-m-d H:i:s');
         }
-        if(is_string($value)){
-            $value=strtotime($value);
-        }else{
+        if(is_numeric($value)){
             $value=(int)$value;
+        }else{
+            $value=strtotime($value);
         }
         $value = date('Y-m-d H:i:s',$value);
 
