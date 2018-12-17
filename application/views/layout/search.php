@@ -12,7 +12,7 @@
 <?php $index=0; ?>
 
 <div id="filter-box" style="display: none;">
-    <form action="<?php echo $data['FilterUrl']; ?>" class="layui-form" method="get" id="filter-form">
+    <form action="<?php echo $data['FilterUrl']; ?>" class="layui-form" method="post" id="filter-form">
         <table class="layui-table">
             <tr>
                 <th>
