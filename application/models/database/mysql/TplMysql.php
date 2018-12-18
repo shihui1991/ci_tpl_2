@@ -17,11 +17,19 @@ class TplMysql extends MysqlModel
 
     public function __construct(array $args)
     {
-        if(!empty($args['table'])){
-            $this->table=$args['table'];
-        }
-        if(!empty($args['primaryKey'])){
-            $this->primaryKey=$args['primaryKey'];
+        if(!empty($args['mysql'])){
+            $conf = $args['mysql'];
+            $this->dbConfigName = @(string)$conf['dbConfigName'];
+            $this->db = @(string)$conf['db'];
+            $this->table = @(string)$conf['table'];
+            // 处理多主键
+            $strpos = strpos($args['primaryKey'],',');
+            if(false !== $strpos){
+                $this->primaryKey = '';
+            }else{
+                $this->primaryKey = @(string)$conf['primaryKey'];
+            }
+
         }
 
         parent::__construct();

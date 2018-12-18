@@ -24,22 +24,27 @@ class TplLogic extends LogicModel
 
     public function __construct($table)
     {
-        // redis 为主，mysql 备份
-        $this->tplDB = TplRedis::class;
-        $this->tplBackDB = TplMysql::class;
-
-        $this->tplData = TplData::class;
-        $this->tplValidator = TplValidator::class;
-
         $this->tplConfig = ConfigLogic::instance()->getRowByTable($table);
         if(empty($this->tplConfig)){
             throw new \Exception('配置表不存在',EXIT_USER_INPUT);
         }
+        $args = array();
+        foreach($this->tplConfig['DBConf'] as $dbConf){
+            $args[$dbConf['type']] = $dbConf;
+        }
+        // 数据库配置
+        $mainDB = ucfirst($this->tplConfig['MainDB']);
+        $backDB = ucfirst($this->tplConfig['BackDB']);
+        eval("\$this->tplDB = Tpl$mainDB::class;");
+        eval("\$this->tplBackDB = Tpl$backDB::class;");
+
+        $this->tplData = TplData::class;
+        $this->tplValidator = TplValidator::class;
 
         parent::__construct();
 
-        $this->databaseModel = $this->getDBModel($table);
-        $this->backDB = $this->getBackDBModel($table);
+        $this->databaseModel = $this->getDBModel($args);
+        $this->backDB = $this->getBackDBModel($args);
 
         $this->dataModel = $this->getDataModel($table,$this->tplConfig['Columns']);
         $this->validatorModel = $this->getValidatorModel($table);
@@ -77,28 +82,24 @@ class TplLogic extends LogicModel
     }
 
     /** 获取数据库模型
-     * @param string $table
+     * @param array $args
      * @param string $k
      * @return mixed
      */
-    public function getDBModel($table,$k=0)
+    public function getDBModel($args,$k=0)
     {
-        $args['table'] = $table;
-        $args['primaryKey'] = $this->tplConfig['PrimaryKey'];
         eval("\$databaseModel = \\{$this->tplDB}::instance(\$table,\$args,\$k);");
 
         return $databaseModel;
     }
 
     /** 获取备份数据库模型
-     * @param string $table
+     * @param array $args
      * @param string $k
      * @return mixed
      */
-    public function getBackDBModel($table,$k=0)
+    public function getBackDBModel($args,$k=0)
     {
-        $args['table'] = $table;
-        $args['primaryKey'] = $this->tplConfig['PrimaryKey'];
         eval("\$backDBModel = \\{$this->tplBackDB}::instance(\$table,\$args,\$k);");
 
         return $backDBModel;

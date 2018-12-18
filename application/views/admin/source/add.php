@@ -70,28 +70,5 @@
 <script src="/viewer/jquery-0.6.0/viewer.min.js"></script>
 <script src="/js/upload-images.js"></script>
 
-<script>
-
-    layui.use(['form','layer'], function(){
-        var form = layui.form;
-        var layer = layui.layer;
-        //监听提交
-        form.on('submit(formSubmit)', function(data){
-            btnAct(data.elem);
-            return false;
-        });
-    });
-
-    // 输入云地址实时预览
-    $('#Cloud').on('change',function () {
-        var src=$(this).val();
-        var img=$('#CloudImg');
-        img.attr('src',src);
-        if(src){
-            img.css('display','');
-        }else{
-            img.css('display','none');
-        }
-    });
-
-</script>
+<script src="/js/func-form-submit.js"></script>
+<script src="/js/func-source-modify.js"></script>

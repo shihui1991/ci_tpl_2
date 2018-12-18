@@ -79,80 +79,14 @@
 
 <link rel="stylesheet" href="/treetable/treetable.min.css" />
 <script src="/treetable/jquery.treetable.min.js"></script>
+<script src="/js/func-form-submit.js"></script>
 
 <script>
-    layui.use(['form','layer'], function(){
-        var form = layui.form;
-        var layer = layui.layer;
-
-        // 获取上级角色
-        var ParentId=<?php echo $data['ParentId'];?>;
-        if(ParentId){
-            ajaxSubmit('/admin/role/info',{Id:ParentId},'get');
-            if(!ajaxResp || "undefined" === typeof ajaxResp){
-                layer.msg('网络开小差了',{icon:5});
-            }else{
-                if(ajaxResp.code){
-                    layer.msg(ajaxResp.msg,{icon:2});
-                }
-                else{
-                    var dom='<input type="text" value="'+ajaxResp.data.List.Name+'" class="layui-input" readonly>';
-                    $('#ParentId').append(dom);
-                    form.render();
-                }
-            }
-        }
-
-        // 获取菜单
-        ajaxSubmit('/admin/menu/all',{},'get');
-        if(!ajaxResp || "undefined" === typeof ajaxResp){
-            layer.msg('网络开小差了',{icon:5});
-        }else{
-            if(ajaxResp.code){
-                layer.msg(ajaxResp.msg,{icon:2});
-            }
-            else{
-                var dom=makeTableTree(ajaxResp.data.List,0);
-                $('#menu-ids').append(dom);
-                $(".treetable").treetable({
-                    expandable: true // 展示
-                    ,initialState :"expanded"//默认打开所有节点
-                    ,stringCollapse:'关闭'
-                    ,stringExpand:'展开'
-                    ,clickableNodeNames: true
-                    ,column: 1
-                });
-                form.render();
-            }
-        }
-
-        //监听提交
-        form.on('submit(formSubmit)', function(data){
-            btnAct(data.elem);
-            return false;
-        });
-    });
-
-    // 生成树形表格
-    function makeTableTree(dataList,parentId) {
-        if(0 == dataList.length){
-            return '';
-        }
-        var group=getChilds(dataList,parentId);
-        var dom='';
-
-        $.each(group.childs,function (i,data) {
-            if(1 == data.Ctrl){
-                dom +='<tr data-tt-id="'+data.Id+'" data-tt-parent-id="'+data.ParentId+'">' +
-                    '    <td>'+data.Id+'</td>' +
-                    '    <td>'+data.Name+'</td>' +
-                    '    <td>'+data.Url+'</td>' +
-                    '    <td><input type="checkbox" name="MenuIds[]" value="'+data.Id+'" id="id-'+data.Id+'" data-id="'+data.Id+'" data-parent-id="'+data.ParentId+'" onclick="upDown(this)" lay-ignore></td>' +
-                    '</tr>';
-                dom += makeTableTree(group.other,data.Id)
-            }
-        });
-        return dom;
-    }
+    // 获取上级角色
+    var ParentId=<?php echo $data['List']['ParentId'];?>;
+    var curMenuIds=[];
+    var isAdmin=0;
 
 </script>
+
+<script src="/js/func-role-modify.js"></script>

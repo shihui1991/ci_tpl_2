@@ -67,32 +67,10 @@
     </div>
 </div>
 
+<script src="/js/func-form-submit.js"></script>
 <script>
-    layui.use(['form','layer'], function(){
-        var form = layui.form;
-        var layer = layui.layer;
-
-        // 获取角色
-        ajaxSubmit('/admin/role/all',{},'get');
-        if(!ajaxResp || "undefined" === typeof ajaxResp){
-            layer.msg('网络开小差了',{icon:5});
-        }else{
-            if(ajaxResp.code){
-                layer.msg(ajaxResp.msg,{icon:2});
-            }
-            else{
-                var dom = makeOptionTree(ajaxResp.data.List,0,1,'Id','Name');
-                $('#RoleId').append(dom);
-                form.render();
-            }
-        }
-
-        //监听提交
-        form.on('submit(formSubmit)', function(data){
-            btnAct(data.elem);
-            return false;
-        });
-    });
-
+    // 获取角色
+    var curRoleId=0;
 
 </script>
+<script src="/js/func-master-modify.js"></script>

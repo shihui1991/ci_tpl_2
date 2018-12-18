@@ -27,7 +27,7 @@
                                 <th>Id</th>
                                 <th>表名</th>
                                 <th>名称</th>
-                                <th>主键</th>
+                                <th>主数据库</th>
                                 <th>单列</th>
                                 <th>说明</th>
                                 <th>状态</th>
@@ -41,7 +41,7 @@
                                         <td><?php echo $row['Id'];?></td>
                                         <td><?php echo $row['Table'];?></td>
                                         <td><?php echo $row['Name'];?></td>
-                                        <td><?php echo $row['PrimaryKey'];?></td>
+                                        <td><?php echo $row['MainDB'];?></td>
                                         <td><?php echo YES == $row['Single']?'是':'否';?></td>
                                         <td><?php echo $row['Infos'];?></td>
                                         <td><?php echo YES == $row['State']?'开启':'弃用';?></td>

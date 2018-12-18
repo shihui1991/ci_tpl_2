@@ -18,7 +18,9 @@ class ConfigValidator extends ValidatorModel
         return array(
             'Table',
             'Name',
-            'PrimaryKey',
+            'DBConf',
+            'MainDB',
+            'BackDB',
             'Single',
             'Columns',
             'Infos',
@@ -34,7 +36,9 @@ class ConfigValidator extends ValidatorModel
         return array(
             'Id',
             'Name',
-            'PrimaryKey',
+            'DBConf',
+            'MainDB',
+            'BackDB',
             'Single',
             'Columns',
             'Infos',
@@ -48,5 +52,13 @@ class ConfigValidator extends ValidatorModel
     public function valiColumnsRules()
     {
         $this->validator->set_rules('Columns[]', '字段详情', 'trim|required');
+    }
+
+    /**
+     * 数据库配置 验证
+     */
+    public function valiDBConfRules()
+    {
+        $this->validator->set_rules('DBConf[]', '数据库配置', 'trim|required');
     }
 }

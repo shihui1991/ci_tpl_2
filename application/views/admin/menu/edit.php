@@ -107,33 +107,9 @@
     </div>
 </div>
 
+<script src="/js/func-form-submit.js"></script>
 <script>
-    layui.use(['form','layer'], function(){
-        var form = layui.form;
-        var layer = layui.layer;
-
-        // 获取上级菜单
-        var ParentId=<?php echo $data['List']['ParentId'];?>;
-        if(ParentId){
-            ajaxSubmit('/admin/menu/info',{Id:ParentId},'get');
-            if(!ajaxResp || "undefined" === typeof ajaxResp){
-                layer.msg('网络开小差了',{icon:5});
-            }else{
-                if(ajaxResp.code){
-                    layer.msg(ajaxResp.msg,{icon:2});
-                }
-                else{
-                    var dom='<input type="text" value="'+ajaxResp.data.List.Name+'" class="layui-input" readonly>';
-                    $('#ParentId').append(dom);
-                    form.render();
-                }
-            }
-        }
-
-        //监听提交
-        form.on('submit(formSubmit)', function(data){
-            btnAct(data.elem);
-            return false;
-        });
-    });
+    // 获取上级菜单
+    var ParentId=<?php echo $data['List']['ParentId'];?>;
 </script>
+<script src="/js/func-menu-modify.js"></script>

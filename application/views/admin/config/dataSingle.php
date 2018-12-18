@@ -79,20 +79,13 @@
         </div>
     </div>
 </div>
+
+<script src="/js/func-form-submit.js"></script>
 <script>
 
-    layui.use(['form','layer'], function(){
-        var form = layui.form;
-        var layer = layui.layer;
-        //监听提交
-        form.on('submit(formSubmit)', function(data){
-            btnAct(data.elem);
-            return false;
-        });
-        // 监听修改
-        $('.content-text').on('keyup blur change',function () {
-            $(this).siblings('.content-input').val($(this).html());
-        });
+    // 监听修改
+    $('.content-text').on('keyup blur change',function () {
+        $(this).siblings('.content-input').val($(this).html());
     });
 
 </script>

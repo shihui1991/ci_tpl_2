@@ -19,7 +19,7 @@
     }
 </style>
 <ul class="layui-fixbar">
-    <li class="layui-icon layui-icon-return" id="body-back" title="返回" onclick="window.history.back();" ></li>
+    <li class="layui-icon layui-icon-return" id="body-back" title="返回" onclick="location=document.referrer;" ></li>
     <li class="layui-icon layui-icon-refresh" id="body-reload" title="刷新" onclick="location.reload();"></li>
     <li class="layui-icon layui-icon-top layui-fixbar-top" id="body-top" title="返回顶部" onclick="window.scrollTo(0,0)"></li>
 </ul>

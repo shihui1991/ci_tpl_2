@@ -50,12 +50,5 @@
         },0);
     }
 
-    layui.use(['form'], function(){
-        var form = layui.form;
-
-        //监听提交
-        form.on('submit(formSubmit)', function(data){
-            btnAct(data.elem);
-        });
-    });
 </script>
+<script src="/js/func-form-submit.js"></script>
