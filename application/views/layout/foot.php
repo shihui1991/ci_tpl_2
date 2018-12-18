@@ -30,6 +30,12 @@
         var form = layui.form;
 
         $('.layui-fixbar').find('li').html('');
+
+        // 修改标题
+        var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+        if(index > 0){
+            parent.layer.title("<?php echo $data['CurMenu']['Name'];?>", index)
+        }
     });
 </script>
 </body>

@@ -47,6 +47,8 @@ class Init extends Base
                 if(empty($tpls)){
                     echo $resp;
                 }else{
+                    $this->outputData['data']['CurMenu'] = $this->menu;
+
                     $this->load->view('layout/head',$this->outputData);
 
                     if(is_string($tpls)){
