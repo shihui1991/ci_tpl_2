@@ -35,8 +35,6 @@
                             <div class="layui-field-box">
                                 <form class="layui-form " action="/admin/config/modify?ConfigId=<?php echo $data['ConfigId'];?>" method="post" onsubmit="return false;">
 
-                                    <input type="hidden" name="Id" value="<?php echo $data['Id']; ?>">
-
                                     <?php if(!empty($data['Config'])): ?>
                                         <?php foreach($data['Config']['Columns'] as $column): ?>
                                             <div class="layui-form-item">

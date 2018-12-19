@@ -460,7 +460,6 @@ abstract class LogicModel
         if(false === $id){
             throw new \Exception('保存失败',EXIT_DATABASE);
         }
-        $row[$this->databaseModel->primaryKey]=$id;
         if($this->isFormat){
             $result=$this->dataModel->format($row,$this->isAlias);
         }else{
@@ -487,14 +486,15 @@ abstract class LogicModel
         }
         // 验证字段唯一
         $this->checkUnique($data);
-        $preRow=$this->databaseModel->getOneByKey($data[$this->databaseModel->primaryKey]);
+        $key = $this->databaseModel->getKey($data);
+        $preRow=$this->databaseModel->getOneByKey($key);
         if(empty($preRow[$this->databaseModel->primaryKey])){
             throw new \Exception('数据不存在',EXIT_USER_INPUT);
         }
         // 批量赋值
         $update=$this->dataModel->fill($data,'edit');
         // 修改
-        $result = $this->databaseModel->setOneByKey($data[$this->databaseModel->primaryKey],$update);
+        $result = $this->databaseModel->setOneByKey($key,$update);
         if(false === $result){
             throw new \Exception('保存失败',EXIT_DATABASE);
         }

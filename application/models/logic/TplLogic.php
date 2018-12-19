@@ -33,18 +33,18 @@ class TplLogic extends LogicModel
             $args[$dbConf['type']] = $dbConf;
         }
         // 数据库配置
-        $mainDB = ucfirst($this->tplConfig['MainDB']);
-        $backDB = ucfirst($this->tplConfig['BackDB']);
-        eval("\$this->tplDB = Tpl$mainDB::class;");
-        eval("\$this->tplBackDB = Tpl$backDB::class;");
+        $mainDB = lcfirst($this->tplConfig['MainDB']);
+        $backDB = lcfirst($this->tplConfig['BackDB']);
+        $this->tplDB = "models\\database\\$mainDB\\Tpl".ucfirst($mainDB);
+        $this->tplBackDB = "models\\database\\$mainDB\\Tpl".ucfirst($backDB);
 
-        $this->tplData = TplData::class;
-        $this->tplValidator = TplValidator::class;
+        $this->tplData = "models\\data\\TplData";
+        $this->tplValidator = "models\\validator\\TplValidator";
 
         parent::__construct();
 
-        $this->databaseModel = $this->getDBModel($args);
-        $this->backDB = $this->getBackDBModel($args);
+        $this->databaseModel = $this->getDBModel($table,$args[$mainDB]);
+        $this->backDB = $this->getBackDBModel($table,$args[$backDB]);
 
         $this->dataModel = $this->getDataModel($table,$this->tplConfig['Columns']);
         $this->validatorModel = $this->getValidatorModel($table);
@@ -82,25 +82,29 @@ class TplLogic extends LogicModel
     }
 
     /** 获取数据库模型
+     * @param string $table
      * @param array $args
      * @param string $k
      * @return mixed
      */
-    public function getDBModel($args,$k=0)
+    public function getDBModel($table,$args,$k=0)
     {
-        eval("\$databaseModel = \\{$this->tplDB}::instance(\$table,\$args,\$k);");
+        $model = $this->tplDB;
+        $databaseModel = $model::instance($table,$args,$k);
 
         return $databaseModel;
     }
 
     /** 获取备份数据库模型
+     * @param string $table
      * @param array $args
      * @param string $k
      * @return mixed
      */
-    public function getBackDBModel($args,$k=0)
+    public function getBackDBModel($table,$args,$k=0)
     {
-        eval("\$backDBModel = \\{$this->tplBackDB}::instance(\$table,\$args,\$k);");
+        $model = $this->tplBackDB;
+        $backDBModel = $model::instance($table,$args,$k);
 
         return $backDBModel;
     }
@@ -113,7 +117,8 @@ class TplLogic extends LogicModel
      */
     public function getDataModel($table, array $columns,$k=0)
     {
-        eval("\$dataModel = \\{$this->tplData}::instance(\$table,\$columns,\$k);");
+        $model = $this->tplData;
+        $dataModel = $model::instance($table,$columns,$k);
 
         return $dataModel;
     }
@@ -124,7 +129,8 @@ class TplLogic extends LogicModel
      */
     public function getValidatorModel($table,$k=0)
     {
-        eval("\$validatorModel = \\{$this->tplValidator}::instance(\$table,\$k);");
+        $model = $this->tplValidator;
+        $validatorModel = $model::instance($table,$k);
 
         return $validatorModel;
     }

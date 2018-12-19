@@ -60,9 +60,11 @@
                                             <tfoot>
                                             <tr>
                                                 <th colspan="3">
+                                                    <?php $dbModel = \models\logic\TplLogic::instance($data['Config']['Table'])->databaseModel; ?>
+                                                    <?php $key = $dbModel->getKey($data['List'][0]); ?>
                                                     <div class="layui-btn-group">
                                                         <button class="layui-btn" lay-submit lay-filter="formSubmit">更新</button>
-                                                        <a class="layui-btn layui-btn-danger" data-confirm="确定要删除吗？" onclick="btnAct(this);" data-action="/admin/config/delete?ConfigId=<?php echo $data['ConfigId'];?>&Ids=<?php echo $data['List'][0]['Id'];?>">删除</a>
+                                                        <a class="layui-btn layui-btn-danger" data-confirm="确定要删除吗？" onclick="btnAct(this);" data-action="/admin/config/delete?ConfigId=<?php echo $data['ConfigId'];?>&Keys=<?php echo $key;?>">删除</a>
                                                     </div>
                                                 </th>
                                             </tr>

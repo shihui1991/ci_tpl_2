@@ -60,11 +60,11 @@
                                         <?php if(!empty($data['List']['DBConf'])):?>
                                             <?php foreach($data['List']['DBConf'] as $dbConf):?>
                                                 <tr>
-                                                    <td><input type="text" name="DBConf[<?php echo $index;?>][type]" value="<?php echo $column['type'];?>" class="layui-input"></td>
-                                                    <td><input type="text" name="DBConf[<?php echo $index;?>][dbConfigName]" value="<?php echo $column['dbConfigName'];?>" class="layui-input"></td>
-                                                    <td><input type="text" name="DBConf[<?php echo $index;?>][db]" value="<?php echo $column['db'];?>" class="layui-input"></td>
-                                                    <td><input type="text" name="DBConf[<?php echo $index;?>][table]" value="<?php echo $column['table'];?>" class="layui-input"></td>
-                                                    <td><input type="text" name="DBConf[<?php echo $index;?>][primaryKey]" value="<?php echo $column['primaryKey'];?>" class="layui-input" placeholder="英文逗号（,）隔开"></td>
+                                                    <td><input type="text" name="DBConf[<?php echo $index;?>][type]" value="<?php echo $dbConf['type'];?>" class="layui-input"></td>
+                                                    <td><input type="text" name="DBConf[<?php echo $index;?>][dbConfigName]" value="<?php echo $dbConf['dbConfigName'];?>" class="layui-input"></td>
+                                                    <td><input type="text" name="DBConf[<?php echo $index;?>][db]" value="<?php echo $dbConf['db'];?>" class="layui-input"></td>
+                                                    <td><input type="text" name="DBConf[<?php echo $index;?>][table]" value="<?php echo $dbConf['table'];?>" class="layui-input"></td>
+                                                    <td><input type="text" name="DBConf[<?php echo $index;?>][primaryKey]" value="<?php echo $dbConf['primaryKey'];?>" class="layui-input" placeholder="英文逗号（,）隔开"></td>
                                                     <td>
                                                         <div class="layui-btn-group">
                                                             <a class="layui-btn layui-btn-xs layui-btn-danger" onclick="removeField(this);">删除</a>

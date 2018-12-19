@@ -51,15 +51,17 @@
                                     <tbody>
 
                                     <?php if(!empty($data['List'])):?>
+                                        <?php $dbModel = \models\logic\TplLogic::instance($data['Config']['Table'])->databaseModel; ?>
                                         <?php foreach($data['List'] as $row):?>
                                             <tr>
                                                 <?php foreach($data['Config']['Columns'] as $field=>$column):?>
                                                     <td><?php echo isset($row[$field])?$row[$field]:'';?></td>
                                                 <?php endforeach;?>
                                                 <td>
+                                                    <?php $key = $dbModel->getKey($row); ?>
                                                     <div class="layui-btn-group">
-                                                        <a class="layui-btn layui-btn-xs" href="/admin/config/modify?ConfigId=<?php echo $data['ConfigId'];?>&Id=<?php echo $row['Id'];?>">编辑</a>
-                                                        <a class="layui-btn layui-btn-xs layui-btn-danger" data-confirm="确定要删除吗？" onclick="btnAct(this);" data-action="/admin/config/delete?ConfigId=<?php echo $data['ConfigId'];?>&Ids=<?php echo $row['Id'];?>">删除</a>
+                                                        <a class="layui-btn layui-btn-xs" href="/admin/config/modify?ConfigId=<?php echo $data['ConfigId'];?>&Key=<?php echo $key;?>">编辑</a>
+                                                        <a class="layui-btn layui-btn-xs layui-btn-danger" data-confirm="确定要删除吗？" onclick="btnAct(this);" data-action="/admin/config/delete?ConfigId=<?php echo $data['ConfigId'];?>&Keys=<?php echo $key;?>">删除</a>
                                                     </div>
                                                 </td>
                                             </tr>

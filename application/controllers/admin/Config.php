@@ -376,19 +376,19 @@ class Config extends Auth
             }
             $tplLogic=\models\logic\TplLogic::instance($config['Table']);
 
-            if(empty($this->inputData['Id'])){
+            if(empty($this->inputData['Key'])){
                 throw new Exception('请选择数据',EXIT_USER_INPUT);
             }
-            $id=(int)$this->inputData['Id'];
-            $row=$tplLogic->isFormat(false)->getRowById($id);
-            if(empty($row['Id'])){
+            $key=$this->inputData['Key'];
+            $row=$tplLogic->databaseModel->getOneByKey($key);
+            if(empty($row)){
                 throw new Exception('数据不存在',EXIT_DATABASE);
             }
 
             $data=array(
                 'ConfigId'=>$configId,
                 'Config'=>$config,
-                'Id'=>$id,
+                'Key'=>$key,
                 'List'=>$row,
             );
             $code=EXIT_SUCCESS;
@@ -440,23 +440,23 @@ class Config extends Auth
         }
         $tplLogic=\models\logic\TplLogic::instance($config['Table']);
 
-        if(empty($this->inputData['Ids'])){
+        if(empty($this->inputData['Keys'])){
             throw new Exception('请选择数据',EXIT_USER_INPUT);
         }
-        if(is_array($this->inputData['Ids'])){
-            $ids=$this->inputData['Ids'];
+        if(is_array($this->inputData['Keys'])){
+            $keys=$this->inputData['Keys'];
         }else{
-            $ids=array((int)$this->inputData['Ids']);
+            $keys=array((int)$this->inputData['Keys']);
         }
 
-        $result=$tplLogic->delByIds($ids);
+        $result=$tplLogic->delByIds($keys);
         if(false === $result){
             throw new Exception('删除失败',EXIT_DATABASE);
         }
 
         $data=array(
             'ConfigId'=>$configId,
-            'Ids'=>$ids,
+            'Keys'=>$keys,
         );
         $code=EXIT_SUCCESS;
         $msg='请求成功';
