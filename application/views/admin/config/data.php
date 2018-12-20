@@ -38,12 +38,14 @@
                                     <thead>
                                     <tr>
                                         <?php foreach($data['Config']['Columns'] as $field=>$column):?>
-                                            <th>
-                                                <?php echo $field;?><br>
-                                                <?php echo $column['name'];?><br>
-                                                <?php echo $column['alias'];?><br>
-                                                <?php echo $column['attr'];?>
-                                            </th>
+                                            <?php if(1 == $column['show']):?>
+                                                <th>
+                                                    <?php echo $field;?><br>
+                                                    <?php echo $column['name'];?><br>
+                                                    <?php echo $column['alias'];?><br>
+                                                    <?php echo $column['attr'];?>
+                                                </th>
+                                            <?php endif;?>
                                         <?php endforeach;?>
                                         <th>操作</th>
                                     </tr>
@@ -55,7 +57,9 @@
                                         <?php foreach($data['List'] as $row):?>
                                             <tr>
                                                 <?php foreach($data['Config']['Columns'] as $field=>$column):?>
-                                                    <td><?php echo isset($row[$field])?$row[$field]:'';?></td>
+                                                    <?php if(1 == $column['show']):?>
+                                                        <td><?php echo isset($row[$field])?$row[$field]:'';?></td>
+                                                    <?php endif;?>
                                                 <?php endforeach;?>
                                                 <td>
                                                     <?php $key = $dbModel->getKey($row); ?>

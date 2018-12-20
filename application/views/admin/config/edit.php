@@ -82,14 +82,14 @@
                             <div class="layui-form-item">
                                 <label class="layui-form-label">主数据库：</label>
                                 <div class="layui-input-block">
-                                    <input type="text" name="MainDB" value="<?php echo $data['List']['MainDB'];?>" readonly class="layui-input">
+                                    <input type="text" name="MainDB" value="<?php echo $data['List']['MainDB'];?>" required  lay-verify="required"  class="layui-input">
                                 </div>
                             </div>
 
                             <div class="layui-form-item">
                                 <label class="layui-form-label">备数据库：</label>
                                 <div class="layui-input-block">
-                                    <input type="text" name="BackDB" value="<?php echo $data['List']['BackDB'];?>" readonly class="layui-input">
+                                    <input type="text" name="BackDB" value="<?php echo $data['List']['BackDB'];?>" class="layui-input">
                                 </div>
                             </div>
 
@@ -113,6 +113,7 @@
                                             <th width="100">属性</th>
                                             <th>属性描述</th>
                                             <th>验证规则</th>
+                                            <th>显示</th>
                                             <th><a class="layui-btn layui-btn-xs layui-btn-normal" onclick="addField(this);">添加字段</a></th>
                                         </tr>
                                         </thead>
@@ -138,6 +139,12 @@
                                                     </td>
                                                     <td><textarea name="Columns[<?php echo $index;?>][desc]" class="layui-textarea"><?php echo $column['desc'];?></textarea></td>
                                                     <td><textarea name="Columns[<?php echo $index;?>][rules]" class="layui-textarea"><?php echo $column['rules'];?></textarea></td>
+                                                    <td>
+                                                        <select name="Columns[<?php echo $index;?>][show]">
+                                                            <option value="0" <?php if(0 == $column['show']){echo ' selected';}?>> 隐藏 </option>
+                                                            <option value="1" <?php if(1 == $column['show']){echo ' selected';}?>> 显示 </option>
+                                                        </select>
+                                                    </td>
                                                     <td>
                                                         <div class="layui-btn-group">
                                                             <a class="layui-btn layui-btn-xs layui-btn-danger" onclick="removeField(this);">删除</a>

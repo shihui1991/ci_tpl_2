@@ -24,6 +24,12 @@ function addField(obj) {
         '    <td><textarea name="Columns['+index+'][desc]" class="layui-textarea"></textarea></td>' +
         '    <td><textarea name="Columns['+index+'][rules]" class="layui-textarea"></textarea></td>' +
         '    <td>' +
+        '        <select name="Columns['+index+'][show]" class="layui-input">' +
+        '            <option value="0"> 隐藏 </option>' +
+        '            <option value="1"> 显示 </option>' +
+        '        </select>' +
+        '    </td>' +
+        '    <td>' +
         '        <div class="layui-btn-group">' +
         '             <a class="layui-btn layui-btn-xs layui-btn-danger" onclick="removeField(this);">删除</a>' +
         '             <a class="layui-btn layui-btn-xs layui-btn-primary" onclick="moveUp(this);" title="上移">上移</a>' +

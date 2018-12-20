@@ -21,8 +21,12 @@ class ConfigLogic extends LogicModel
         parent::__construct();
 
         // redis 为主，mysql 备份
-        $this->databaseModel = ConfigRedis::instance();
-        $this->backDB = ConfigMysql::instance();
+//        $this->databaseModel = ConfigRedis::instance();
+//        $this->backDB = ConfigMysql::instance();
+        // mysql 为主，redis 备份
+        $this->databaseModel = ConfigMysql::instance();
+//        $this->backDB = ConfigRedis::instance();
+        $this->backDBStr = 'models\database\redis\ConfigRedis';
 
         $this->dataModel = ConfigData::instance();
         $this->validatorModel = ConfigValidator::instance();

@@ -20,10 +20,12 @@ class MasterLogic extends LogicModel
         parent::__construct();
 
         // redis 为主，mysql 备份
-        $this->databaseModel = MasterRedis::instance();
-        $this->backDB = MasterMysql::instance();
-//        $this->databaseModel = MasterMysql::instance();
+//        $this->databaseModel = MasterRedis::instance();
+//        $this->backDB = MasterMysql::instance();
+        // mysql 为主，redis 备份
+        $this->databaseModel = MasterMysql::instance();
 //        $this->backDB = MasterRedis::instance();
+        $this->backDBStr = 'models\database\redis\MasterRedis';
 
         $this->dataModel = MasterData::instance();
         $this->validatorModel = MasterValidator::instance();

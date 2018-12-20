@@ -15,6 +15,7 @@ abstract class LogicModel
 {
     public $databaseModel;
     public $backDB;
+    public $backDBStr;
     public $dataModel;
     public $validatorModel;
     static protected $objs;
@@ -99,6 +100,7 @@ abstract class LogicModel
      */
     public function rsync($act='backup')
     {
+        $this->instanceBackDB();
         // 备份
         if('backup' == $act){
             $db1=$this->databaseModel;
@@ -123,6 +125,22 @@ abstract class LogicModel
         $result = $db2->batchInsertUpdate($list);
 
         return $result;
+    }
+
+    /** 实例备份数据库
+     * @return mixed
+     * @throws \Exception
+     */
+    public function instanceBackDB()
+    {
+        if(empty($this->backDB)){
+            if(empty($this->backDBStr)){
+                throw new \Exception('不存在备份数据库',EXIT_DATABASE);
+            }
+            $backDB = $this->backDBStr;
+            $this->backDB = $backDB::instance();
+        }
+        return $this->backDB;
     }
 
     /** 是否格式化数据

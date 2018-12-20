@@ -36,7 +36,9 @@ class TplLogic extends LogicModel
         $mainDB = lcfirst($this->tplConfig['MainDB']);
         $backDB = lcfirst($this->tplConfig['BackDB']);
         $this->tplDB = "models\\database\\$mainDB\\Tpl".ucfirst($mainDB);
-        $this->tplBackDB = "models\\database\\$mainDB\\Tpl".ucfirst($backDB);
+        if(!empty($backDB)){
+            $this->tplBackDB = "models\\database\\$mainDB\\Tpl".ucfirst($backDB);
+        }
 
         $this->tplData = "models\\data\\TplData";
         $this->tplValidator = "models\\validator\\TplValidator";
@@ -44,7 +46,9 @@ class TplLogic extends LogicModel
         parent::__construct();
 
         $this->databaseModel = $this->getDBModel($table,$args[$mainDB]);
-        $this->backDB = $this->getBackDBModel($table,$args[$backDB]);
+        if(!empty($backDB)){
+            $this->backDB = $this->getBackDBModel($table,$args[$backDB]);
+        }
 
         $this->dataModel = $this->getDataModel($table,$this->tplConfig['Columns']);
         $this->validatorModel = $this->getValidatorModel($table);

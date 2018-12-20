@@ -56,8 +56,8 @@ class ConfigData extends DataModel
             'name'  => '备数据库',
             'alias' => 'ConfigBackDB',
             'attr'  => 'string',
-            'desc'  => "varchar(255) NOT NULL COMMENT '备数据库'",
-            'rules' => 'trim|required|max_length[255]',
+            'desc'  => "varchar(255) DEFAULT NULL COMMENT '备数据库'",
+            'rules' => 'trim|max_length[255]',
         ),
         'Single' => array(
             'field' => 'Single',

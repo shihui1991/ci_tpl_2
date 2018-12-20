@@ -64,7 +64,7 @@
                             <div class="layui-form-item">
                                 <label class="layui-form-label">备数据库：</label>
                                 <div class="layui-input-block">
-                                    <input type="text" name="BackDB" value="" required  lay-verify="required" placeholder="" class="layui-input">
+                                    <input type="text" name="BackDB" value="" placeholder="" class="layui-input">
                                 </div>
                             </div>
 
@@ -88,6 +88,7 @@
                                             <th width="100">属性</th>
                                             <th>属性描述</th>
                                             <th>验证规则</th>
+                                            <th>显示</th>
                                             <th><a class="layui-btn layui-btn-xs layui-btn-normal" onclick="addField(this);">添加字段</a></th>
                                         </tr>
                                         </thead>
