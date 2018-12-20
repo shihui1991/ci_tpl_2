@@ -113,7 +113,7 @@
                                             <th width="100">属性</th>
                                             <th>属性描述</th>
                                             <th>验证规则</th>
-                                            <th>显示</th>
+                                            <th width="80">显示</th>
                                             <th><a class="layui-btn layui-btn-xs layui-btn-normal" onclick="addField(this);">添加字段</a></th>
                                         </tr>
                                         </thead>
