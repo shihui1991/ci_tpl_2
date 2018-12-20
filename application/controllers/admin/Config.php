@@ -70,7 +70,7 @@ class Config extends Auth
             $newRow=$this->logicModel->add($this->inputData);
             // 建表
             $tplLogic=\models\logic\TplLogic::instance($newRow['Table']);
-            $result = $tplLogic->databaseModel->createTable($newRow['Columns'],true);
+            $result = $tplLogic->databaseModel->createTable($newRow['Columns']);
             if(false == $result){
                 throw new Exception('建表失败',EXIT_DATABASE);
             }
