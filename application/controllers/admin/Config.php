@@ -277,7 +277,7 @@ class Config extends Auth
         $orderBy=$filter['OrderBy'];
 
         // 获取列表
-        $list=$tplLogic->getAll($params,$orderBy);
+        $list=$tplLogic->isFormat(false)->getAll($params,$orderBy);
 
         $data=array(
             'ConfigId'=>$configId,
