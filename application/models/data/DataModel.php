@@ -186,15 +186,15 @@ abstract class DataModel
         $result=array();
         foreach($fields as $field){
             $value=isset($data[$field])?$data[$field]:'';
-            // 属性赋值
-            $setAttr='set'.ucfirst($this->fieldsAttr[$field]).'Attr';
-            if(method_exists($this,$setAttr)){
-                $value=$this->$setAttr($value);
-            }
             // 字段特殊赋值
             $setField='set'.ucfirst($field).'Field';
             if(method_exists($this,$setField)){
                 $value=$this->$setField($value,$data);
+            }
+            // 属性赋值
+            $setAttr='set'.ucfirst($this->fieldsAttr[$field]).'Attr';
+            if(method_exists($this,$setAttr)){
+                $value=$this->$setAttr($value);
             }
 
             $result[$field]=$value;
