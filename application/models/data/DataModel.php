@@ -216,14 +216,15 @@ abstract class DataModel
         $result=array();
         foreach($data as $field=>$value){
             if(isset($this->fieldsAttr[$field])){
-                $getAttr='get'.ucfirst($this->fieldsAttr[$field]).'Attr';
-                if(method_exists($this,$getAttr)){
-                    $value=$this->$getAttr($value);
-                }
-
+                // 字段特殊处理
                 $getField='get'.ucfirst($field).'Field';
                 if(method_exists($this,$getField)){
                     $value=$this->$getField($value,$data);
+                }
+                // 字段属性处理
+                $getAttr='get'.ucfirst($this->fieldsAttr[$field]).'Attr';
+                if(method_exists($this,$getAttr)){
+                    $value=$this->$getAttr($value);
                 }
                 if($makeAlias){
                     $field=$this->getAliasField($field);
