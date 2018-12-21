@@ -440,13 +440,10 @@ class Config extends Auth
         }
         $tplLogic=\models\logic\TplLogic::instance($config['Table']);
 
-        if(empty($this->inputData['Keys'])){
-            throw new Exception('请选择数据',EXIT_USER_INPUT);
-        }
         if(is_array($this->inputData['Keys'])){
             $keys=$this->inputData['Keys'];
         }else{
-            $keys=array((int)$this->inputData['Keys']);
+            $keys=array($this->inputData['Keys']);
         }
 
         $result=$tplLogic->delByIds($keys);
