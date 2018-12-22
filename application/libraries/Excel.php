@@ -159,9 +159,11 @@ class Excel
         }
     }
 
+
     /** 设置工作表
      * @param int $index
      * @param string $title
+     * @throws \PHPExcel_Exception
      */
     public function setActiveSheet($index=0, $title='sheet1')
     {
