@@ -570,3 +570,16 @@ if(!function_exists('makeBillNo')){
         return $billNo;
     }
 }
+
+if(!function_exists('makeArrayIterator')){
+    /** 生成数组迭代器
+     * @return string
+     */
+    function makeArrayIterator($array = array())
+    {
+        $obj = new ArrayObject($array);
+        $iterator = $obj->getIterator();
+
+        return $iterator;
+    }
+}
