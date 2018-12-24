@@ -56,15 +56,7 @@ class ApiLogic extends LogicModel
         $where=array(
             array('Url','eq',$url),
         );
-        $select=array(
-            'Id',
-            'Name',
-            'Url',
-            'EventId',
-            'State',
-            'Infos',
-        );
-        $row = $this->databaseModel->getOne($where,$select);
+        $row = $this->databaseModel->getOne($where);
         if(empty($row)){
             return array();
         }
