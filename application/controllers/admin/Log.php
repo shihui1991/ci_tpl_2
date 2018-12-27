@@ -87,12 +87,10 @@ class Log extends Auth
         header( "Pragma: public ");
 
         // 逐行输出
-        $handle = fopen($file, "r") or exit("不能打开文件");
-        while(!feof($handle))
-        {
-            echo fgets($handle);
+        $handle = makeTextYield($file);
+        foreach($handle as $text){
+            echo $text;
         }
-        fclose($handle);
     }
 
     /** 查看文件
@@ -109,12 +107,10 @@ class Log extends Auth
         }
         // 逐行读取
         $content='';
-        $handle = fopen($file, "r") or exit("不能打开文件");
-        while(!feof($handle))
-        {
-            $content .= fgets($handle);
+        $handle = makeTextYield($file);
+        foreach($handle as $text){
+            $content .= $text;
         }
-        fclose($handle);
 
         $data=array(
             'File'=>$file,
