@@ -185,7 +185,7 @@ abstract class DataModel
         // 批量赋值
         $result=array();
         foreach($fields as $field){
-            $value=isset($data[$field])?$data[$field]:'';
+            $value=isset($data[$field])?$data[$field]:null;
             // 字段特殊赋值
             $setField='set'.ucfirst($field).'Field';
             if(method_exists($this,$setField)){

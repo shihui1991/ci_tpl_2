@@ -23,6 +23,7 @@ if(!function_exists('makeTree'))
             return $result;
         }
         $i=1;
+        $childs = makeArrayIterator($childs);
         foreach ($childs as $child){
             $space='';
             for($j=1;$j<$level;$j++){
@@ -57,6 +58,7 @@ if(!function_exists('getChildsAndLast')){
      */
     function getChildsAndLast($list, $parentId){
         $array=array();
+        $list = makeArrayIterator($list);
         foreach ($list as $key=>$value){
             if($value['parentId'] == $parentId){
                 $array[]=$value;
