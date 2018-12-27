@@ -585,3 +585,33 @@ if(!function_exists('makeArrayIterator')){
         return $iterator;
     }
 }
+
+if(!function_exists('makeTextYield')){
+    /**
+     * 文本文件迭代生成器
+     */
+    function makeTextYield($file)
+    {
+        $handle = fopen($file, "r") or exit("不能打开文件");
+        while(!feof($handle))
+        {
+            yield fgets($handle);
+        }
+        fclose($handle);
+    }
+}
+
+if(!function_exists('makeCsvYield')){
+    /**
+     * CSV文件迭代生成器
+     */
+    function makeCsvYield($file)
+    {
+        $handle = fopen($file, "r") or exit("不能打开文件");
+        while(!feof($handle))
+        {
+            yield fgetcsv($handle);
+        }
+        fclose($handle);
+    }
+}
