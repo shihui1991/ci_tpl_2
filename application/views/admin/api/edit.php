@@ -84,7 +84,7 @@
                                                     <td><input type="text" name="Request[<?php echo $request['Id'];?>][Infos]" value="<?php echo $request['Infos'];?>" class="layui-input"></td>
                                                     <td>
                                                         <div class="layui-btn-group">
-                                                            <button class="layui-btn layui-btn-xs layui-btn-normal" type="button" data-field="Response" data-id="<?php echo $request['Id'];?>" onclick="addField(this)" title="添加子级"><i class="layui-icon layui-icon-add-circle"></i></button>
+                                                            <button class="layui-btn layui-btn-xs layui-btn-normal" type="button" data-field="Request" data-id="<?php echo $request['Id'];?>" onclick="addField(this)" title="添加子级"><i class="layui-icon layui-icon-add-circle"></i></button>
                                                             <button class="layui-btn layui-btn-xs layui-btn-danger" type="button" data-id="<?php echo $request['Id'];?>" onclick="removeField(this)" title="删除"><i class="layui-icon layui-icon-delete"></i></button>
                                                         </div>
                                                     </td>
