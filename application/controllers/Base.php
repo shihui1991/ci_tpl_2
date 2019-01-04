@@ -10,7 +10,8 @@ class Base extends CI_Controller
 {
     protected $inputData=array();   // 请求输入数据
     protected $outputData=array();  // 响应输出数据
-    protected $requestUrl;  // 请求URL
+    protected $requestUrl;          // 请求URL
+    protected $clientIP;            // 客户端IP
 
     public function __construct()
     {
@@ -40,7 +41,10 @@ class Base extends CI_Controller
         if(FALSE === $index || $index > 0){
             $url = '/'.$url;
         }
-        $this->requestUrl=$url;
+        $this->requestUrl = $url;
+        $this->clientIP = $this->input->ip_address();
+        $this->inputData['RequestUrl'] = $this->requestUrl;
+        $this->inputData['ClientIP'] = $this->clientIP;
 
         // 自动加载模型、验证器、等（命名空间）
         spl_autoload_register(function ($class){
@@ -178,8 +182,8 @@ class Base extends CI_Controller
         $execTime=$this->benchmark->elapsed_time('app_start', 'app_end');
 
         $datetime=date('Y-m-d H:i:s');
-        $reqUrl=$this->requestUrl;
-        $ip=$this->input->ip_address();
+        $reqUrl = $this->requestUrl;
+        $ip = $this->clientIP;
         $get=json_encode($this->input->get());
         $post=json_encode($this->input->post());
         $stream=urldecode($this->input->raw_input_stream);
@@ -230,7 +234,7 @@ EEE;
     {
         $datetime=date('Y-m-d H:i:s');
         $reqUrl=$this->requestUrl;
-        $ip=$this->input->ip_address();
+        $ip = $this->clientIP;
         $get=json_encode($this->input->get());
         $post=json_encode($this->input->post());
         $stream=urldecode($this->input->raw_input_stream);

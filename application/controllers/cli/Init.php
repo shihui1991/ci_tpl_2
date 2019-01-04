@@ -14,13 +14,12 @@ class Init extends Base
     {
         parent::__construct();
 
-        $ip = $this->input->ip_address();
         $whiteIps=array(
             '0.0.0.0',
             '127.0.0.1',
             '::1',
         );
-        if(!is_cli() && !in_array($ip,$whiteIps)){
+        if(!is_cli() && !in_array($this->clientIP,$whiteIps)){
             show_404();
         }
     }
