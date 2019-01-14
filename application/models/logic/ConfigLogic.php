@@ -90,10 +90,21 @@ class ConfigLogic extends LogicModel
             $config=$this->databaseModel->getOne($where);
             // 不存在则添加，存在则更新
             $add=array(
-                'Table'=>$table,
-                'Name'=>$table,
-                'Columns'=>$data['columns'],
-                'Infos'=>$table,
+                'Table'  => $table,
+                'Name'   => $table,
+                'DBConf' => array(
+                    'type' => $this->databaseModel->dbConfigFile,
+                    'dbConfigName' => $this->databaseModel->dbConfigName,
+                    'db' => $this->databaseModel->db,
+                    'table' => $table,
+                    'primaryKey' => 'Id',
+                ),
+                'MainDB' => $this->databaseModel->dbConfigFile,
+                'BackDB' => $this->databaseModel->dbConfigFile,
+                'Single' => NO,
+                'Columns'=> $data['columns'],
+                'Infos'  => $table,
+                'State'  => YES,
             );
             if(empty($config['Id'])){
                 $config = $this->dataModel->fill($add,'add');

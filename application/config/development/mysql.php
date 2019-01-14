@@ -76,6 +76,7 @@ $query_builder = TRUE;
 $config['default'] = array(
 	'dsn'	=> '',
 	'hostname' => '127.0.0.1',
+	'port'     => 3306,
 	'username' => 'root',
 	'password' => 'mysql003@yz.com',
 	'database' => 'ci_tpl',
