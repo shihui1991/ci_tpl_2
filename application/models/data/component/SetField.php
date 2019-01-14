@@ -57,10 +57,13 @@ trait SetField
      */
     public function setColumnsField($value, $data=array())
     {
-        if(empty($value)){
-            return $value;
+        if(is_string($value)){
+            $value=json_decode($value,true);
         }
-        $value=json_decode($value,true);
+        if(empty($value)){
+            return '';
+        }
+
         $result=array();
         foreach($value as $key=>$val){
             $result[$val['field']]=$val;
