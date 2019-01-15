@@ -73,7 +73,7 @@ CREATE TABLE `Cate` (
   `Constant` varchar(255) DEFAULT NULL COMMENT '常量名',
   `Sort` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '排序',
   `Display` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否显示，0隐藏，1显示',
-  `Infos` varchar(255) NOT NULL COMMENT '描述',
+  `Infos` varchar(255) DEFAULT NULL COMMENT '描述',
   `Created` datetime DEFAULT NULL,
   `Updated` datetime DEFAULT NULL,
   PRIMARY KEY (`Id`) USING BTREE,
@@ -90,7 +90,7 @@ CREATE TABLE `Cate` (
 
 LOCK TABLES `Cate` WRITE;
 /*!40000 ALTER TABLE `Cate` DISABLE KEYS */;
-INSERT INTO `Cate` VALUES (1,'默认配置项','15','默认分页条数','DEFAULT_PERPAGE',0,1,'','2018-09-11 16:41:11',NULL),(2,'默认配置项','10','默认分页跳转页码个数','DEFAULT_PAGEBAR_NUM',0,1,'','2018-09-11 16:48:05',NULL),(3,'默认配置项','36000','后台操作等待最长时间（秒）','OPERAT_WAIT_TIME',0,1,'','2018-09-11 16:52:35',NULL),(4,'默认配置项','wx5cf8b07877638bfc','微信 APPID','WX_APPID',0,1,'','2018-09-11 16:55:04',NULL),(5,'默认配置项','90f959b5c385a5618f44824896d3b209','微信 SECRET','WX_SECRET',0,1,'','2018-09-11 16:55:29',NULL),(6,'redis数据库分配','0','配置','REDIS_DB_CONF',0,1,'','2018-09-11 20:16:57',NULL),(7,'redis数据库分配','1','后台管理','REDIS_DB_ADMIN',0,1,'','2018-09-11 20:17:50',NULL),(8,'redis数据库分配','2','日志','REDIS_DB_LOG',0,1,'','2018-09-11 20:18:14',NULL),(9,'redis数据库分配','3','玩家','REDIS_DB_USER',0,1,'','2018-09-11 20:18:49',NULL),(10,'默认配置项','1000','玩家金币初始值','USER_COIN_DEFAULT',0,1,'','2018-09-11 20:25:23',NULL),(11,'默认配置项','5','玩家复活卡初始值','USER_CARD_DEFAULT',0,1,'','2018-09-11 20:26:54',NULL);
+INSERT INTO `Cate` VALUES (1,'默认配置项','15','默认分页条数','DEFAULT_PERPAGE',0,1,'','2018-09-11 16:41:11',NULL),(2,'默认配置项','10','默认分页跳转页码个数','DEFAULT_PAGEBAR_NUM',0,1,'','2018-09-11 16:48:05',NULL),(3,'默认配置项','36000','后台操作等待最长时间（秒）','OPERAT_WAIT_TIME',0,1,'','2018-09-11 16:52:35',NULL),(4, '默认配置项', '', '接口地址', 'API_BASE_URL', 0, 1, '', '2019-01-15 11:38:26', NULL);
 /*!40000 ALTER TABLE `Cate` ENABLE KEYS */;
 UNLOCK TABLES;
 

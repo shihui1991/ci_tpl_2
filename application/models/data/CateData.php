@@ -72,7 +72,7 @@ class CateData extends DataModel
             'name'  => '功能说明',
             'alias' => 'CateInfos',
             'attr'  => 'string',
-            'desc'  => "varchar(255) NOT NULL COMMENT '描述'",
+            'desc'  => "varchar(255) DEFAULT NULL COMMENT '描述'",
             'rules' => 'trim|max_length[255]',
         ),
         'Created' => array(
