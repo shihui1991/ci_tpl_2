@@ -93,11 +93,13 @@ class ConfigLogic extends LogicModel
                 'Table'  => $table,
                 'Name'   => $table,
                 'DBConf' => array(
-                    'type' => $this->databaseModel->dbConfigFile,
-                    'dbConfigName' => $this->databaseModel->dbConfigName,
-                    'db' => $this->databaseModel->db,
-                    'table' => $table,
-                    'primaryKey' => 'Id',
+                    array(
+                        'type' => $this->databaseModel->dbConfigFile,
+                        'dbConfigName' => $this->databaseModel->dbConfigName,
+                        'db' => $this->databaseModel->db,
+                        'table' => $table,
+                        'primaryKey' => 'Id',
+                    )
                 ),
                 'MainDB' => $this->databaseModel->dbConfigFile,
                 'BackDB' => $this->databaseModel->dbConfigFile,

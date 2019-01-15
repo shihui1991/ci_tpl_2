@@ -336,18 +336,32 @@ class Excel
      */
     public function makeDataList(array $dataList)
     {
-        $fields=$dataList[0];  // 所有字段
+        // 所有字段
+        $fields=$dataList[0];
+        // 过滤空字段
+        foreach ($fields as $i=>$field) {
+            $field = trim($field);
+            if (empty($field)) {
+                unset($fields[$i]);
+                continue;
+            }
+        }
         // 整理数据列表
         unset($dataList[0]);
         $list=array();
         if(!empty($dataList)){
             $dataList = new ListIterator($dataList,1);
             foreach($dataList as $data){
+                // 过滤空数据
                 $temp=array_filter($data);
                 if(empty($temp)){
                     continue;
                 }
-                $row = array_combine($fields,$data);
+                // 取字段列数据
+                $row = array();
+                foreach($fields as $i=>$field){
+                    $row[$field] = $data[$i];
+                }
                 $list[]=$row;
             }
         }
@@ -373,6 +387,11 @@ class Excel
         $ruleses = $dataList[5];  // 所有字段验证规则
         $columns=array();   // 所有字段详情
         foreach ($fields as $i=>$field){
+            if(empty($field)){
+                // 过滤空字段
+                unset($fields[$i]);
+                continue;
+            }
             $columns[$field]=array(
                 'field' => $field,
                 'name'  => $names[$i],
@@ -396,11 +415,17 @@ class Excel
         if(!empty($dataList)){
             $dataList = new ListIterator($dataList,7);
             foreach($dataList as $data){
+                // 过滤空数据
                 $temp=array_filter($data);
                 if(empty($temp)){
                     continue;
                 }
-                $row = array_combine($fields,$data);
+                // 取字段列数据
+                $row = array();
+                foreach($fields as $i=>$field){
+                    $row[$field] = $data[$i];
+                }
+
                 $list[]=$row;
             }
         }

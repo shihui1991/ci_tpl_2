@@ -141,8 +141,8 @@
                                                     <td><textarea name="Columns[<?php echo $index;?>][rules]" class="layui-textarea"><?php echo $column['rules'];?></textarea></td>
                                                     <td>
                                                         <select name="Columns[<?php echo $index;?>][show]">
-                                                            <option value="0" <?php if(0 == $column['show']){echo ' selected';}?>> 隐藏 </option>
-                                                            <option value="1" <?php if(1 == $column['show']){echo ' selected';}?>> 显示 </option>
+                                                            <option value="0" <?php if(isset($column['show']) && 0 == $column['show']){echo ' selected';}?>> 隐藏 </option>
+                                                            <option value="1" <?php if(!isset($column['show']) || 1 == $column['show']){echo ' selected';}?>> 显示 </option>
                                                         </select>
                                                     </td>
                                                     <td>

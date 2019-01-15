@@ -38,7 +38,7 @@
                                     <thead>
                                     <tr>
                                         <?php foreach($data['Config']['Columns'] as $field=>$column):?>
-                                            <?php if(1 == $column['show']):?>
+                                            <?php if(!isset($column['show']) || 1 == $column['show']):?>
                                                 <th>
                                                     <?php echo $field;?><br>
                                                     <?php echo $column['name'];?><br>
@@ -57,7 +57,7 @@
                                         <?php foreach($data['List'] as $row):?>
                                             <tr>
                                                 <?php foreach($data['Config']['Columns'] as $field=>$column):?>
-                                                    <?php if(1 == $column['show']):?>
+                                                    <?php if(!isset($column['show']) || 1 == $column['show']):?>
                                                         <td><?php echo isset($row[$field])?$row[$field]:'';?></td>
                                                     <?php endif;?>
                                                 <?php endforeach;?>
