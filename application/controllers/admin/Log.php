@@ -76,21 +76,10 @@ class Log extends Auth
         if(false == $file){
             throw new Exception('文件不存在',EXIT_UNKNOWN_FILE);
         }
-        $basename=basename($file);
-//        $content=file_get_contents($file);
-
-        Header( "Content-type: application/octet-stream ");
-        Header( "Accept-Ranges: bytes ");
-        header( "Content-Disposition: attachment; filename={$basename} ");
-        header( "Expires: 0 ");
-        header( "Cache-Control: must-revalidate, post-check=0, pre-check=0 ");
-        header( "Pragma: public ");
-
-        // 逐行输出
-        $handle = makeTextYield($file);
-        foreach($handle as $text){
-            echo $text;
-        }
+        // 文件输出
+        outputHeaderForFile(basename($file),filesize($file));
+        @readfile($file);
+        exit;
     }
 
     /** 查看文件

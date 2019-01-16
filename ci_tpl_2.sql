@@ -81,7 +81,7 @@ CREATE TABLE `Cate` (
   KEY `Value` (`Value`) USING BTREE,
   KEY `Name` (`Name`) USING BTREE,
   KEY `Constant` (`Constant`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8 COMMENT='分类';
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COMMENT='分类';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
