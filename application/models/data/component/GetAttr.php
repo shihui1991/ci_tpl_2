@@ -58,7 +58,7 @@ trait GetAttr
         if(empty($value)){
             return array();
         }
-        $value = array_values(array_filter($value));
+        $value = array_values($value);
         $value=formatArray($value);
 
         return $value;
