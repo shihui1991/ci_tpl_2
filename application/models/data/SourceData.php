@@ -16,7 +16,7 @@ class SourceData extends DataModel
             'name'  => '资源ID',
             'alias' => 'SourceId',
             'attr'  => 'int',
-            'desc'  => "int(10) unsigned NOT NULL PRIMARY KEY AUTO_INCREMENT COMMENT '资源ID'",
+            'desc'  => "int(10) unsigned NOT NULL PRIMARY KEY AUTO_INCREMENT COMMENT '资源ID' ",
             'rules' => 'trim|required|max_length[10]|is_natural',
         ),
         'Name' => array(
@@ -24,7 +24,7 @@ class SourceData extends DataModel
             'name'  => '名称',
             'alias' => 'SourceName',
             'attr'  => 'string',
-            'desc'  => "varchar(255) NOT NULL COMMENT ' 名称'",
+            'desc'  => "varchar(255) NOT NULL COMMENT ' 名称' ",
             'rules' => 'trim|required|max_length[255]',
         ),
         'Url' => array(
@@ -32,7 +32,7 @@ class SourceData extends DataModel
             'name'  => '资源地址',
             'alias' => 'SourceUrl',
             'attr'  => 'string',
-            'desc'  => "varchar(255) NOT NULL COMMENT ' 资源地址'",
+            'desc'  => "varchar(255) NOT NULL COMMENT ' 资源地址' ",
             'rules' => 'trim|required|max_length[255]',
         ),
         'Cloud' => array(
@@ -40,7 +40,7 @@ class SourceData extends DataModel
             'name'  => '云地址',
             'alias' => 'CloudUrl',
             'attr'  => 'string',
-            'desc'  => "varchar(255) DEFAULT NULL COMMENT '云存储地址'",
+            'desc'  => "varchar(255) DEFAULT NULL COMMENT '云存储地址' ",
             'rules' => 'trim|max_length[255]',
         ),
         'Infos' => array(
@@ -48,7 +48,7 @@ class SourceData extends DataModel
             'name'  => '说明',
             'alias' => 'RoleInfos',
             'attr'  => 'string',
-            'desc'  => "varchar(255) DEFAULT NULL COMMENT '说明'",
+            'desc'  => "varchar(255) DEFAULT NULL COMMENT '说明' ",
             'rules' => 'trim|max_length[255]',
         ),
         'Created' => array(
@@ -56,7 +56,7 @@ class SourceData extends DataModel
             'name'  => '创建时间',
             'alias' => 'SourceCreated',
             'attr'  => 'datetime',
-            'desc'  => "varchar(20) DEFAULT NULL COMMENT '创建时间'",
+            'desc'  => "varchar(20) DEFAULT NULL COMMENT '创建时间' ",
             'rules' => 'trim|max_length[255]',
         ),
         'Updated' => array(
@@ -64,7 +64,7 @@ class SourceData extends DataModel
             'name'  => '更新时间',
             'alias' => 'SourceUpdated',
             'attr'  => 'datetime',
-            'desc'  => "varchar(20) DEFAULT NULL COMMENT '更新时间'",
+            'desc'  => "varchar(20) DEFAULT NULL COMMENT '更新时间' ",
             'rules' => 'trim|max_length[255]',
         ),
     );

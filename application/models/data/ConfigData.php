@@ -16,7 +16,7 @@ class ConfigData extends DataModel
             'name'  => '配置ID',
             'alias' => 'ConfigId',
             'attr'  => 'int',
-            'desc'  => "int(10) unsigned NOT NULL PRIMARY KEY AUTO_INCREMENT COMMENT '配置ID'",
+            'desc'  => "int(10) unsigned NOT NULL PRIMARY KEY AUTO_INCREMENT COMMENT '配置ID' ",
             'rules' => 'trim|required|max_length[10]|is_natural',
         ),
         'Table' => array(
@@ -24,7 +24,7 @@ class ConfigData extends DataModel
             'name'  => '表名',
             'alias' => 'ConfigTable',
             'attr'  => 'string',
-            'desc'  => "varchar(255) NOT NULL COMMENT ' 表名'",
+            'desc'  => "varchar(255) NOT NULL COMMENT ' 表名' ",
             'rules' => 'trim|required|max_length[255]',
         ),
         'Name' => array(
@@ -32,7 +32,7 @@ class ConfigData extends DataModel
             'name'  => '名称',
             'alias' => 'ConfigName',
             'attr'  => 'string',
-            'desc'  => "varchar(255) DEFAULT NULL COMMENT ' 名称'",
+            'desc'  => "varchar(255) DEFAULT NULL COMMENT ' 名称' ",
             'rules' => 'trim|max_length[255]',
         ),
         'DBConf' => array(
@@ -40,7 +40,7 @@ class ConfigData extends DataModel
             'name'  => '数据库配置',
             'alias' => 'ConfigDBConf',
             'attr'  => 'array',
-            'desc'  => "text COMMENT ' 数据库配置'",
+            'desc'  => "text COMMENT ' 数据库配置' ",
             'rules' => 'trim',
         ),
         'MainDB' => array(
@@ -48,7 +48,7 @@ class ConfigData extends DataModel
             'name'  => '主数据库',
             'alias' => 'ConfigMainDB',
             'attr'  => 'string',
-            'desc'  => "varchar(255) NOT NULL COMMENT '主数据库'",
+            'desc'  => "varchar(255) NOT NULL COMMENT '主数据库' ",
             'rules' => 'trim|required|max_length[255]',
         ),
         'BackDB' => array(
@@ -56,7 +56,7 @@ class ConfigData extends DataModel
             'name'  => '备数据库',
             'alias' => 'ConfigBackDB',
             'attr'  => 'string',
-            'desc'  => "varchar(255) DEFAULT NULL COMMENT '备数据库'",
+            'desc'  => "varchar(255) DEFAULT NULL COMMENT '备数据库' ",
             'rules' => 'trim|max_length[255]',
         ),
         'Single' => array(
@@ -64,7 +64,7 @@ class ConfigData extends DataModel
             'name'  => '单项配置',
             'alias' => 'ConfigSingle',
             'attr'  => 'int',
-            'desc'  => "tinyint(1) DEFAULT '0' COMMENT '单列配置，0否，1是'",
+            'desc'  => "tinyint(1) DEFAULT '0' COMMENT '单列配置，0否，1是' ",
             'rules' => 'trim|required|max_length[1]|is_natural|in_list[0,1]',
         ),
         'Columns' => array(
@@ -72,7 +72,7 @@ class ConfigData extends DataModel
             'name'  => '字段详情',
             'alias' => 'ConfigColumns',
             'attr'  => 'json',
-            'desc'  => "text COMMENT '字段详情'",
+            'desc'  => "text COMMENT '字段详情' ",
             'rules' => '',
         ),
         'Infos' => array(
@@ -80,7 +80,7 @@ class ConfigData extends DataModel
             'name'  => '说明',
             'alias' => 'RoleInfos',
             'attr'  => 'string',
-            'desc'  => "varchar(255) DEFAULT NULL COMMENT '说明'",
+            'desc'  => "varchar(255) DEFAULT NULL COMMENT '说明' ",
             'rules' => 'trim|max_length[255]',
         ),
         'State' => array(
@@ -88,7 +88,7 @@ class ConfigData extends DataModel
             'name'  => '状态',
             'alias' => 'ConfigState',
             'attr'  => 'int',
-            'desc'  => "tinyint(1) DEFAULT '1' COMMENT '状态，0弃用，1在用'",
+            'desc'  => "tinyint(1) DEFAULT '1' COMMENT '状态，0弃用，1在用' ",
             'rules' => 'trim|required|max_length[1]|is_natural|in_list[0,1]',
         ),
         'Created' => array(
@@ -96,7 +96,7 @@ class ConfigData extends DataModel
             'name'  => '创建时间',
             'alias' => 'ConfigCreated',
             'attr'  => 'datetime',
-            'desc'  => "varchar(20) DEFAULT NULL COMMENT '创建时间'",
+            'desc'  => "varchar(20) DEFAULT NULL COMMENT '创建时间' ",
             'rules' => 'trim|max_length[255]',
         ),
         'Updated' => array(
@@ -104,7 +104,7 @@ class ConfigData extends DataModel
             'name'  => '更新时间',
             'alias' => 'ConfigUpdated',
             'attr'  => 'datetime',
-            'desc'  => "varchar(20) DEFAULT NULL COMMENT '更新时间'",
+            'desc'  => "varchar(20) DEFAULT NULL COMMENT '更新时间' ",
             'rules' => 'trim|max_length[255]',
         ),
     );

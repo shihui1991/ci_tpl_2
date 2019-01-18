@@ -16,7 +16,7 @@ class RsyncData extends DataModel
             'name'  => '同步ID',
             'alias' => 'RsyncId',
             'attr'  => 'int',
-            'desc'  => "int(10) unsigned NOT NULL PRIMARY KEY AUTO_INCREMENT COMMENT '同步ID'",
+            'desc'  => "int(10) unsigned NOT NULL PRIMARY KEY AUTO_INCREMENT COMMENT '同步ID' ",
             'rules' => 'trim|required|max_length[10]|is_natural',
         ),
         'Name' => array(
@@ -24,7 +24,7 @@ class RsyncData extends DataModel
             'name'  => '名称',
             'alias' => 'RsyncName',
             'attr'  => 'string',
-            'desc'  => "varchar(255) NOT NULL COMMENT ' 名称'",
+            'desc'  => "varchar(255) NOT NULL COMMENT ' 名称' ",
             'rules' => 'trim|required|max_length[255]',
         ),
         'Instance' => array(
@@ -32,7 +32,7 @@ class RsyncData extends DataModel
             'name'  => '实例',
             'alias' => 'RsyncInstance',
             'attr'  => 'string',
-            'desc'  => "varchar(255) NOT NULL COMMENT ' 实例'",
+            'desc'  => "varchar(255) NOT NULL COMMENT ' 实例' ",
             'rules' => 'trim|required|max_length[255]',
         ),
         'Method' => array(
@@ -40,7 +40,7 @@ class RsyncData extends DataModel
             'name'  => '操作方法',
             'alias' => 'RsyncMethod',
             'attr'  => 'string',
-            'desc'  => "varchar(255) NOT NULL COMMENT ' 操作方法'",
+            'desc'  => "varchar(255) NOT NULL COMMENT ' 操作方法' ",
             'rules' => 'trim|required|max_length[255]',
         ),
         'Infos' => array(
@@ -48,7 +48,7 @@ class RsyncData extends DataModel
             'name'  => '说明',
             'alias' => 'RoleInfos',
             'attr'  => 'string',
-            'desc'  => "varchar(255) DEFAULT NULL COMMENT '说明'",
+            'desc'  => "varchar(255) DEFAULT NULL COMMENT '说明' ",
             'rules' => 'trim|max_length[255]',
         ),
         'Created' => array(
@@ -56,7 +56,7 @@ class RsyncData extends DataModel
             'name'  => '创建时间',
             'alias' => 'RsyncCreated',
             'attr'  => 'datetime',
-            'desc'  => "varchar(20) DEFAULT NULL COMMENT '创建时间'",
+            'desc'  => "varchar(20) DEFAULT NULL COMMENT '创建时间' ",
             'rules' => 'trim|max_length[255]',
         ),
         'Updated' => array(
@@ -64,7 +64,7 @@ class RsyncData extends DataModel
             'name'  => '更新时间',
             'alias' => 'RsyncUpdated',
             'attr'  => 'datetime',
-            'desc'  => "varchar(20) DEFAULT NULL COMMENT '更新时间'",
+            'desc'  => "varchar(20) DEFAULT NULL COMMENT '更新时间' ",
             'rules' => 'trim|max_length[255]',
         ),
     );

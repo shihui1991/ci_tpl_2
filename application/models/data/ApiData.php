@@ -16,7 +16,7 @@ class ApiData extends DataModel
             'name'  => '接口ID',
             'alias' => 'ApiId',
             'attr'  => 'int',
-            'desc'  => "int(10) unsigned NOT NULL PRIMARY KEY AUTO_INCREMENT COMMENT '接口ID'",
+            'desc'  => "int(10) unsigned NOT NULL PRIMARY KEY AUTO_INCREMENT COMMENT '接口ID' ",
             'rules' => 'trim|required|max_length[10]|is_natural',
         ),
         'Name' => array(
@@ -24,7 +24,7 @@ class ApiData extends DataModel
             'name'  => '名称',
             'alias' => 'ApiName',
             'attr'  => 'string',
-            'desc'  => "varchar(255) NOT NULL COMMENT '名称'",
+            'desc'  => "varchar(255) NOT NULL COMMENT '名称' ",
             'rules' => 'trim|required|max_length[255]',
         ),
         'Url' => array(
@@ -32,7 +32,7 @@ class ApiData extends DataModel
             'name'  => '接口地址',
             'alias' => 'ApiUrl',
             'attr'  => 'string',
-            'desc'  => "varchar(255) NOT NULL COMMENT '接口URL'",
+            'desc'  => "varchar(255) NOT NULL COMMENT '接口URL' ",
             'rules' => 'trim|required|max_length[255]|regex_match[/^\/\S*$/]',
         ),
         'EventId' => array(
@@ -40,7 +40,7 @@ class ApiData extends DataModel
             'name'  => '事件ID',
             'alias' => 'EventId',
             'attr'  => 'int',
-            'desc'  => "int(10) unsigned NOT NULL DEFAULT '0' COMMENT '事件ID'",
+            'desc'  => "int(10) unsigned NOT NULL DEFAULT '0' COMMENT '事件ID' ",
             'rules' => 'trim|required|max_length[10]|is_natural',
         ),
         'Request' => array(
@@ -48,7 +48,7 @@ class ApiData extends DataModel
             'name'  => '请求参数',
             'alias' => 'Request',
             'attr'  => 'array',
-            'desc'  => "text NOT NULL COMMENT '请求参数'",
+            'desc'  => "text NOT NULL COMMENT '请求参数' ",
             'rules' => '',
         ),
         'Response' => array(
@@ -56,7 +56,15 @@ class ApiData extends DataModel
             'name'  => '响应参数',
             'alias' => 'Response',
             'attr'  => 'array',
-            'desc'  => "text NOT NULL COMMENT '响应参数'",
+            'desc'  => "text NOT NULL COMMENT '响应参数' ",
+            'rules' => '',
+        ),
+        'Example' => array(
+            'field' => 'Example',
+            'name'  => '响应示例',
+            'alias' => 'Example',
+            'attr'  => 'array',
+            'desc'  => "text COMMENT '响应示例' ",
             'rules' => '',
         ),
         'State' => array(
@@ -64,7 +72,7 @@ class ApiData extends DataModel
             'name'  => '状态',
             'alias' => 'ApiState',
             'attr'  => 'int',
-            'desc'  => "tinyint(1) NOT NULL DEFAULT '0' COMMENT '状态，0禁用，1启用'",
+            'desc'  => "tinyint(1) NOT NULL DEFAULT '0' COMMENT '状态，0禁用，1启用' ",
             'rules' => 'trim|required|max_length[1]|is_natural|in_list[0,1]',
         ),
         'Infos' => array(
@@ -72,7 +80,7 @@ class ApiData extends DataModel
             'name'  => '说明',
             'alias' => 'ApiInfos',
             'attr'  => 'string',
-            'desc'  => "text COMMENT '说明'",
+            'desc'  => "text COMMENT '说明' ",
             'rules' => '',
         ),
         'Created' => array(
@@ -80,7 +88,7 @@ class ApiData extends DataModel
             'name'  => '创建时间',
             'alias' => 'ApiCreated',
             'attr'  => 'datetime',
-            'desc'  => "varchar(20) DEFAULT NULL COMMENT '创建时间'",
+            'desc'  => "varchar(20) DEFAULT NULL COMMENT '创建时间' ",
             'rules' => 'trim|max_length[255]',
         ),
         'Updated' => array(
@@ -88,7 +96,7 @@ class ApiData extends DataModel
             'name'  => '更新时间',
             'alias' => 'ApiUpdated',
             'attr'  => 'datetime',
-            'desc'  => "varchar(20) DEFAULT NULL COMMENT '更新时间'",
+            'desc'  => "varchar(20) DEFAULT NULL COMMENT '更新时间' ",
             'rules' => 'trim|max_length[255]',
         ),
     );
