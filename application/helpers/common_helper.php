@@ -642,3 +642,22 @@ if(!function_exists('outputHeaderForFile')){
         header ( "Cache-Control: must-revalidate, post-check=0, pre-check=0 ");
     }
 }
+
+if(!function_exists('getPositionFromTaoBaoIssueByIp')){
+    /**
+     * 通过IP获取淘宝IP库中的省市位置
+     */
+    function getPositionFromTaoBaoIssueByIp($ip)
+    {
+        $issueUrl = 'http://ip.taobao.com/service/getIpInfo.php';
+        $url = $issueUrl.'?ip='.urlencode($ip);
+        $res = file_get_contents($url);
+        $res = json_decode($res,true);
+        # 0 成功，1 失败
+        if(0 == $res['code']){
+            return $res['data'];
+        }else{
+            return false;
+        }
+    }
+}
