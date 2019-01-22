@@ -93,9 +93,9 @@ class Base extends CI_Controller
         $config['allowed_types'] = '*';
         // 保存目录
         if(empty($this->inputData['SavePath'])){
-            $savePath= '/'.UPLOAD_DIR.'/'.date('Ymd');
+            $savePath= '/'.UPLOAD_LINK_DIR.'/'.date('Ymd');
         }else{
-            $savePath='/'.UPLOAD_DIR.'/'.str_replace(' ','_',trim($this->inputData['SavePath']));
+            $savePath='/'.UPLOAD_LINK_DIR.'/'.str_replace(' ','_',trim($this->inputData['SavePath']));
         }
         $savePath=str_replace(' ','_',trim($savePath));
         $path='.'.$savePath;

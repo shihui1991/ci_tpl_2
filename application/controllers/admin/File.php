@@ -20,8 +20,8 @@ class File extends Auth
     public function index()
     {
         $dirs=array(
-            UPLOAD_DIR,  // 上传目录
-            DOWNLOAD_DIR,// 下载目录
+            UPLOAD_LINK_DIR,  // 上传目录
+            DOWNLOAD_DIR,     // 下载目录
         );
         foreach($dirs as $dir){
             $list[]=array(
