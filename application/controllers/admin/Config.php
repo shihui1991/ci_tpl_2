@@ -173,7 +173,7 @@ class Config extends Auth
      */
     public function file()
     {
-        $list = getDirAllDirOrFile(UPLOAD_DIR.'/'.CONFIG_UPLOAD_DIR);
+        $list = getDirAllDirOrFile(UPLOAD_LINK_DIR.'/'.CONFIG_UPLOAD_LINK_DIR);
 
         $data=array(
             'List'=>$list,
