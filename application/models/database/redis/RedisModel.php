@@ -185,7 +185,7 @@ class RedisModel extends DatabaseModel
         $result = $list;
         if(!empty($list) && !empty($select)){
             $result=array();
-            $list=new ListIterator($list);
+            $list=makeArrayIterator($list);
             foreach($list as $data){
                 $array=array();
                 foreach($select as $field){
@@ -277,7 +277,7 @@ class RedisModel extends DatabaseModel
     public function getMany($where=array(), $select=array(), $orderBy=array(), $limit=0, $offset=0,$distinct=false)
     {
         $keys = $this->getAllKeys();
-        $keys=new ListIterator($keys); // 使用迭代器
+        $keys=makeArrayIterator($keys); // 使用迭代器
 
         $list=array();
         foreach($keys as $key){
@@ -344,9 +344,7 @@ class RedisModel extends DatabaseModel
         }
         $list=array();
         foreach($keys as $key){
-            if(!empty($this->table)){
-                $key=$this->table.':'.$key;
-            }
+            $key = $this->getRedisKey($key);
             $data=$this->dbModel->hGetAll($key);
             ksort($data);
             $list[]=$data;
@@ -369,10 +367,7 @@ class RedisModel extends DatabaseModel
      */
     public function getOneByKey($key, $select=array())
     {
-        if(!empty($this->table)){
-            $key=$this->table.':'.$key;
-        }
-
+        $key = $this->getRedisKey($key);
         if(empty($select)){
             $result=$this->dbModel->hGetAll($key);
         }else{
@@ -389,9 +384,7 @@ class RedisModel extends DatabaseModel
      */
     public function setOneByKey($key, array $data)
     {
-        if(!empty($this->table)){
-            $key=$this->table.':'.$key;
-        }
+        $key = $this->getRedisKey($key);
         $this->dbModel->hMSet($key,$data);
 
         return true;
@@ -404,10 +397,7 @@ class RedisModel extends DatabaseModel
      */
     public function incListByKey($key, array $list)
     {
-        if(!empty($this->table)){
-            $key=$this->table.':'.$key;
-        }
-
+        $key = $this->getRedisKey($key);
         $temp=array();
         $result=array();
         foreach($list as $field=>$data){
@@ -444,9 +434,7 @@ class RedisModel extends DatabaseModel
      */
     public function incFieldByKey($key, $field, $num=1, $symbol='+', $min=0, $max=INF)
     {
-        if(!empty($this->table)){
-            $key=$this->table.':'.$key;
-        }
+        $key = $this->getRedisKey($key);
         $num=$symbol.abs($num);
         $result=$this->dbModel->hIncrByFloat($key,$field,$num);
         if($result < $min || $result > $max){
@@ -455,6 +443,23 @@ class RedisModel extends DatabaseModel
         if(false === $result){
             $this->dbModel->hIncrByFloat($key,$field,-$num);
         }
+
+        return $result;
+    }
+
+    /** 字段增量
+     * @param array $where
+     * @param string $field
+     * @param number $num
+     * @param number $min
+     * @param number $max
+     * @return bool|float
+     */
+    public function incFieldByWhere($where, $field, $num, $symbol='+', $min=0, $max=INF)
+    {
+        $row = $this->getOne($where);
+        $key = $this->getKey($row);
+        $result = $this->incFieldByKey($key,$field,$num,$symbol,$min,$max);
 
         return $result;
     }
@@ -468,16 +473,16 @@ class RedisModel extends DatabaseModel
         if(empty($keys)){
             return false;
         }
-        if(!empty($this->table)){
-            foreach($keys as &$key){
-                $key=$this->table.':'.$key;
-            }
+        $redisKeys = array();
+        $keys = makeArrayIterator($keys);
+        foreach($keys as $key){
+            $redisKeys[] = $this->getRedisKey($key);
         }
-        $result=$this->dbModel->del($keys);
+        $result=$this->dbModel->del($redisKeys);
         if(false == $result){
             return false;
         }
-        $result=count($keys);
+        $result=count($redisKeys);
 
         return $result;
     }
@@ -496,6 +501,27 @@ class RedisModel extends DatabaseModel
             $key=implode(':',$temp);
         }else{
             $key=$data[$this->primaryKey];
+        }
+
+        return $key;
+    }
+
+    /** 获取redis key
+     * @param string $key
+     * @param array $data
+     * @return mixed|string
+     */
+    public function getRedisKey($key='', $data=array())
+    {
+        if(0 == strlen($key) && !empty($data)){
+            $key = $this->getKey($data);
+        }
+        if(!empty($this->table)){
+            if(!empty($this->primaryKey)){
+                $key=$this->table.':'.$key;
+            }else{
+                $key=$this->table;
+            }
         }
 
         return $key;
@@ -541,10 +567,7 @@ class RedisModel extends DatabaseModel
         $data['Id']=$id;
 
         // 获取主键值
-        $key=$this->getKey($data);
-        if(!empty($this->table)){
-            $key=$this->table.':'.$key;
-        }
+        $key = $this->getRedisKey('',$data);
         $this->dbModel->hMSet($key,$data);
 
         return (int)$id;
@@ -558,7 +581,7 @@ class RedisModel extends DatabaseModel
     public function batchInsertUpdate(array $list,array $fields=array())
     {
         $result=0;
-        $list=new ListIterator($list);
+        $list=makeArrayIterator($list);
         foreach($list as $data){
             $row=array();
             if(empty($fields)){
@@ -592,13 +615,9 @@ class RedisModel extends DatabaseModel
         }
 
         $this->dbModel->multi();
-        $list=new ListIterator($list);
+        $list=makeArrayIterator($list);
         foreach($list as $preData){
-            $key=$this->getKey($preData);
-            if(!empty($this->table)){
-                $key=$this->table.':'.$key;
-            }
-
+            $key = $this->getRedisKey('',$preData);
             $this->dbModel->hMset($key,$data);
         }
         $result=$this->dbModel->exec();
@@ -615,7 +634,7 @@ class RedisModel extends DatabaseModel
     public function batchUpdate(array $list, array $whereFields, array $updateFields)
     {
         $result=0;
-        $list=new ListIterator($list);
+        $list=makeArrayIterator($list);
         foreach($list as $data){
             // 条件
             $where=array();
@@ -646,13 +665,9 @@ class RedisModel extends DatabaseModel
         }
 
         $keys=array();
-        $list=new ListIterator($list);
+        $list=makeArrayIterator($list);
         foreach($list as $data){
-            $key=$this->getKey($data);
-            if(!empty($this->table)){
-                $key=$this->table.':'.$key;
-            }
-
+            $key = $this->getRedisKey('',$data);
             $keys[]=$key;
         }
         if(empty($keys)){

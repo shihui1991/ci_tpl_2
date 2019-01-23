@@ -390,6 +390,38 @@ class MysqlModel extends DatabaseModel
         return $result;
     }
 
+    /** 字段增量
+     * @param array $where
+     * @param string $field
+     * @param number $num
+     * @param number $min
+     * @param number $max
+     * @return bool|float
+     */
+    public function incFieldByWhere($where, $field, $num, $symbol='+', $min=0, $max=INF)
+    {
+        $num = abs($num);
+        // 更新 开启事务
+        $this->dbModel->trans_begin();
+        $this->dealWhere($where);
+        $this->dbModel->set("`$field`","`$field` $symbol $num",false);
+        $this->dbModel->update($this->table);
+        // 获取最新值
+        $row=$this->getOne($where,array($field));
+        $result=(float)$row[$field];
+        // 更新后新值超过限制
+        if($row[$field] < $min || $row[$field] > $max){
+            $this->dbModel->trans_rollback();
+            $result=false;
+        }
+        if(false === $result){
+            return false;
+        }
+        $this->dbModel->trans_commit();
+
+        return $result;
+    }
+
     /**  通过主键索引删除数据
      * @param array $keys
      * @return mixed 成功返回条数，失败返回false
