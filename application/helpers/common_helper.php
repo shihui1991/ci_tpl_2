@@ -368,10 +368,11 @@ if(!function_exists('recordLog')){
     /** 记录文件日志
      * @param string $log
      * @param string $fileName
+     * @param string $dir
      */
-    function recordLog($log, $fileName='debug')
+    function recordLog($log, $fileName='', $dir='debug')
     {
-        $path=APPPATH.'logs/'.date('Y_m_d');
+        $path=APPPATH.'logs/'.date('Y_m_d').'/'.$dir;
         if(!file_exists($path)){
             mkdir($path,DIR_WRITE_MODE,true);
         }
@@ -384,11 +385,12 @@ if(!function_exists('debugLog')){
     /** 记录调试信息日志
      * @param string $log
      * @param string $fileName
+     * @param string $dir
      */
-    function debugLog($file,$line,$desc,$info, $fileName='debug')
+    function debugLog($file, $line, $desc, $info, $fileName='', $dir='debug')
     {
         $log="[".date('Y-m-d H:i:s')."][$file][$line][$desc]$info \r\n";
-        recordLog($log,'debug/'.$fileName);
+        recordLog($log,$fileName,$dir);
     }
 }
 

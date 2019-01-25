@@ -209,12 +209,8 @@ class Base extends CI_Controller
 -------------------------------------------------
 
 EEE;
-        $urlArr=explode('/',$reqUrl);
-        $dir='';
-        if(isset($urlArr[1])){
-            $dir = $urlArr[1];
-        }
-        recordLog($record,$dir.'_response');
+
+        recordLog($record,'response',$reqUrl);
         // 响应数据
         $this->outputData=array(
             'data'=>$data,
@@ -255,12 +251,8 @@ EEE;
 -------------------------------------------------
 
 EEE;
-        $urlArr=explode('/',$reqUrl);
-        $dir='';
-        if(isset($urlArr[1])){
-            $dir = $urlArr[1];
-        }
-        recordLog($record,$dir.'_exception');
+
+        recordLog($record,'exception',$reqUrl);
 
         $data=array();
         $code=EXIT_ERROR;
