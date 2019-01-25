@@ -22,7 +22,7 @@
     <li class="layui-icon layui-icon-up layui-fixbar-top" id="body-top" title="顶部" onclick="window.scrollTo(0,0)"></li>
     <li class="layui-icon layui-icon-return" id="body-back" title="返回" onclick="location=document.referrer;" ></li>
     <li class="layui-icon layui-icon-refresh" id="body-reload" title="刷新" onclick="location.reload();"></li>
-    <li class="layui-icon layui-icon-down layui-fixbar-buttom" id="body-buttom" title="底部" onclick="window.scrollTo(0,document.documentElement.clientHeight)"></li>
+    <li class="layui-icon layui-icon-down layui-fixbar-buttom" id="body-buttom" title="底部" onclick="window.scrollTo(0,document.documentElement.scrollHeight)"></li>
 </ul>
 
 <script>
