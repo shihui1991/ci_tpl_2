@@ -417,9 +417,7 @@ if(!function_exists('formatArray')){
                     $val=(double)$val;
                 }
             }
-            else{
-                $val=(string)$val;
-            }
+
             $result[$key]=$val;
         }
         return $result;
