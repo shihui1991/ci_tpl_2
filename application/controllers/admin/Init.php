@@ -29,11 +29,6 @@ class Init extends Base
      */
     public function _response(array $data=array(),$code=EXIT_SUCCESS,$msg='请求成功',$url='', $tpls=array())
     {
-        // 登录验证失败强制跳转
-        if(isset($_SESSION['redirect'])){
-            $url=$_SESSION['redirect'];
-            unset($_SESSION['redirect']);
-        }
         // 响应数据
         parent::_response($data,$code,$msg,$url,$tpls);
         $resp=json_encode($this->outputData);

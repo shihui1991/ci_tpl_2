@@ -179,18 +179,18 @@ class Base extends CI_Controller
         // 结束计时
         $this->benchmark->mark('app_end');
         // 执行时间
-        $execTime=$this->benchmark->elapsed_time('app_start', 'app_end');
+        $execTime = $this->benchmark->elapsed_time('app_start', 'app_end');
 
-        $datetime=date('Y-m-d H:i:s');
+        $datetime = date('Y-m-d H:i:s');
         $reqUrl = $this->requestUrl;
         $ip = $this->clientIP;
-        $get=json_encode($this->input->get());
-        $post=json_encode($this->input->post());
-        $stream=urldecode($this->input->raw_input_stream);
+        $get = json_encode($this->input->get());
+        $post = json_encode($this->input->post());
+        $stream = urldecode($this->input->raw_input_stream);
         if('/admin/log/info' == $reqUrl){
-            $output='';
+            $output = '';
         }else{
-            $output=json_encode($data);
+            $output = json_encode($data);
         }
         // 记录内容
         $record=<<<"EEE"
@@ -213,10 +213,10 @@ EEE;
         recordLog($record,'response',$reqUrl);
         // 响应数据
         $this->outputData=array(
-            'data'=>$data,
-            'code'=>$code,
-            'msg'=>(EXIT_ERROR == $code ? '' : $msg),
-            'url'=>$url,
+            'data' => $data,
+            'code' => $code,
+            'msg'  => (EXIT_ERROR == $code ? '' : $msg),
+            'url'  => $url,
         );
     }
 
@@ -228,12 +228,12 @@ EEE;
      */
     public function _recordException($type, $msg, $file, $line)
     {
-        $datetime=date('Y-m-d H:i:s');
-        $reqUrl=$this->requestUrl;
+        $datetime = date('Y-m-d H:i:s');
+        $reqUrl = $this->requestUrl;
         $ip = $this->clientIP;
-        $get=json_encode($this->input->get());
-        $post=json_encode($this->input->post());
-        $stream=urldecode($this->input->raw_input_stream);
+        $get = json_encode($this->input->get());
+        $post = json_encode($this->input->post());
+        $stream = urldecode($this->input->raw_input_stream);
         // 记录内容
         $record=<<<"EEE"
         
@@ -254,20 +254,20 @@ EEE;
 
         recordLog($record,'exception',$reqUrl);
 
-        $data=array();
-        $code=EXIT_ERROR;
-        $url='';
-        $tpls=array();
-        // 缓存重定向 URL
-        if(isset($_SESSION['redirect'])){
-            $url=$_SESSION['redirect'];
-        }
-
-        $args=func_get_args();
+        $data = array();
+        $code = EXIT_ERROR;
+        $args = func_get_args();
         if(isset($args[5])){
-            $code=$args[5];
-            $msg=$args[4];
+            $code = $args[5];
+            $msg = $args[4];
         }
+        # 缓存重定向 URL
+        $url = '';
+        if(isset($_SESSION['redirect'])){
+            $url = $_SESSION['redirect'];
+            unset($_SESSION['redirect']);
+        }
+        $tpls = array();
 
         $this->_response($data,$code,$msg,$url,$tpls);
         die();
