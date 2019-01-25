@@ -14,14 +14,15 @@
         line-height: 35px;
         font-size: 18px;
     }
-    .layui-fixbar-top{
-        font-size: 36px !important;
+    .layui-fixbar-top,.layui-fixbar-buttom{
+        font-size: 22px !important;
     }
 </style>
 <ul class="layui-fixbar">
+    <li class="layui-icon layui-icon-up layui-fixbar-top" id="body-top" title="顶部" onclick="window.scrollTo(0,0)"></li>
     <li class="layui-icon layui-icon-return" id="body-back" title="返回" onclick="location=document.referrer;" ></li>
     <li class="layui-icon layui-icon-refresh" id="body-reload" title="刷新" onclick="location.reload();"></li>
-    <li class="layui-icon layui-icon-top layui-fixbar-top" id="body-top" title="返回顶部" onclick="window.scrollTo(0,0)"></li>
+    <li class="layui-icon layui-icon-down layui-fixbar-buttom" id="body-buttom" title="底部" onclick="window.scrollTo(0,document.documentElement.clientHeight)"></li>
 </ul>
 
 <script>
