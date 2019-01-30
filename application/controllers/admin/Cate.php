@@ -158,12 +158,10 @@ class Cate extends Auth
         }
         // 逐行读取
         $content='';
-        $handle = fopen($file, "r") or exit("不能打开文件");
-        while(!feof($handle))
-        {
-            $content .= fgets($handle);
+        $handle = makeTextYield($file);
+        foreach($handle as $text){
+            $content .= $text;
         }
-        fclose($handle);
 
         $data=array(
             'Updated'=>filemtime($file),
