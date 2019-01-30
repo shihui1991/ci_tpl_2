@@ -249,7 +249,7 @@ if(!function_exists('createGuid')){
      * @return string
      */
     function createGuid(){
-        $charid = strtoupper(md5(uniqid(mt_rand(), true)));
+        $charid = makeUniqueStr(true);
         $hyphen = chr(45);// "-"
         $guid = substr($charid, 6, 2).substr($charid, 4, 2).
             substr($charid, 2, 2).substr($charid, 0, 2).$hyphen
@@ -257,6 +257,19 @@ if(!function_exists('createGuid')){
             .substr($charid,14, 2).substr($charid,12, 2).$hyphen
             .substr($charid,16, 4).$hyphen.substr($charid,20,12);
         return $guid;
+    }
+}
+
+if(!function_exists('makeUniqueStr')){
+    /** 生成时间随机字符串
+     * @return string
+     */
+    function makeUniqueStr($upper=false){
+        $guidStr = md5(uniqid(mt_rand(), true));
+        if($upper){
+            $guidStr = strtoupper($guidStr);
+        }
+        return $guidStr;
     }
 }
 
