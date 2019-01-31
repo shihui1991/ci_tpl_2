@@ -306,12 +306,12 @@ if(!function_exists('bigRMB')){
 if(!function_exists('curlHttp')){
     /** curl http/https 请求
      * @param string $url
-     * @param array $data
+     * @param string|array $data
      * @param bool $isPost
      * @param int $execTimes
      * @return mixed|string
      */
-    function curlHttp($url, $data = array(), $isPost = true, $execTimes = 1)
+    function curlHttp($url, $data = '', $isPost = true, $execTimes = 1)
     {
         # 检测是不是 https
         $ssl = false;
@@ -322,14 +322,16 @@ if(!function_exists('curlHttp')){
         # 检测 url 中是否已存在参数
         $mark = strpos($url,'?');
         # 将参数转为请求字符串
-        $post = http_build_query($data);
+        if(is_array($data)){
+            $data = http_build_query($data);
+        }
         # 处理 GET 请求的参数
         if(false == $isPost){
             $conn = '&';
             if(false === $mark){
                 $conn = '?';
             }
-            $url .= $conn.$post;
+            $url .= $conn . $data;
         }
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
@@ -343,7 +345,7 @@ if(!function_exists('curlHttp')){
         }
         if($isPost) {
             curl_setopt($ch, CURLOPT_POST, 1);
-            curl_setopt($ch, CURLOPT_POSTFIELDS, $post);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
         }
 
         curl_setopt($ch, CURLOPT_TIMEOUT, 10);
