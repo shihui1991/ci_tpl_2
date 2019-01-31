@@ -454,6 +454,29 @@ abstract class LogicModel
         return $result;
     }
 
+    /** 验证数据
+     * @param $data
+     * @param $valiMethod
+     * @param $checkMethod
+     * @return bool
+     * @throws \Exception
+     */
+    public function valiData($data, $valiMethod, $checkMethod='')
+    {
+        # 验证模型 验证数据格式
+        $vali=$this->validatorModel->validate($data,$this->dataModel->getColumns(),$valiMethod);
+        if(true !== $vali){
+            $err=array_shift($vali);
+            throw new \Exception($err,EXIT_USER_INPUT);
+        }
+        # 其他检验方法
+        if(!empty($checkMethod)){
+            $this->$checkMethod($data);
+        }
+
+        return true;
+    }
+
     /**  表单添加
      * @param array $input
      * @return mixed
@@ -464,13 +487,7 @@ abstract class LogicModel
         // 获取真实字段数据
         $data=$this->dataModel->getRealRow($input);
         // 验证模型 验证数据格式
-        $vali=$this->validatorModel->validate($data,$this->dataModel->getColumns(),'add');
-        if(true !== $vali){
-            $err=array_shift($vali);
-            throw new \Exception($err,EXIT_USER_INPUT);
-        }
-        // 验证字段唯一
-        $this->checkUnique($data);
+        $this->valiData($data,'add','checkUnique');
         // 批量赋值
         $row=$this->dataModel->fill($data,'add');
         // 新增
@@ -497,13 +514,8 @@ abstract class LogicModel
         // 获取真实字段数据
         $data=$this->dataModel->getRealRow($input);
         // 验证模型 验证数据格式
-        $vali=$this->validatorModel->validate($data,$this->dataModel->getColumns(),'edit');
-        if(true !== $vali){
-            $err=array_shift($vali);
-            throw new \Exception($err,EXIT_USER_INPUT);
-        }
-        // 验证字段唯一
-        $this->checkUnique($data);
+        $this->valiData($data,'edit','checkUnique');
+
         $key = $this->databaseModel->getKey($data);
         $preRow=$this->databaseModel->getOneByKey($key);
         if(empty($preRow[$this->databaseModel->primaryKey])){

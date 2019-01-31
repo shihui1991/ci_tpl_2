@@ -17,7 +17,9 @@ trait SetField
      */
     public function setPasswordField($value,$data=array())
     {
-        $value=password_hash($value,PASSWORD_DEFAULT);
+        if(!is_null($value)){
+            $value=password_hash($value,PASSWORD_DEFAULT);
+        }
 
         return $value;
     }
@@ -29,8 +31,8 @@ trait SetField
      */
     public function setTokenField($value,$data=array())
     {
-        if(empty($value)){
-            $value=createGuid();
+        if(is_null($value)){
+            $value=makeUniqueStr();
         }
 
         return $value;
@@ -43,7 +45,7 @@ trait SetField
      */
     public function setGuidField($value,$data=array())
     {
-        if(empty($value)){
+        if(is_null($value)){
             $value=createGuid();
         }
 

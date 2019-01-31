@@ -303,57 +303,60 @@ if(!function_exists('bigRMB')){
     }
 }
 
-if(!function_exists('httpsCurl')){
-    /**  https 请求
+if(!function_exists('curlHttp')){
+    /** curl http/https 请求
      * @param string $url
-     * @param string $data
-     * @return bool|mixed
+     * @param array $data
+     * @param bool $isPost
+     * @param int $execTimes
+     * @return mixed|string
      */
-    function httpsCurl($url, $data)
-    {
+    function curlHttp($url, $data = array(), $isPost = true, $execTimes = 1){
+        # 检测是不是 https
+        $ssl = false;
+        $http = parse_url($url,PHP_URL_SCHEME);
+        if('https' == $http){
+            $ssl = true;
+        }
+        # 检测 url 中是否已存在参数
+        $mark = strpos($url,'?');
+        # 将参数转为请求字符串
+        $post = http_build_query($data);
+        # 处理 GET 请求的参数
+        if(false == $isPost){
+            $conn = '&';
+            if(false === $mark){
+                $conn = '?';
+            }
+            $url .= $conn.$post;
+        }
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_HEADER, 0);
-        curl_setopt($ch, CURLOPT_POST, 1);
-        // 设置超时时间
-        curl_setopt($ch, CURLOPT_SSLVERSION, 1);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, FALSE);
+        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
+        curl_setopt($ch, CURLOPT_AUTOREFERER, 1);
+        if($ssl){
+            curl_setopt($ch, CURLOPT_SSLVERSION, 1);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, FALSE);
+        }
+        if($isPost) {
+            curl_setopt($ch, CURLOPT_POST, 1);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $post);
+        }
+
         curl_setopt($ch, CURLOPT_TIMEOUT, 10);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
-
-        $result = curl_exec($ch);
-        if (curl_error($ch)) {
-            $result=false;
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        # 特殊接口可能会多次请求才能得到正确返回结果，例：微信APP支付
+        for($i = 0 ; $i < $execTimes ; $i++){
+            $res = curl_exec($ch);
+        }
+        if (curl_errno($ch)) {
+            $res = curl_error($ch);
         }
         curl_close($ch);
 
-        return $result;
-    }
-}
-
-if(!function_exists('httpCurl')){
-    /**  http 请求
-     * @param string $url
-     * @param string $data
-     * @return bool|mixed
-     */
-    function httpCurl($url, $data){
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL,$url);
-        curl_setopt($ch, CURLOPT_HEADER, 0);
-        curl_setopt($ch , CURLOPT_POST , 1);
-        //设置超时时间
-        curl_setopt($ch , CURLOPT_TIMEOUT , 3);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch , CURLOPT_POSTFIELDS , $data);
-        $result=curl_exec($ch);
-        if(curl_error($ch)){
-            $result=false;
-        }
-        curl_close($ch);
-        return $result;
+        return $res;
     }
 }
 
@@ -574,11 +577,11 @@ if(!function_exists('makeFileSize')){
 }
 
 
-if(!function_exists('makeBillNo')){
-    /** 生成 20 位时间订单号
+if(!function_exists('makeDateBillNo')){
+    /** 生成 20 位日期订单号
      * @return string
      */
-    function makeBillNo()
+    function makeDateBillNo()
     {
         $billNo = date('ymdHis').substr(implode(NULL, array_map('ord', str_split(substr(uniqid(), 7, 13), 1))), 0, 8);
 
