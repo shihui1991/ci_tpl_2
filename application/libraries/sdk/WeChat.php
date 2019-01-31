@@ -94,7 +94,7 @@ class WeChat
         }
         $userinfo['access_token'] = $accessToken;
 
-        return $res;
+        return $userinfo;
     }
 
     /** 下单，并返回支付参数
