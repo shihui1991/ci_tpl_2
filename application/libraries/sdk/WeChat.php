@@ -43,7 +43,7 @@ class WeChat
      * @return mixed
      * @throws \Exception
      */
-    public function checkAuth($code,$accessToken='')
+    public function checkAuth($code, $accessToken = '')
     {
         if(empty($code)){
             throw new \Exception('请先授权微信登录',EXIT_USER_INPUT);
@@ -71,23 +71,28 @@ class WeChat
     }
 
     /** 获取微信玩家信息
-     * @param string $code
+     * @param string $openid
      * @param string $accessToken
+     * @param string $code
      * @return array
      * @throws \Exception
      */
-    public function getUserinfo($code,$accessToken='')
+    public function getUserinfo($openid = '', $accessToken = '', $code = '')
     {
         # 获取微信授权登录数据
-        $authData = $this->checkAuth($code,$accessToken);
+        if(empty($openid)){
+            $authData = $this->checkAuth($code,$accessToken);
+            $openid = $authData['openid'];
+            $accessToken = $authData['access_token'];
+        }
         # 获取玩家信息
-        $url = $this->userinfoUrl."?access_token=".$authData['access_token']."&openid=".$authData['openid']."&lang=zh_CN";
+        $url = $this->userinfoUrl."?access_token=".$accessToken."&openid=".$openid."&lang=zh_CN";
         $res = file_get_contents($url);
         $userinfo = json_decode($res,TRUE);
         if(isset($userinfo['errcode']) && 0 != $userinfo['errcode']){
             throw new \Exception('获取玩家数据失败',EXIT_USER_INPUT);
         }
-        $res = array_merge($authData,$userinfo);
+        $userinfo['access_token'] = $accessToken;
 
         return $res;
     }
