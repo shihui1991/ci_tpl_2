@@ -684,14 +684,25 @@ if(!function_exists('arrayToSimpleXml')){
     /** 将数组转换为Xml
      * @param $array
      * @param string $root
+     * @param null|object $xml
      * @return mixed
      */
-    function arrayToSimpleXml($array, $root='<root/>')
+    function arrayToSimpleXml($array, $root='<root/>', $xml = null)
     {
         # 创建 xml 文档对象
-        $xml = new SimpleXMLElement($root);
-        # 将数组添加到 xml $root 目录下
-        array_walk_recursive($array, array ($xml, 'addChild'));
+        if(null === $xml){
+            $xml = new SimpleXMLElement($root);
+        }
+        # 迭代数组添加到xml 目录下
+        $array = makeArrayIterator($array);
+        foreach($array as $key=>$value){
+            if(is_array($value)){
+                arrayToSimpleXml($value,$key,$xml->addChild($key));
+            }else{
+                $xml->addChild($key,$value);
+            }
+        }
+
         # 返回 xml
         return $xml->asXML();
     }
