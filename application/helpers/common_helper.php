@@ -311,7 +311,8 @@ if(!function_exists('curlHttp')){
      * @param int $execTimes
      * @return mixed|string
      */
-    function curlHttp($url, $data = array(), $isPost = true, $execTimes = 1){
+    function curlHttp($url, $data = array(), $isPost = true, $execTimes = 1)
+    {
         # 检测是不是 https
         $ssl = false;
         $http = parse_url($url,PHP_URL_SCHEME);
@@ -675,5 +676,46 @@ if(!function_exists('getPositionFromTaoBaoIssueByIp')){
         }else{
             return false;
         }
+    }
+}
+
+if(!function_exists('arrayToSimpleXml')){
+
+    /** 将数组转换为Xml
+     * @param $array
+     * @param string $root
+     * @return mixed
+     */
+    function arrayToSimpleXml($array, $root='<root/>')
+    {
+        # 创建 xml 文档对象
+        $xml = new SimpleXMLElement($root);
+        # 将数组添加到 xml $root 目录下
+        array_walk_recursive($array, array ($xml, 'addChild'));
+        # 返回 xml
+        return $xml->asXML();
+    }
+}
+
+if(!function_exists('simpleXmlToArray')){
+
+    /** 将Xml 转换为数组
+     * @param $xml
+     * @param bool $toArr
+     * @return mixed|SimpleXMLElement
+     */
+    function simpleXmlToArray($xml, $toArr = true)
+    {
+        # 禁止引用外部xml实体
+        $disableLibxmlEntityLoader = libxml_disable_entity_loader(true);
+        # 把 XML 字符串载入对象中
+        $obj = simplexml_load_string($xml, 'SimpleXMLElement', LIBXML_NOCDATA);
+        libxml_disable_entity_loader($disableLibxmlEntityLoader);
+        # 转为数组
+        if($toArr){
+            return json_decode(json_encode($obj),true);
+        }
+
+        return $obj;
     }
 }
