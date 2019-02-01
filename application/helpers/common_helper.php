@@ -95,15 +95,15 @@ if(!function_exists('insertOrUpdateSql')){
             return $sql;
         }
         $sql .= ' on duplicate key update ';
+        $updateArr = array();
         # 覆盖更新的字段
         if(!empty($updateFields)){
             if(!is_array($updateFields)){
                 $updateFields = array($updateFields);
             }
             foreach($updateFields as $field){
-                $sql .= " `$field` = values(`$field`), ";
+                $updateArr[] = " `$field` = values(`$field`) ";
             }
-            $sql = rtrim($sql,', ');
         }
         # 增量更新字段
         if(!empty($incrFields)){
@@ -111,10 +111,10 @@ if(!function_exists('insertOrUpdateSql')){
                 $incrFields = array($incrFields);
             }
             foreach($incrFields as $field){
-                $sql .= " `{$field}` = `{$field}` + values(`{$field}`), ";
+                $updateArr[] = " `{$field}` = `{$field}` + values(`{$field}`) ";
             }
-            $sql = rtrim($sql,', ');
         }
+        $sql .= implode(',',$updateArr);
 
         return $sql;
     }
@@ -174,32 +174,28 @@ if(!function_exists('batchInsertOrUpdateSql')){
         if(!empty($updates) || !empty($incrs)){
             $updateSql = ' on duplicate key update ';
         }
+        $sql_updates=array();
         // 覆盖更新的字段
         if(!empty($updates)){
             if(is_string($updates)){
-                $sql_updates = " `$updates` = values(`$updates`) ";
+                $sql_updates[] = " `$updates` = values(`$updates`) ";
             }else{
-                $sql_updates=array();
                 foreach ($updates as $update){
                     $sql_updates[] = " `$updates` = values(`$updates`) ";
                 }
-                $sql_updates=implode(',',$sql_updates);
             }
-            $updateSql .= $sql_updates;
         }
         // 增量更新字段
         if(!empty($incrs)){
             if(is_string($incrs)){
-                $sql_incrs= " `{$incrs}` = `{$incrs}` + values(`{$incrs}`) ";
+                $sql_updates[]= " `{$incrs}` = `{$incrs}` + values(`{$incrs}`) ";
             }else{
-                $sql_incrs=array();
                 foreach ($incrs as $incr){
-                    $sql_incrs[]= " `{$incr}` = `{$incr}` + values(`{$incr}`) ";
+                    $sql_updates[]= " `{$incr}` = `{$incr}` + values(`{$incr}`) ";
                 }
-                $sql_incrs = implode(',',$sql_incrs);
             }
-            $updateSql .= $sql_incrs;
         }
+        $updateSql .= implode(',',$sql_updates);
 
         // 生成sql
         $sqls=array();
