@@ -21,6 +21,7 @@ class WeChat
     public $userinfoUrl = 'https://api.weixin.qq.com/sns/userinfo';
     public $orderUrl = 'https://api.mch.weixin.qq.com/pay/unifiedorder';
     public $orderQueryUrl = 'https://api.mch.weixin.qq.com/pay/orderquery';
+    public $codeToOpenidUrl = 'https://api.weixin.qq.com/sns/jscode2session';
     # 实例
     static protected $objs;
     
@@ -43,7 +44,7 @@ class WeChat
      * @return mixed
      * @throws \Exception
      */
-    public function checkAuth($code, $accessToken = '')
+    public function checkAuth($code, $accessToken='')
     {
         if(empty($code)){
             throw new \Exception('请先授权微信登录',EXIT_USER_INPUT);
@@ -68,6 +69,27 @@ class WeChat
         }
 
         return $authData;
+    }
+
+    /** 微信小游戏通过code获取openid
+     * @param $code
+     * @return mixed
+     * @throws \Exception
+     */
+    public function handleCodeToOpenid($code)
+    {
+        if(empty($code)){
+            throw new \Exception('请先授权微信登录',EXIT_USER_INPUT);
+        }
+        $url = $this->codeToOpenidUrl.'?appid='.$this->appid.'&secret='.$this->appkey.'&js_code='.$code.'&grant_type=authorization_code';
+        # 获取微信 openid,session_key
+        $request = file_get_contents($url);
+        $authData = json_decode($request,TRUE);
+        if(isset($authData['errcode']) && 0 != $authData['errcode']){
+            throw new \Exception('授权失败',EXIT_USER_INPUT);
+        }
+
+        return $authData['openid'];
     }
 
     /** 获取微信玩家信息
