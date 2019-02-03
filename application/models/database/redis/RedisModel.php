@@ -222,10 +222,12 @@ class RedisModel extends DatabaseModel
     public function getAllKeys()
     {
         $pattern = $this->getKeyPattern();
-        $keys=$this->dbModel->keys($pattern);
-        if(empty($keys)){
-            return array();
-        }
+        $keys = array();
+        $index = null;
+        do {
+            $temp = $this->dbModel->scan($index,$pattern,1000);
+            $keys = array_merge($keys,$temp);
+        } while ($index > 0);
         sort($keys);
 
         return $keys;
