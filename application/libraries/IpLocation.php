@@ -1,19 +1,55 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: Administrator
- * Date: 2019/2/3
- * Time: 17:50
+ *  IP获取位置信息
+ * @user 罗仕辉
+ * @create 2019-02-11
  */
 
 namespace libraries;
 
-
 class IpLocation {
-    private $fp;
+
+    private $fp; # 文件句柄
     private $firstip;
     private $lastip;
     private $totalip;
+    private $provinces = array(
+        "黑龙江省",
+        "辽宁省",
+        "吉林省",
+        "河北省",
+        "河南省",
+        "湖北省",
+        "湖南省",
+        "山东省",
+        "山西省",
+        "陕西省",
+        "安徽省",
+        "浙江省",
+        "江苏省",
+        "福建省",
+        "广东省",
+        "海南省",
+        "四川省",
+        "云南省",
+        "贵州省",
+        "青海省",
+        "甘肃省",
+        "江西省",
+        "台湾省",
+        "内蒙古",
+        "宁夏",
+        "新疆",
+        "西藏",
+        "广西",
+        "北京市",
+        "上海市",
+        "天津市",
+        "重庆市",
+        "香港",
+        "澳门",
+    );
+
     public function __construct() {
 
         $file = __DIR__.'/qqwry.dat';
@@ -34,26 +70,46 @@ class IpLocation {
         return new static();
     }
 
+    /** 将读取的little-endian编码的4个字节转化为长整型数
+     * @return mixed
+     */
     private function getlong() {
-        //将读取的little-endian编码的4个字节转化为长整型数
         $result = unpack('Vlong', fread($this->fp, 4));
         return $result['long'];
     }
+
+    /** 将读取的little-endian编码的3个字节转化为长整型数
+     * @return mixed
+     */
     private function getlong3() {
         $result = unpack('Vlong', fread($this->fp, 3) . chr(0));
         return $result['long'];
     }
+
+    /** 将ip打包为二进制
+     * @param $ip
+     * @return string
+     */
     private function packip($ip) {
         return pack('N', intval(ip2long($ip)));
     }
+
+    /**
+     * @param string $data
+     * @return string
+     */
     private function getstring($data = "") {
-        $char = fread($this->fp, 1);
-        while (ord($char) > 0) {
-            $data .= $char;
+        do{
             $char = fread($this->fp, 1);
-        }
+            $data .= $char;
+        }while(ord($char) > 0);
+
         return $data;
     }
+
+    /**
+     * @return string
+     */
     private function getarea() {
         $byte = fread($this->fp, 1);
         switch (ord($byte)) {
@@ -71,12 +127,18 @@ class IpLocation {
         }
         return $area;
     }
-    private $provinces = array("黑龙江省", "辽宁省", "吉林省", "河北省", "河南省", "湖北省", "湖南省", "山东省", "山西省", "陕西省","安徽省", "浙江省", "江苏省", "福建省", "广东省", "海南省", "四川省", "云南省", "贵州省", "青海省", "甘肃省","江西省", "台湾省", "内蒙古", "宁夏", "新疆", "西藏", "广西", "北京市", "上海市", "天津市", "重庆市", "香港", "澳门");
+
+    /** 通过IP获取位置信息
+     * @param string $ip
+     * @return null
+     */
     public function getlocation($ip = '') {
-        if (!$this->fp)
+        if (!$this->fp){
             return null;
-        if (empty($ip))
+        }
+        if (empty($ip)){
             $ip = get_client_ip();
+        }
         $location['ip'] = gethostbyname($ip);
         $ip = $this->packip($location['ip']);
         $l = 0;
@@ -153,12 +215,15 @@ class IpLocation {
             $location['province'] = $location['country'];
         if (empty($location['city']))
             $location['city'] = $location['country'];
-        //sunan moify
         if (in_array($location['province'], $this->provinces)) {
             $location['country'] = "中国";
         }
         return $location;
     }
+
+    /**
+     * 关闭文件
+     */
     public function __destruct() {
         if ($this->fp) {
             fclose($this->fp);
@@ -168,6 +233,9 @@ class IpLocation {
 }
 
 
+/** 获取IP
+ * @return array|false|string
+ */
 function get_client_ip() {
     if (getenv('HTTP_CLIENT_IP')) {
         $onlineip = getenv('HTTP_CLIENT_IP');
