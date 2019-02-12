@@ -459,9 +459,12 @@ class RedisModel extends DatabaseModel
      */
     public function incFieldByWhere($where, $field, $num, $symbol='+', $min=0, $max=INF)
     {
-        $row = $this->getOne($where);
-        $key = $this->getKey($row);
-        $result = $this->incFieldByKey($key,$field,$num,$symbol,$min,$max);
+        $list = $this->getMany($where);
+        $list = makeArrayIterator($list);
+        foreach($list as $row){
+            $key = $this->getKey($row);
+            $result = $this->incFieldByKey($key,$field,$num,$symbol,$min,$max);
+        }
 
         return $result;
     }
