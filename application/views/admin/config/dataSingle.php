@@ -41,25 +41,27 @@
                                                 <th>字段</th>
                                                 <th>属性</th>
                                                 <th>值</th>
+                                                <th>说明</th>
                                             </tr>
                                             </thead>
                                             <tbody>
 
                                             <?php foreach($data['Config']['Columns'] as $field=>$column):?>
                                                 <tr>
-                                                    <td><?php echo $column['name'];?></td>
+                                                    <td><?php echo $field;?></td>
                                                     <td><?php echo $column['attr'];?></td>
                                                     <td>
                                                         <p contenteditable="true" class="content-text"><?php echo isset($data['List'][0][$field]) ? htmlspecialchars($data['List'][0][$field]) : '';?></p>
                                                         <input type="hidden" class="content-input" name="<?php echo $field; ?>" value="<?php echo isset($data['List'][0][$field]) ? htmlspecialchars($data['List'][0][$field]) : '';?>">
                                                     </td>
+                                                    <td><?php echo $column['name'];?></td>
                                                 </tr>
                                             <?php endforeach;?>
 
                                             </tbody>
                                             <tfoot>
                                             <tr>
-                                                <th colspan="3">
+                                                <th colspan="4">
                                                     <?php $dbModel = \models\logic\TplLogic::instance($data['Config']['Table'])->databaseModel; ?>
                                                     <?php $key = $dbModel->getKey($data['List'][0]); ?>
                                                     <div class="layui-btn-group">
