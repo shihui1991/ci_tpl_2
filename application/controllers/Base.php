@@ -174,7 +174,7 @@ class Base extends CI_Controller
      * @param string $url 重定向地址
      * @param array $tpls 响应模板
      */
-    protected function _response(array $data=array(),$code=EXIT_SUCCESS,$msg='请求成功',$url='', $tpls=array())
+    protected function _response($data=array(),$code=EXIT_SUCCESS,$msg='请求成功',$url='', $tpls=array())
     {
         // 结束计时
         $this->benchmark->mark('app_end');

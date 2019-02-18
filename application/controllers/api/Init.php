@@ -23,7 +23,7 @@ class Init extends Base
      * @param string $url 重定向地址
      * @param array $tpls 响应模板
      */
-    public function _response(array $data=array(),$code=EXIT_SUCCESS,$msg='请求成功',$url='', $tpls=array())
+    public function _response($data=array(),$code=EXIT_SUCCESS,$msg='请求成功',$url='', $tpls=array())
     {
         parent::_response($data,$code,$msg,$url,$tpls);
 
