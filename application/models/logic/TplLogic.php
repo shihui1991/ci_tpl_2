@@ -1,7 +1,7 @@
 <?php
 /**
  *  Tpl 逻辑模型
- * @user 罗仕辉
+ * @author 罗仕辉
  * @create 2018-09-18
  */
 

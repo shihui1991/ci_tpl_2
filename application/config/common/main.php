@@ -1,7 +1,7 @@
 <?php
 /**
  *  固定配置
- * @user 罗仕辉
+ * @author 罗仕辉
  */
 if(file_exists(APPPATH.'config/common/conf.php')){
     require_once APPPATH.'config/common/conf.php';

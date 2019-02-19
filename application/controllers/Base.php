@@ -1,7 +1,7 @@
 <?php
 /**
  *  基础
- * @user 罗仕辉
+ * @author 罗仕辉
  * @create 2018-08-19
  */
 defined('BASEPATH') OR exit('No direct script access allowed');

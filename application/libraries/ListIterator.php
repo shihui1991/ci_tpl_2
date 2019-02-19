@@ -2,7 +2,7 @@
 namespace libraries;
 /**
  *  列表迭代器
- * @user 罗仕辉
+ * @author 罗仕辉
  * @create 2018-06-20
  * @update 2018-06-20
  */

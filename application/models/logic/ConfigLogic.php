@@ -1,7 +1,7 @@
 <?php
 /**
  *  Config 逻辑模型
- * @user 罗仕辉
+ * @author 罗仕辉
  * @create 2018-09-15
  */
 
@@ -21,12 +21,12 @@ class ConfigLogic extends LogicModel
         parent::__construct();
 
         // redis 为主，mysql 备份
-//        $this->databaseModel = ConfigRedis::instance();
+        $this->databaseModel = ConfigRedis::instance();
 //        $this->backDB = ConfigMysql::instance();
         // mysql 为主，redis 备份
-        $this->databaseModel = ConfigMysql::instance();
+//        $this->databaseModel = ConfigMysql::instance();
 //        $this->backDB = ConfigRedis::instance();
-        $this->backDBStr = 'models\database\redis\ConfigRedis';
+        $this->backDBStr = 'models\database\mysql\ConfigMysql';
 
         $this->dataModel = ConfigData::instance();
         $this->validatorModel = ConfigValidator::instance();
