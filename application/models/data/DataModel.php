@@ -198,6 +198,7 @@ abstract class DataModel
             }
 
             $result[$field]=$value;
+            $data = array_merge($data,$result);
         }
 
         return $result;

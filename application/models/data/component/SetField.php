@@ -25,6 +25,7 @@ trait SetField
         if(0 == $info['algo'] || 'unknown' == $info['algoName']){
             $value = password_hash($value,PASSWORD_DEFAULT);
         }
+
         return $value;
     }
 
