@@ -17,10 +17,14 @@ trait SetField
      */
     public function setPasswordField($value,$data=array())
     {
-        if(!is_null($value)){
-            $value=password_hash($value,PASSWORD_DEFAULT);
+        if(is_null($value) || 0 == strlen($value)){
+            return $value;
         }
-
+        # 防止重复hash
+        $info = password_get_info($value);
+        if(0 == $info['algo'] || 'unknown' == $info['algoName']){
+            $value = password_hash($value,PASSWORD_DEFAULT);
+        }
         return $value;
     }
 
