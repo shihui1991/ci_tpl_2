@@ -454,11 +454,16 @@ class MysqlModel extends DatabaseModel
 
     /**  插入数据
      * @param array $data
+     * @param bool $replace
      * @return mixed 成功返回 ID，失败返回 false
      */
-    public function insert(array $data)
+    public function insert(array $data,$replace = false)
     {
-        $result=$this->dbModel->insert($this->table,$data);
+        if($replace){
+            $result=$this->dbModel->replace($this->table,$data);
+        }else{
+            $result=$this->dbModel->insert($this->table,$data);
+        }
         if(false == $result){
             return false;
         }
