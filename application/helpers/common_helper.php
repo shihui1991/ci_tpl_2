@@ -181,7 +181,7 @@ if(!function_exists('batchInsertOrUpdateSql')){
                 $sql_updates[] = " `$updates` = values(`$updates`) ";
             }else{
                 foreach ($updates as $update){
-                    $sql_updates[] = " `$updates` = values(`$updates`) ";
+                    $sql_updates[] = " `$update` = values(`$update`) ";
                 }
             }
         }
@@ -271,7 +271,7 @@ if(!function_exists('batchUpdateSql')){
         }else{
             $sql_updates=array();
             foreach ($updates as $update){
-                $sql_updates[] = " `$table`.`$updates` = `$temp_table`.`$updates` ";
+                $sql_updates[] = " `$table`.`$update` = `$temp_table`.`$update` ";
             }
             $sql_updates=implode(',',$sql_updates);
         }
@@ -281,7 +281,7 @@ if(!function_exists('batchUpdateSql')){
         }else{
             $sql_wheres=array();
             foreach ($wheres as $where){
-                $sql_wheres[] = " `$table`.`$wheres` = `$temp_table`.`$wheres` ";
+                $sql_wheres[] = " `$table`.`$where` = `$temp_table`.`$where` ";
             }
             $sql_wheres=implode(' and ',$sql_wheres);
         }

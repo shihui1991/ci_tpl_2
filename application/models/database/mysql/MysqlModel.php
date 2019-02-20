@@ -474,16 +474,16 @@ class MysqlModel extends DatabaseModel
 
     /**  批量插入或更新
      * @param array $list
-     * @param array $fields
+     * @param array $inserts
      * @return int 返回条数
      */
-    public function batchInsertUpdate(array $list,array $fields=array())
+    public function batchInsertUpdate(array $list,array $inserts=array(),$updates = array(),$incrs=array())
     {
         $result=0;
-        if(empty($fields)){
-            $fields=array_keys($list[0]);
+        if(empty($inserts)){
+            $inserts=array_keys($list[0]);
         }
-        $sqls=batchInsertOrUpdateSql($this->table, $list, $fields, $fields);
+        $sqls=batchInsertOrUpdateSql($this->table, $list, $inserts, $updates,$incrs);
         if(false === $sqls){
             return 0;
         }
