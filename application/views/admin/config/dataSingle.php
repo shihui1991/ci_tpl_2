@@ -1,5 +1,9 @@
 <body>
-
+<style>
+    .content-text{
+        min-height:20px;
+    }
+</style>
 <div class="layui-fluid">
     <div class="layui-row">
         <div class="layui-col-xs12">
