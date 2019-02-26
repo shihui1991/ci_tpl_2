@@ -25,7 +25,7 @@ class Auth extends Init
         // 验证登录
         $_SESSION['redirect']='/admin';
         if(empty($_SESSION['Master'])){
-            if(empty($this->inputData)){
+            if(empty($this->inputData['Token']) || empty($this->inputData['Id'])){
                 throw new \Exception('请登录！',EXIT_USER_INPUT);
             }
             MasterLogic::instance()->checkLogin($this->inputData);
