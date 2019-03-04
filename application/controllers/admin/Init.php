@@ -7,12 +7,12 @@
 
 require_once APPPATH.'controllers/Base.php';
 
-use models\logic\MenuLogic;
 
 class Init extends Base
 {
     protected $logicModel;
     protected $menu;
+    protected $master;
 
     public function __construct()
     {
@@ -101,12 +101,49 @@ class Init extends Base
      */
     protected function _getMenu()
     {
-        $menu=MenuLogic::instance()->getRowByUrl($this->requestUrl);
+        $menu = \models\logic\MenuLogic::instance()->getRowByUrl($this->requestUrl);
         if(empty($menu['Id'])){
             return array();
         }
         $this->menu = $menu;
 
         return $this->menu;
+    }
+
+    /** 检查登录
+     * @throws Exception
+     */
+    protected function _checkLogin()
+    {
+        // 验证登录
+        $_SESSION['redirect']='/admin';
+        if(empty($_SESSION['Master'])){
+            if(empty($this->inputData['Token']) || empty($this->inputData['Id'])){
+                throw new \Exception('请登录！',EXIT_USER_INPUT);
+            }
+            \models\logic\MasterLogic::instance()->checkLogin($this->inputData);
+        }else{
+            if(time()>$_SESSION['Master']['Timeout']){
+                unset($_SESSION['Master']);
+                throw new \Exception('等待超时，请重新登录！',EXIT_CONFIG);
+            }
+            $_SESSION['Master']['Timeout']=time()+(int)OPERAT_WAIT_TIME;
+        }
+        $this->master=$_SESSION['Master'];
+        unset($_SESSION['redirect']);
+        // 验证菜单
+        $this->_getMenu();
+        if(empty($this->menu['Id'])){
+            throw new \Exception('无法访问',EXIT_CONFIG);
+        }
+        if(STATE_OFF == $this->menu['State']){
+            throw new \Exception('功能已禁用',EXIT_CONFIG);
+        }
+        if(ADMIN_NO == $this->master['IsAdmin']
+            && YES == $this->menu['Ctrl']
+            && !in_array($this->menu['Id'],$this->master['MenuIds'])){
+
+            throw new \Exception('未授权',EXIT_CONFIG);
+        }
     }
 }
