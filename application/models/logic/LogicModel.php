@@ -122,7 +122,15 @@ abstract class LogicModel
         if(false == $result){
             throw new \Exception('建表失败',EXIT_DATABASE);
         }
-        $result = $db2->batchInsertUpdate($list);
+        # 字段
+        $inserts = array_keys($list[0]);
+        $updates = array();
+        foreach($inserts as $field){
+            if(!in_array($field,array('Id','Created'))){
+                $updates[] = $field;
+            }
+        }
+        $result = $db2->batchInsertUpdate($list,$inserts,$updates);
 
         return $result;
     }
