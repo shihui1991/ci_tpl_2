@@ -209,8 +209,7 @@ class Base extends CI_Controller
 -------------------------------------------------
 
 EEE;
-
-        recordLog($record,'response',$reqUrl);
+        recordLog($record,'R'.str_replace('/','_',$reqUrl),'response');
         // 响应数据
         $this->outputData=array(
             'data' => $data,
@@ -251,9 +250,7 @@ EEE;
 -------------------------------------------------
 
 EEE;
-
-        recordLog($record,'exception',$reqUrl);
-
+        recordLog($record,'E'.str_replace('/','_',$reqUrl),'exception');
         $data = array();
         $code = EXIT_ERROR;
         $args = func_get_args();

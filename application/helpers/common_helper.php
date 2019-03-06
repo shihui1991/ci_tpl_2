@@ -549,8 +549,8 @@ if(!function_exists('getDirAllDirOrFile')){
             $realPath=$realDir.'/'.$file;
             $isDir=is_dir($path);
             $size=makeFileSize(filesize($realPath));
-
-            $result[]=array(
+            $key = str_replace('/','_',$realPath);
+            $result[$key]=array(
                 'File'=>$file,
                 'IsDir'=>(int)$isDir,
                 'Dir'=>$dir,
@@ -568,6 +568,7 @@ if(!function_exists('getDirAllDirOrFile')){
         }
         // 关闭目录
         closedir($handle);
+        ksort($result);
 
         return $result;
     }
@@ -611,9 +612,9 @@ if(!function_exists('getDirAllFile')){
                 $result = array_merge($result,$array);
             }else{
                 $pathinfo=pathinfo($file);
-
                 $size=makeFileSize(filesize($realPath));
-                $result[]=array(
+                $key = str_replace('/','_',$realPath);
+                $result[$key]=array(
                     'File'=>$file,
                     'Ext'=>$pathinfo['extension'],
                     'Dir'=>$dir,
@@ -627,6 +628,7 @@ if(!function_exists('getDirAllFile')){
         }
         // 关闭目录
         closedir($handle);
+        ksort($result);
 
         return $result;
     }
