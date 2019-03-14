@@ -22,6 +22,17 @@ class WeChat
     public $orderUrl = 'https://api.mch.weixin.qq.com/pay/unifiedorder';
     public $orderQueryUrl = 'https://api.mch.weixin.qq.com/pay/orderquery';
     public $codeToOpenidUrl = 'https://api.weixin.qq.com/sns/jscode2session';
+    # 交易状态
+    static public $tradeState = array(
+        'SUCCESS'    => '支付成功',
+        'REFUND'     => '转入退款',
+        'NOTPAY'     => '未支付',
+        'CLOSED'     => '已关闭',
+        'REVOKED'    => '已撤销',
+        'USERPAYING' => '用户支付中',
+        'PAYERROR'   => '支付失败',
+    );
+
     # 实例
     static protected $objs;
     
@@ -199,12 +210,6 @@ class WeChat
         $resXml = curlHttp($this->orderQueryUrl,$dataXml,true,2);
         # 解析查询结果
         $result = simpleXmlToArray($resXml);
-        if('SUCCESS' != $result['return_code']){
-            throw new \Exception('查询失败',EXIT__AUTO_MIN);
-        }
-        if('SUCCESS' != $result['result_code']){
-            throw new \Exception('订单不存在',EXIT__AUTO_MIN);
-        }
 
         return $result;
     }
