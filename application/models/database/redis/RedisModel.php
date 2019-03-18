@@ -99,7 +99,7 @@ class RedisModel extends DatabaseModel
         $array=array('>','>=','<','<=','!=');
         foreach($wheres as $where){
             if(is_array($where)){
-                if( !isset($where[0])){
+                if( !isset($where[0]) || !isset($data[$where[0]])){
                     return false;
                 }
                 switch ($where[1]){
