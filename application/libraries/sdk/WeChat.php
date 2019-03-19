@@ -22,6 +22,8 @@ class WeChat
     public $orderUrl = 'https://api.mch.weixin.qq.com/pay/unifiedorder';
     public $orderQueryUrl = 'https://api.mch.weixin.qq.com/pay/orderquery';
     public $codeToOpenidUrl = 'https://api.weixin.qq.com/sns/jscode2session';
+    public $baseAccessTokenUrl = 'https://api.weixin.qq.com/cgi-bin/token';
+    public $sendCustomMsgUrl = 'https://api.weixin.qq.com/cgi-bin/message/custom/send';
     # 交易状态
     static public $tradeState = array(
         'SUCCESS'    => '支付成功',
@@ -212,6 +214,48 @@ class WeChat
         $result = simpleXmlToArray($resXml);
 
         return $result;
+    }
+
+    /** 获取基础 ACCESS_TOKEN
+     * @return mixed
+     * @throws \Exception
+     */
+    public function getBaseAccessToken()
+    {
+        $url = $this->baseAccessTokenUrl . '?grant_type=client_credential&appid=' . $this->appid . '&secret=' . $this->appkey;
+        $request = file_get_contents($url);
+        $res = json_decode($request,TRUE);
+        if(isset($res['errcode']) && 0 != $res['errcode']){
+            throw new \Exception('获取失败',EXIT_USER_INPUT);
+        }
+
+        return $res['access_token'];
+    }
+
+    /** 发送客服自动回复消息
+     * @param $accessToken
+     * @param $openid
+     * @param $msgType
+     * @param $content
+     * @return bool
+     * @throws \Exception
+     */
+    public function sendCustomMsg($accessToken, $openid, $msgType, $content)
+    {
+        $data = array(
+            'access_token' => $accessToken,
+            'touser' => $openid,
+            'msgtype' => $msgType,
+            $msgType => $content,
+        );
+        $url = $this->sendCustomMsgUrl . '?access_token=' . $accessToken;
+        $res = curlHttp($url,json_encode($data,JSON_UNESCAPED_UNICODE),true,2);
+        $res = json_decode($res,true);
+        if(0 != $res['errcode']){
+            throw new \Exception('发送失败',EXIT_ERROR);
+        }
+
+        return true;
     }
 
     /** 生成 MD5 签名
