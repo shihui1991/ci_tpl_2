@@ -31,7 +31,7 @@ class Init extends Base
     {
         // 响应数据
         parent::_response($data,$code,$msg,$url,$tpls);
-        $resp=json_encode($this->outputData);
+        $resp=json_encode($this->outputData,JSON_UNESCAPED_UNICODE);
 
         // AJAX
         if($this->input->is_ajax_request()){

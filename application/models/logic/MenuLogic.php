@@ -7,7 +7,7 @@
 
 namespace models\logic;
 
-use libraries\ListIterator;
+
 use models\data\MenuData;
 use models\database\mysql\MenuMysql;
 use models\database\redis\MenuRedis;
@@ -85,12 +85,10 @@ class MenuLogic extends LogicModel
             return array();
         }
         if($this->isFormat){
-            $result=$this->dataModel->format($row,$this->isAlias);
-        }else{
-            $result = $row;
+            $row = $this->dataModel->format($row,$this->isAlias);
         }
 
-        return $result;
+        return $row;
     }
 
     /** 获取导航菜单
@@ -139,16 +137,12 @@ class MenuLogic extends LogicModel
         if(empty($list)){
             return array();
         }
-        $list=new ListIterator($list);
-        $result=array();
-        foreach($list as $row){
-            if($this->isFormat){
-                $result[]=$this->dataModel->format($row,$this->isAlias);
-            }else{
-                $result[] = $row;
+        if($this->isFormat){
+            foreach(makeArrayIterator($list) as $i => $row){
+                $list[$i]=$this->dataModel->format($row,$this->isAlias);
             }
         }
 
-        return $result;
+        return $list;
     }
 }

@@ -7,7 +7,7 @@
 
 namespace models\database\redis;
 
-use libraries\ListIterator;
+
 use models\database\DatabaseModel;
 
 class RedisModel extends DatabaseModel
@@ -148,7 +148,7 @@ class RedisModel extends DatabaseModel
         if(!empty($list)){
             // 默认 Id 顺序排序
             $ids=array_column($list,'Id');
-            if(!empty($ids)){
+            if(!empty($ids) && count($ids) == count($list)){
                 $orderData=array(
                     $ids,
                     SORT_ASC,
@@ -182,46 +182,54 @@ class RedisModel extends DatabaseModel
      */
     public function dealSelect(array $list, $select=array())
     {
-        $result = $list;
         if(!empty($list) && !empty($select)){
-            $result=array();
-            $list=makeArrayIterator($list);
-            foreach($list as $data){
-                $array=array();
+            foreach(makeArrayIterator($list) as $i => $row){
+                $temp =array();
                 foreach($select as $field){
-                    $array[$field]=isset($data[$field])?$data[$field]:null;
+                    $temp[$field] = isset($row[$field]) ? $row[$field] : null;
                 }
-                $result[]=$array;
+                $list[$i] = $temp;
             }
         }
 
-        return $result;
+        return $list;
     }
 
     /** 获取 key 匹配式
+     *
+     * @param array $data
      * @return string
      */
-    public function getKeyPattern()
+    public function getKeyPattern($data = array())
     {
+        $array = array();
         if(!empty($this->table)){
-            if(!empty($this->primaryKey)){
-                $pattern=$this->table.':*';
-            }else{
-                $pattern=$this->table;
-            }
-        }else{
-            $pattern='*';
+            $array[] = $this->table;
         }
+        if(!empty($this->primaryKey)){
+            if(is_array($this->primaryKey)){
+                foreach($this->primaryKey as $field){
+                    $array[] = isset($data[$field]) ? $data[$field] : '*';
+                }
+            }else{
+                $array[] = isset($data[$this->primaryKey]) ? $data[$this->primaryKey] : '*';
+            }
+        }
+        $pattern = implode(':',$array);
 
         return $pattern;
     }
 
     /** 获取全部键名
+     * @param string $pattern
+     * @param array $data
      * @return array
      */
-    public function getAllKeys()
+    public function getAllKeys($pattern = '', $data = array())
     {
-        $pattern = $this->getKeyPattern();
+        if(empty($pattern)){
+            $pattern = $this->getKeyPattern($data);
+        }
         $keys = array();
         $index = null;
         do {
@@ -279,10 +287,9 @@ class RedisModel extends DatabaseModel
     public function getMany($where=array(), $select=array(), $orderBy=array(), $limit=0, $offset=0,$distinct=false)
     {
         $keys = $this->getAllKeys();
-        $keys=makeArrayIterator($keys); // 使用迭代器
 
         $list=array();
-        foreach($keys as $key){
+        foreach(makeArrayIterator($keys) as $key){
             $data=$this->dbModel->hGetAll($key);
 
             // 查询条件
@@ -460,8 +467,7 @@ class RedisModel extends DatabaseModel
     public function incFieldByWhere($where, $field, $num, $symbol='+', $min=0, $max=INF)
     {
         $list = $this->getMany($where);
-        $list = makeArrayIterator($list);
-        foreach($list as $row){
+        foreach(makeArrayIterator($list) as $row){
             $key = $this->getKey($row);
             $result = $this->incFieldByKey($key,$field,$num,$symbol,$min,$max);
         }
@@ -479,8 +485,7 @@ class RedisModel extends DatabaseModel
             return false;
         }
         $redisKeys = array();
-        $keys = makeArrayIterator($keys);
-        foreach($keys as $key){
+        foreach(makeArrayIterator($keys) as $key){
             $redisKeys[] = $this->getRedisKey($key);
         }
         $result=$this->dbModel->del($redisKeys);
@@ -586,8 +591,7 @@ class RedisModel extends DatabaseModel
     public function batchInsertUpdate(array $list,array $fields=array())
     {
         $result=0;
-        $list=makeArrayIterator($list);
-        foreach($list as $data){
+        foreach(makeArrayIterator($list) as $data){
             $row=array();
             if(empty($fields)){
                 $row=$data;
@@ -620,8 +624,7 @@ class RedisModel extends DatabaseModel
         }
 
         $this->dbModel->multi();
-        $list=makeArrayIterator($list);
-        foreach($list as $preData){
+        foreach(makeArrayIterator($list) as $preData){
             $key = $this->getRedisKey('',$preData);
             $this->dbModel->hMset($key,$data);
         }
@@ -639,8 +642,7 @@ class RedisModel extends DatabaseModel
     public function batchUpdate(array $list, array $whereFields, array $updateFields)
     {
         $result=0;
-        $list=makeArrayIterator($list);
-        foreach($list as $data){
+        foreach(makeArrayIterator($list) as $data){
             // 条件
             $where=array();
             foreach($whereFields as $field){
@@ -670,8 +672,7 @@ class RedisModel extends DatabaseModel
         }
 
         $keys=array();
-        $list=makeArrayIterator($list);
-        foreach($list as $data){
+        foreach(makeArrayIterator($list) as $data){
             $key = $this->getRedisKey('',$data);
             $keys[]=$key;
         }

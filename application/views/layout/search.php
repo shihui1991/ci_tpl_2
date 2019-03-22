@@ -162,8 +162,8 @@
     });
 
     var filterIndex=<?php echo $index; ?>;
-    var fields=<?php echo json_encode($data['FilterFields']); ?>;
-    var methods=<?php echo json_encode($data['FilterMethods']); ?>;
+    var fields=<?php echo json_encode($data['FilterFields'],JSON_UNESCAPED_UNICODE); ?>;
+    var methods=<?php echo json_encode($data['FilterMethods'],JSON_UNESCAPED_UNICODE); ?>;
 
     // 添加筛选条件
     function addParams() {

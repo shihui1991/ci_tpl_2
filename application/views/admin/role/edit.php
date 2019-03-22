@@ -89,7 +89,7 @@
 <script>
     // 获取上级角色
     var ParentId=<?php echo $data['List']['ParentId'];?>;
-    var curMenuIds=<?php echo json_encode($data['List']['MenuIds'])?>;
+    var curMenuIds=<?php echo json_encode($data['List']['MenuIds'],JSON_UNESCAPED_UNICODE)?>;
     var isAdmin=<?php echo $data['List']['Admin']?>;
 
 </script>

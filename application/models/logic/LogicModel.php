@@ -8,7 +8,7 @@
 namespace models\logic;
 
 use libraries\Excel;
-use libraries\ListIterator;
+
 use models\logic\component\CheckUnique;
 
 abstract class LogicModel
@@ -353,18 +353,13 @@ abstract class LogicModel
         if(empty($list)){
             return array();
         }
-
-        $result=array();
         if($this->isFormat){
-            $list=new ListIterator($list);
-            foreach($list as $row){
-                $result[]=$this->dataModel->format($row,$this->isAlias);
+            foreach(makeArrayIterator($list) as $i => $row){
+                $list[$i]=$this->dataModel->format($row,$this->isAlias);
             }
-        }else{
-            $result = $list;
         }
 
-        return $result;
+        return $list;
     }
 
     /** 获取全部
@@ -386,18 +381,13 @@ abstract class LogicModel
         if(empty($list)){
             return array();
         }
-
-        $result=array();
         if($this->isFormat){
-            $list=new ListIterator($list);
-            foreach($list as $row){
-                $result[]=$this->dataModel->format($row,$this->isAlias);
+            foreach(makeArrayIterator($list) as $i => $row){
+                $list[$i]=$this->dataModel->format($row,$this->isAlias);
             }
-        }else{
-            $result = $list;
         }
 
-        return $result;
+        return $list;
     }
 
     /** 通过 ID 获取列表
@@ -415,18 +405,13 @@ abstract class LogicModel
         if(empty($list)){
             return array();
         }
-
-        $result=array();
         if($this->isFormat){
-            $list=new ListIterator($list);
-            foreach($list as $row){
-                $result[]=$this->dataModel->format($row,$this->isAlias);
+            foreach(makeArrayIterator($list) as $i => $row){
+                $list[$i]=$this->dataModel->format($row,$this->isAlias);
             }
-        }else{
-            $result = $list;
         }
 
-        return $result;
+        return $list;
     }
 
     /** 通过 ID 获取数据
@@ -443,12 +428,10 @@ abstract class LogicModel
         }
 
         if($this->isFormat){
-            $result=$this->dataModel->format($row,$this->isAlias);
-        }else{
-            $result = $row;
+            $row = $this->dataModel->format($row,$this->isAlias);
         }
 
-        return $result;
+        return $row;
     }
 
     /** 通过 ID 删除数据
@@ -504,12 +487,10 @@ abstract class LogicModel
             throw new \Exception('保存失败',EXIT_DATABASE);
         }
         if($this->isFormat){
-            $result=$this->dataModel->format($row,$this->isAlias);
-        }else{
-            $result = $row;
+            $row = $this->dataModel->format($row,$this->isAlias);
         }
 
-        return $result;
+        return $row;
     }
 
     /** 表单修改
@@ -537,14 +518,12 @@ abstract class LogicModel
             throw new \Exception('保存失败',EXIT_DATABASE);
         }
         // 获取更新后数据
-        $row=array_merge($preRow,$update);
+        $row = array_merge($preRow,$update);
         if($this->isFormat){
-            $result=$this->dataModel->format($row,$this->isAlias);
-        }else{
-            $result = $row;
+            $row = $this->dataModel->format($row,$this->isAlias);
         }
 
-        return $result;
+        return $row;
     }
 
     /** 导入数据
@@ -577,5 +556,24 @@ abstract class LogicModel
         $list = $this->databaseModel->getMany();
         // 输入 Excel
         Excel::instance()->exportConfig($list,$this->dataModel->getColumns(),$this->databaseModel->table,true);
+    }
+
+    /** 刷新所有数据
+     * @return bool
+     */
+    public function refreshData()
+    {
+        $list = $this->databaseModel->getMany();
+        if(empty($list)){
+            return true;
+        }
+        foreach(makeArrayIterator($list) as $i => $row){
+            $row = $this->dataModel->fill($row);
+            $row = $this->dataModel->getRealRow($row,true);
+            $list[$i] = $row;
+        }
+        $res = $this->databaseModel->batchInsertUpdate($list,$this->dataModel->fields,$this->dataModel->fields);
+
+        return $res;
     }
 }

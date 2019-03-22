@@ -23,8 +23,7 @@ if(!function_exists('makeTree'))
             return $result;
         }
         $i=1;
-        $childs = makeArrayIterator($childs);
-        foreach ($childs as $child){
+        foreach (makeArrayIterator($childs) as $child){
             $space='';
             for($j=1;$j<$level;$j++){
                 if(1 == $j){
@@ -57,15 +56,17 @@ if(!function_exists('getChildsAndLast')){
      * @return array            子元素集合
      */
     function getChildsAndLast($list, $parentId){
-        $array=array();
-        $list = makeArrayIterator($list);
-        foreach ($list as $key=>$value){
+        $childs=array();
+        foreach (makeArrayIterator($list) as $key=>$value){
             if($value['parentId'] == $parentId){
-                $array[]=$value;
+                $childs[]=$value;
                 unset($list[$key]);
             }
         }
-        return array('childs'=>$array,'last'=>$list);
+        return array(
+            'childs' => $childs,
+            'last' => $list,
+        );
     }
 }
 
@@ -83,11 +84,11 @@ if(!function_exists('insertOrUpdateSql')){
         if(0 == count($data)){
             return false;
         }
-        $sql = "insert into `$table` ";
+        $sql = "insert into `$table` set ";
         # 数据字段
         foreach($data as $key => $val){
             $val = addslashes($val);
-            $sql .= " set `$key` = '$val',";
+            $sql .= " `$key` = '$val',";
         }
         $sql = rtrim($sql,', ');
         # 更新字段
@@ -404,7 +405,7 @@ if(!function_exists('curlHttp')){
             if(false === $mark){
                 $conn = '?';
             }
-            $url .= $conn . $data;
+            $url .= $conn.$data;
         }
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
@@ -435,6 +436,7 @@ if(!function_exists('curlHttp')){
         return $res;
     }
 }
+
 
 if(!function_exists('compareVersion')){
     /**  比较两个版本号大小
@@ -485,6 +487,7 @@ if(!function_exists('debugLog')){
         recordLog($log,$fileName,$dir);
     }
 }
+
 
 if(!function_exists('formatArray')){
     /** 格式化数组
@@ -771,8 +774,7 @@ if(!function_exists('arrayToSimpleXml')){
             $xml = new SimpleXMLElement($root);
         }
         # 迭代数组添加到xml 目录下
-        $array = makeArrayIterator($array);
-        foreach($array as $key=>$value){
+        foreach(makeArrayIterator($array) as $key=>$value){
             if(is_array($value)){
                 arrayToSimpleXml($value,$key,$xml->addChild($key));
             }else{
