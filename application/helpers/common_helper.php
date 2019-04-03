@@ -83,11 +83,11 @@ if(!function_exists('insertOrUpdateSql')){
         if(0 == count($data)){
             return false;
         }
-        $sql = "insert into `$table` ";
+        $sql = "insert into `$table` set ";
         # 数据字段
         foreach($data as $key => $val){
             $val = addslashes($val);
-            $sql .= " set `$key` = '$val',";
+            $sql .= " `$key` = '$val',";
         }
         $sql = rtrim($sql,', ');
         # 更新字段
