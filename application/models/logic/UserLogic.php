@@ -57,73 +57,67 @@ class UserLogic extends LogicModel
         if(false !== $queues){
             throw new \Exception('请勿重复操作',EXIT_USER_INPUT);
         }
-        # 处理在各类型的登录/注册之前，获取$uid/$user
-        switch ($data['LoginType']) {
-            # 游客
-            case LOGIN_TYPE_GUEST:
-                $handle = $this->handleBeforeGuestLoginOrRegister($data);
-
-                break;
-            # 账号
-            case LOGIN_TYPE_REGISTER:
-                $handle = $this->handleBeforeAccountLoginOrRegister($data);
-
-                break;
-            # 微信
-            case LOGIN_TYPE_WECHAT:
-                $handle = $this->handleBeforeWeChatLoginOrRegister($data);
-
-                break;
-            # 微信小游戏
-            case LOGIN_TYPE_WECHAT_GAME:
-                $handle = $this->handleBeforeWeChatGameLoginOrRegister($data);
-
-                break;
-            # 其他
-            default:
-                throw new \Exception('非法操作',EXIT_USER_INPUT);
-                break;
+        # 各类型的注册登录处理
+        $methods = array(
+            LOGIN_TYPE_GUEST         => 'handleLoginOrRegisterForGuest',
+            LOGIN_TYPE_ACCOUNT_REG   => 'handleRegisterForAccount',
+            LOGIN_TYPE_ACCOUNT_LOGIN => 'handleLoginForAccount',
+            LOGIN_TYPE_WECHAT        => 'handleLoginOrRegisterForWeChat',
+            LOGIN_TYPE_WECHAT_GAME   => 'handleLoginOrRegisterForWeChatGame',
+        );
+        if(!isset($methods[$data['LoginType']])){
+            throw new \Exception('非法操作',EXIT_USER_INPUT);
         }
-        # 注册
-        if(true == $handle['IsNew']){
-            $user = $handle['User'];
-            # 处理通过分享链接注册
-            if(!empty($data['ShareLogId'])){
+        $method = $methods[$data['LoginType']];
+        $user = $this->$method($data);
+        # 处理通过分享链接注册登录
+        if(!empty($data['ShareLogId'])){
+            if(true == $user['IsNew']){
                 LogShareLogic::instance()->handleShareForRegister($data['ShareLogId'],$user['Uid']);
-            }
-        }
-        # 登录
-        else{
-            $user = $this->login($handle['Uid'],$data);
-            # 处理通过分享链接登录
-            if(!empty($data['ShareLogId'])){
+            }else{
                 LogShareLogic::instance()->handleShareForLogin($data['ShareLogId'],$user['Uid']);
             }
         }
-        # 登录统计
         $loginNum = DayUserLoginLogic::instance()->incDayUserLoginNum($user['Uid']);
-
-        $user = $this->dataModel->format($user,$this->isAlias);
+        $user = $this->dataModel->format($user);
         $_SESSION['User'] = $user;
+        # 生成登录需返回玩家数据
+        $return = $this->makeLoginUserData($user);
 
-        return $user;
+        return $return;
     }
 
+    /** 生成登录需返回玩家数据
+     * @param $user
+     * @return array
+     */
+    public function makeLoginUserData($user)
+    {
+        $fields = $this->dataModel->getFieldsForLogin();
+        $data = array();
+        foreach($fields as $field){
+            $data[$field] = isset($user[$field]) ? $user[$field] : '';
+        }
+        $data = $this->dataModel->format($data,$this->isAlias);
 
-    /** 处理游客登录或注册
-     * @param $data
+        return $data;
+    }
+
+    /** 处理游客注册登录
+     * @param array $data
      * @return array
      * @throws \Exception
      */
-    public function handleBeforeGuestLoginOrRegister($data)
+    public function handleLoginOrRegisterForGuest($data)
     {
-        $this->valiData($data,'GuestLoginOrRegister');
+        $this->valiData($data,'handleLoginOrRegisterForGuest');
         # 获取设备绑定的游客玩家Uid
         $uid = DidGuestLogic::instance()->getDeviceBindGuestUidByDid($data['Did']);
-        $isNew = false;
-        $user = array();
         if(false !== $uid){
-            goto result;
+            # 登录
+            $user = $this->login($uid,$data,'handleLoginForGuest');
+            $user['IsNew'] = false;
+            return $user;
         }
         # 生成UID
         $uid = CreateUidLogic::instance()->createUid();
@@ -135,32 +129,23 @@ class UserLogic extends LogicModel
         # 注册
         $data['Uid'] = $uid;
         $user = $this->register($data);
-        $isNew = true;
-
-        result:
-
-        return array(
-            'Uid' => (int)$uid,
-            'IsNew' => $isNew,
-            'User' => $user,
-        );
+        $user['IsNew'] = true;
+        return $user;
     }
 
-    /** 处理账号登录或注册
-     * @param $data
+    /** 账号注册
+     * @param array $data
      * @return array
      * @throws \Exception
      */
-    public function handleBeforeAccountLoginOrRegister($data)
+    public function handleRegisterForAccount($data)
     {
         # 验证模型 验证数据格式
-        $this->valiData($data,'AccountLoginOrRegister');
+        $this->valiData($data,'handleLoginOrRegisterForAccount');
         # 获取账号玩家Uid
         $uid = AccountUidLogic::instance()->getUidByAccount($data['Account']);
-        $isNew = false;
-        $user = array();
-        if(false !== $uid){
-            goto result;
+        if($uid){
+            throw new \Exception('账号已被注册',EXIT_USER_INPUT);
         }
         # 生成UID
         $uid = CreateUidLogic::instance()->createUid();
@@ -177,23 +162,43 @@ class UserLogic extends LogicModel
         # 注册
         $data['Uid'] = $uid;
         $user = $this->register($data);
-        $isNew = true;
-
-        result:
-
-        return array(
-            'Uid' => (int)$uid,
-            'IsNew' => $isNew,
-            'User' => $user,
-        );
+        $user['IsNew'] = true;
+        return $user;
     }
 
-    /** 处理微信登录或注册
-     * @param $data
+    /** 账号登录
+     * @param array $data
      * @return array
      * @throws \Exception
      */
-    public function handleBeforeWeChatLoginOrRegister($data)
+    public function handleLoginForAccount($data)
+    {
+        # 验证模型 验证数据格式
+        $this->valiData($data,'handleLoginOrRegisterForAccount');
+        # 获取账号玩家Uid
+        $uid = AccountUidLogic::instance()->getUidByAccount($data['Account']);
+        if(false == $uid){
+            throw new \Exception('账号不存在',EXIT_USER_INPUT);
+        }
+        # 验证密码
+        $select = $this->dataModel->getFieldsForAccountLogin();
+        $user = $this->getUserByUid($uid,$select);
+        $vali = password_verify($data['Password'],$user['Password']);
+        if(false == $vali){
+            throw new \Exception('密码错误',EXIT_USER_INPUT);
+        }
+        # 登录
+        $user = $this->login($uid,$data,'handleLoginForAccount');
+        $user['IsNew'] = false;
+        return $user;
+    }
+
+    /** 微信APK 注册登录
+     * @param array $data
+     * @return mixed
+     * @throws \Exception
+     */
+    public function handleLoginOrRegisterForWeChat($data)
     {
         # 优先通过openid,accessToken 获取微信玩家信息
         if(!empty($data['Openid']) && !empty($data['AccessToken'])){
@@ -209,25 +214,13 @@ class UserLogic extends LogicModel
         # 合入微信玩家数据
         $weChatData = $this->dataModel->getUserDataFromWeChat($weChat);
         $data = array_merge($data,$weChatData);
-        # 微信通用处理登录或注册
-        $res = $this->handleWeChatCommonLoginOrRegister($data);
-
-        return $res;
-    }
-
-    /**  微信通用处理登录或注册
-     * @param $data
-     * @return array
-     * @throws \Exception
-     */
-    public function handleWeChatCommonLoginOrRegister($data)
-    {
         # 获取微信玩家UID
         $uid = WeChatUidLogic::instance()->getUidByOpenid($data['Openid']);
-        $isNew = false;
-        $user = array();
         if(false !== $uid){
-            goto result;
+            # 登录
+            $user = $this->login($uid,$data,'handleLoginForWeChat');
+            $user['IsNew'] = false;
+            return $user;
         }
         # 生成UID
         $uid = CreateUidLogic::instance()->createUid();
@@ -239,68 +232,77 @@ class UserLogic extends LogicModel
         # 注册
         $data['Uid'] = $uid;
         $user = $this->register($data);
-        $isNew = true;
-
-        result:
-
-        return array(
-            'Uid' => (int)$uid,
-            'IsNew' => $isNew,
-            'User' => $user,
-        );
+        $user['IsNew'] = true;
+        return $user;
     }
 
-    /** 微信小游戏登录或注册
-     * @param $data
+    /** 微信小游戏注册登录
+     * @param array $data
      * @return array
      * @throws \Exception
      */
-    public function handleBeforeWeChatGameLoginOrRegister($data)
+    public function handleLoginOrRegisterForWeChatGame($data)
     {
         if(empty($data['Code'])){
             throw new \Exception('请先授权微信登录',EXIT_USER_INPUT);
         }
         # 微信小游戏通过code获取openid
         $data['Openid'] = WeChat::instance()->handleCodeToOpenid($data['Code']);
-        # 微信通用处理登录或注册
-        $res = $this->handleWeChatCommonLoginOrRegister($data);
-
-        return $res;
+        # 获取微信小游戏玩家UID
+        $uid = WeChatGameUidLogic::instance()->getUidByOpenid($data['Openid']);
+        if(false !== $uid){
+            # 登录
+            $user = $this->login($uid,$data,'handleLoginForWeChatGame');
+            $user['IsNew'] = false;
+            return $user;
+        }
+        # 生成UID
+        $uid = CreateUidLogic::instance()->createUid();
+        # 绑定玩家微信小游戏
+        $res = WeChatGameUidLogic::instance()->setUidByOpenid($data['Openid'], $uid);
+        if(false == $res){
+            throw new \Exception('马上就好！请稍候……',EXIT_USER_INPUT);
+        }
+        # 注册
+        $data['Uid'] = $uid;
+        $user = $this->register($data);
+        $user['IsNew'] = true;
+        return $user;
     }
 
     /** 注册
      * @param array $data
-     * @param string $fillMethod   批量赋值方法
      * @return array
      * @throws \Exception
      */
-    public function register($data, $fillMethod='')
+    public function register($data)
     {
-        $row = $this->dataModel->fill($data,$fillMethod);
+        $row = $this->dataModel->fill($data);
         $res = $this->databaseModel->insert($row);
         if(false == $res){
             throw new \Exception('注册失败',EXIT_DATABASE);
         }
+        $user = $this->dataModel->format($row);
 
-        return $row;
+        return $user;
     }
 
     /** 登录
-     * @param $uid
-     * @param $data
+     * @param int $uid
+     * @param array $data
+     * @param string $method
      * @return array
      * @throws \Exception
      */
-    public function login($uid, $data)
+    public function login($uid, $data, $method)
     {
-        # 更新登录数据
-        $update = $this->dataModel->fill($data,'Login');
+        $update = $this->dataModel->fill($data,$method);
         $res = $this->databaseModel->setOneByKey($uid,$update);
         if(false == $res){
             throw new \Exception('登录失败',EXIT_DATABASE);
         }
         # 获取玩家数据
-        $user = $this->getUserByUid($uid);
+        $user = $this->getUserByUid($uid,array(),false);
 
         return $user;
     }
@@ -308,12 +310,16 @@ class UserLogic extends LogicModel
     /** 通过UID 获取玩家数据
      * @param $uid
      * @param array $select
+     * @param bool $isAlias
      * @return array
      */
-    public function getUserByUid($uid, $select = array())
+    public function getUserByUid($uid, $select = array(),$isAlias = null)
     {
         $user = $this->databaseModel->getOneByKey($uid,$select);
-        $user = $this->dataModel->format($user,$this->isAlias);
+        if(is_null($isAlias)){
+            $isAlias = $this->isAlias;
+        }
+        $user = $this->dataModel->format($user,$isAlias);
 
         return $user;
     }
@@ -358,8 +364,8 @@ class UserLogic extends LogicModel
             $model = UserMysql::instance();
         }
         $where = array(
-            array('Created','>=',"$date 00:00:00"),
-            array('Created','<=',"$date 23:59:59"),
+            array('Created','>=',strtotime("$date 00:00:00")),
+            array('Created','<=',strtotime("$date 23:59:59")),
         );
         $select = array('Uid');
         $list = $model->getMany($where,$select);
@@ -383,8 +389,7 @@ class UserLogic extends LogicModel
         }
         # 过滤、补充字段
         $users = array();
-        $list = makeArrayIterator($list);
-        foreach($list as $row){
+        foreach(makeArrayIterator($list) as $row){
             $row = $this->dataModel->fill($row);
             $row = $this->dataModel->getRealRow($row,true);
             $users[] = $row;
@@ -398,6 +403,35 @@ class UserLogic extends LogicModel
         }
         # 同步到 mysql
         $res = UserMysql::instance()->batchInsertUpdate($users,$inserts,$updates);
+
+        return $res;
+    }
+
+    /** 增加玩家物品
+     * @param $uid
+     * @param $field
+     * @param $num
+     * @return mixed
+     */
+    public function incField($uid, $field, $num)
+    {
+        $symbol = $num > 0 ? '+' : '-';
+        $res = $this->databaseModel->incFieldByKey($uid, $field, abs($num), $symbol, 0, INF);
+
+        return $res;
+    }
+
+    /** 发放物品
+     * @param array $input
+     * @return mixed
+     * @throws \Exception
+     */
+    public function incItem($input = array())
+    {
+        if(empty($input['Uid']) || empty($input['Field']) || empty($input['Num'])){
+            throw new \Exception('参数错误',EXIT_USER_INPUT);
+        }
+        $res = $this->incField($input['Uid'],$input['Field'],$input['Num']);
 
         return $res;
     }

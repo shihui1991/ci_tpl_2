@@ -62,7 +62,7 @@ trait SetAttr
         }
         if(is_array($value)){
             $value=formatArray($value);
-            $value=json_encode(array_values($value));
+            $value=json_encode(array_values($value),JSON_UNESCAPED_UNICODE);
         }else{
             $value='';
         }
@@ -87,7 +87,7 @@ trait SetAttr
         }
         if(is_array($value)){
             $value=formatArray($value);
-            $value=json_encode($value);
+            $value=json_encode($value,JSON_UNESCAPED_UNICODE);
         }else{
             $value='';
         }

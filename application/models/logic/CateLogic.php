@@ -7,7 +7,7 @@
 
 namespace models\logic;
 
-use libraries\ListIterator;
+
 use models\data\CateData;
 use models\database\mysql\CateMysql;
 use models\database\redis\CateRedis;
@@ -65,13 +65,12 @@ class CateLogic extends LogicModel
         if(empty($list)){
             return array();
         }
-        $list=new ListIterator($list);
         $groupList=array();
         $cateList=array();
         $groups=array();
-        foreach($list as $row){
+        foreach(makeArrayIterator($list) as $row){
             if($this->isFormat){
-                $row=$this->dataModel->format($row,$this->isAlias);
+                $row = $this->dataModel->format($row,$this->isAlias);
             }
 
             if(!in_array($row['Group'],$groups)){
@@ -122,8 +121,7 @@ class CateLogic extends LogicModel
 FFF;
         // 文件体
         if(!empty($list)){
-            $list = new ListIterator($list);
-            foreach($list as $row){
+            foreach(makeArrayIterator($list) as $row){
                 $str .= <<<"FFF"
 
 /* {$row['Group']} - {$row['Name']} */

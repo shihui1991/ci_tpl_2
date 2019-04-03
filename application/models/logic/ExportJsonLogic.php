@@ -33,16 +33,14 @@ class ExportJsonLogic extends LogicModel
         $method = 'handleListFor'.$table;
         if(method_exists($this,$method)){
             // 特定配置按格式处理数据
-            $resList = $this->$method($list);
+            $list = $this->$method($list);
         }else{
             // 全部导出
-            $resList = array();
-            $tempList = makeArrayIterator($list);
-            foreach($tempList as $row){
-                $resList[] = TplLogic::instance($table)->dataModel->format($row,true);
+            foreach(makeArrayIterator($list) as $i => $row){
+                $list[$i] = TplLogic::instance($table)->dataModel->format($row,true);
             }
         }
-        $str = json_encode($resList);
+        $str = json_encode($list,JSON_UNESCAPED_UNICODE);
         // 文件输出
         if($output){
             outputHeaderForFile($table.'.json');
@@ -90,8 +88,7 @@ class ExportJsonLogic extends LogicModel
         # 生成 JSON 文件
         $savePath = DOWNLOAD_DIR.'/configJson/json';
         $files = array();
-        $tableList = makeArrayIterator($tableList);
-        foreach($tableList as $row){
+        foreach(makeArrayIterator($tableList) as $row){
             $files[] = $this->exportJson($row['Table'],false,$savePath);
         }
         # 生成 zip 文件
@@ -105,8 +102,7 @@ class ExportJsonLogic extends LogicModel
             }
         }
         # 写入文件
-        $files = makeArrayIterator($files);
-        foreach($files as $file){
+        foreach(makeArrayIterator($files) as $file){
             $zipObj->addFile($file,basename($file));
         }
         $zipObj->close();
@@ -134,10 +130,11 @@ class ExportJsonLogic extends LogicModel
             'ModulusOfflineGain',
             'ModulusOreCarryTop',
             'Desc',
+            'SourceId',
+            'Star',
         );
         $resList = array();
-        $list = makeArrayIterator($list);
-        foreach($list as $row){
+        foreach(makeArrayIterator($list) as $row){
             $data = array();
             foreach($select as $field){
                 $data[$field] = $row[$field];
@@ -164,8 +161,7 @@ class ExportJsonLogic extends LogicModel
             'CityPrice',
         );
         $resList = array();
-        $list = makeArrayIterator($list);
-        foreach($list as $row){
+        foreach(makeArrayIterator($list) as $row){
             $data = array();
             foreach($select as $field){
                 $data[$field] = $row[$field];
@@ -177,5 +173,16 @@ class ExportJsonLogic extends LogicModel
         $resList = array_values($resList);
 
         return $resList;
+    }
+
+    /** 处理数据 -> 综合配置
+     * @param array $list
+     * @return array
+     *
+     * @throws \Exception
+     */
+    public function handleListForCommon(array $list)
+    {
+        return $list[0];
     }
 }

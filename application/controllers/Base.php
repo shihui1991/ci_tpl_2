@@ -184,13 +184,13 @@ class Base extends CI_Controller
         $datetime = date('Y-m-d H:i:s');
         $reqUrl = $this->requestUrl;
         $ip = $this->clientIP;
-        $get = json_encode($this->input->get());
-        $post = json_encode($this->input->post());
+        $get = json_encode($this->input->get(),JSON_UNESCAPED_UNICODE);
+        $post = json_encode($this->input->post(),JSON_UNESCAPED_UNICODE);
         $stream = urldecode($this->input->raw_input_stream);
         if('/admin/log/info' == $reqUrl){
             $output = '';
         }else{
-            $output = json_encode($data);
+            $output = json_encode($data,JSON_UNESCAPED_UNICODE);
         }
         // 记录内容
         $record=<<<"EEE"
@@ -230,8 +230,8 @@ EEE;
         $datetime = date('Y-m-d H:i:s');
         $reqUrl = $this->requestUrl;
         $ip = $this->clientIP;
-        $get = json_encode($this->input->get());
-        $post = json_encode($this->input->post());
+        $get = json_encode($this->input->get(),JSON_UNESCAPED_UNICODE);
+        $post = json_encode($this->input->post(),JSON_UNESCAPED_UNICODE);
         $stream = urldecode($this->input->raw_input_stream);
         // 记录内容
         $record=<<<"EEE"

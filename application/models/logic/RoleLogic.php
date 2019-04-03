@@ -7,7 +7,7 @@
 
 namespace models\logic;
 
-use libraries\ListIterator;
+
 use models\data\RoleData;
 use models\database\mysql\RoleMysql;
 use models\database\redis\RoleRedis;
@@ -65,16 +65,12 @@ class RoleLogic extends LogicModel
         if(empty($list)){
             return array();
         }
-        $list=new ListIterator($list);
-        $result=array();
-        foreach($list as $row){
-            if($this->isFormat){
-                $result[]=$this->dataModel->format($row,$this->isAlias);
-            }else{
-                $result[] = $row;
+        if($this->isFormat){
+            foreach(makeArrayIterator($list) as $i => $row){
+                $list[$i]=$this->dataModel->format($row,$this->isAlias);
             }
         }
 
-        return $result;
+        return $list;
     }
 }

@@ -8,7 +8,6 @@
 namespace models\logic;
 
 use libraries\Excel;
-use libraries\ListIterator;
 use models\data\ConfigData;
 use models\database\mysql\ConfigMysql;
 use models\database\redis\ConfigRedis;
@@ -62,12 +61,10 @@ class ConfigLogic extends LogicModel
             return array();
         }
         if($this->isFormat){
-            $result=$this->dataModel->format($row,$this->isAlias);
-        }else{
-            $result=$row;
+            $row = $this->dataModel->format($row,$this->isAlias);
         }
 
-        return $result;
+        return $row;
     }
 
     /** 批量更新配置

@@ -7,7 +7,6 @@
 
 namespace models\logic;
 
-use libraries\ListIterator;
 use models\data\ApiData;
 use models\database\mysql\ApiMysql;
 use models\database\redis\ApiRedis;
@@ -61,11 +60,9 @@ class ApiLogic extends LogicModel
             return array();
         }
         if($this->isFormat){
-            $result=$this->dataModel->format($row,$this->isAlias);
-        }else{
-            $result = $row;
+            $row = $this->dataModel->format($row,$this->isAlias);
         }
 
-        return $result;
+        return $row;
     }
 }

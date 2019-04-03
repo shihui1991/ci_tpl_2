@@ -228,8 +228,7 @@ class Excel
         if($rowStart < 1){
             $rowStart = $this->rowStart;
         }
-        $list=new ListIterator($list);
-        foreach($list as $k=>$row){
+        foreach(makeArrayIterator($list) as $k => $row){
             if(empty($fields)){
                 $fields=array_keys($row);
             }
@@ -308,8 +307,7 @@ class Excel
     {
         $sheets = $this->getAllSheets($file);
         $result=array();
-        $sheets=new ListIterator($sheets);
-        foreach($sheets as $sheet){
+        foreach(makeArrayIterator($sheets) as $sheet){
             $sheetName=$sheet->getTitle();
             $list=$sheet->toArray();
 
@@ -339,8 +337,7 @@ class Excel
         unset($dataList[0]);
         $list=array();
         if(!empty($dataList)){
-            $dataList = new ListIterator($dataList,1);
-            foreach($dataList as $data){
+            foreach(makeArrayIterator($dataList) as $data){
                 // 过滤空数据
                 $temp=array_filter($data);
                 if(empty($temp)){
@@ -403,8 +400,7 @@ class Excel
         );
         $list=array();
         if(!empty($dataList)){
-            $dataList = new ListIterator($dataList,7);
-            foreach($dataList as $data){
+            foreach(makeArrayIterator($dataList) as $data){
                 // 过滤空数据
                 $temp=array_filter($data);
                 if(empty($temp)){
@@ -438,8 +434,7 @@ class Excel
     {
         $sheets = $this->getAllSheets($file);
         $result=array();
-        $sheets=new ListIterator($sheets);
-        foreach($sheets as $sheet){
+        foreach(makeArrayIterator($sheets) as $sheet){
             $dataList=array_filter($sheet->toArray()); //  工作表内容
             if(empty($dataList)){
                 continue;
@@ -466,8 +461,7 @@ class Excel
     {
         $sheets = $this->getAllSheets($file);
         $result=array();
-        $sheets=new ListIterator($sheets);
-        foreach($sheets as $sheet){
+        foreach(makeArrayIterator($sheets) as $sheet){
             $dataList=array_filter($sheet->toArray()); //  工作表内容
             if(empty($dataList)){
                 continue;

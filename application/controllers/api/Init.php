@@ -27,7 +27,7 @@ class Init extends Base
     {
         parent::_response($data,$code,$msg,$url,$tpls);
 
-        $resp=json_encode($this->outputData);
+        $resp=json_encode($this->outputData,JSON_UNESCAPED_UNICODE);
         echo $resp;
     }
 }

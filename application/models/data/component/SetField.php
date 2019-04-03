@@ -75,7 +75,7 @@ trait SetField
         foreach($value as $key=>$val){
             $result[$val['field']]=$val;
         }
-        $result=json_encode($result);
+        $result=json_encode($result,JSON_UNESCAPED_UNICODE);
 
         return $result;
     }
