@@ -153,9 +153,10 @@ class RedisModel extends DatabaseModel
             $orderBy['Id'] = ORDER_BY_ASC;
         }
         $orderData = array();
+        $count = count($list);
         foreach($orderBy as $order => $by){
             $data = array_column($list,$order);
-            if(empty($data)){
+            if(empty($data) || count($data) != $count){
                 continue;
             }
             $orderData[] = $data;
