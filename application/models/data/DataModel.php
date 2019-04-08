@@ -237,4 +237,25 @@ abstract class DataModel
 
         return $result;
     }
+
+    /** 字段数值描述
+     * @param $field
+     * @param null $val
+     * @return |null
+     */
+    public function getValueDesc($field, $val = null)
+    {
+        $method = 'get'.ucfirst($field).'Conf';
+        if( ! method_exists($this,$method)){
+            return $val;
+        }
+        $conf = $this->$method();
+        if(isset($conf[$val])){
+            return $conf[$val];
+        }elseif(is_null($val)){
+            return $conf;
+        }else{
+            return $val;
+        }
+    }
 }
