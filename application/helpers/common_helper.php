@@ -383,6 +383,7 @@ if(!function_exists('curlHttp')){
      * @param string|array $data
      * @param bool $isPost
      * @param int $execTimes
+     * @param bool $makeJsonStr
      * @return mixed|string
      */
     function curlHttp($url, $data = '', $isPost = true, $execTimes = 1, $makeJsonStr = true)
@@ -396,9 +397,13 @@ if(!function_exists('curlHttp')){
         # 检测 url 中是否已存在参数
         $mark = strpos($url,'?');
         # 处理 POST 请求的参数
+        $header = array();
         if($isPost){
             if(is_array($data) && $makeJsonStr){
                 $data = json_encode($data,JSON_UNESCAPED_UNICODE);
+            }
+            if($makeJsonStr){
+                $header[] = 'Content-Type: application/json';
             }
         }
         # 处理 GET 请求的参数
@@ -426,6 +431,9 @@ if(!function_exists('curlHttp')){
         if($isPost) {
             curl_setopt($ch, CURLOPT_POST, 1);
             curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+        }
+        if( ! empty($header)){
+            curl_setopt($ch, CURLOPT_HTTPHEADER, $header);
         }
 
         curl_setopt($ch, CURLOPT_TIMEOUT, 10);
