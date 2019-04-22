@@ -385,7 +385,7 @@ if(!function_exists('curlHttp')){
      * @param int $execTimes
      * @return mixed|string
      */
-    function curlHttp($url, $data = '', $isPost = true, $execTimes = 1)
+    function curlHttp($url, $data = '', $isPost = true, $execTimes = 1, $makeJsonStr = true)
     {
         # 检测是不是 https
         $ssl = false;
@@ -395,17 +395,23 @@ if(!function_exists('curlHttp')){
         }
         # 检测 url 中是否已存在参数
         $mark = strpos($url,'?');
-        # 将参数转为请求字符串
-        if(is_array($data)){
-            $data = http_build_query($data);
+        # 处理 POST 请求的参数
+        if($isPost){
+            if(is_array($data) && $makeJsonStr){
+                $data = json_encode($data,JSON_UNESCAPED_UNICODE);
+            }
         }
         # 处理 GET 请求的参数
-        if(false == $isPost){
+        else{
+            # 将参数转为请求字符串
+            if(is_array($data)){
+                $data = http_build_query($data);
+            }
             $conn = '&';
             if(false === $mark){
                 $conn = '?';
             }
-            $url .= $conn.$data;
+            $url .= $conn . $data;
         }
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
@@ -432,6 +438,11 @@ if(!function_exists('curlHttp')){
             $res = curl_error($ch);
         }
         curl_close($ch);
+        # 记录请求结果
+        if(is_array($data)){
+            $data = json_encode($data,JSON_UNESCAPED_UNICODE);
+        }
+        debugLog($url,$data,'curlHttp请求结果',$res,'CurlHttp');
 
         return $res;
     }
