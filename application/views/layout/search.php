@@ -24,7 +24,6 @@
                 <td id="filter-params">
                     <?php if(!empty($data['FilterParams'])): ?>
                         <?php foreach($data['FilterParams'] as $params): ?>
-                        <?php $index++; ?>
                             <div class="layui-form-item filter-item">
                                 <div class="layui-inline">
                                     <div class="layui-input-inline">
@@ -49,6 +48,7 @@
                                     </a>
                                 </div>
                             </div>
+                            <?php $index++; ?>
                         <?php endforeach; ?>
                     <?php endif; ?>
 
@@ -64,7 +64,7 @@
                 <td id="filter-orders">
                     <?php if(!empty($data['FilterOrders'])): ?>
                         <?php foreach($data['FilterOrders'] as $orders): ?>
-                            <?php $index++; ?>
+
                             <div class="layui-form-item filter-item">
                                 <div class="layui-inline">
                                     <div class="layui-input-inline">
@@ -85,6 +85,7 @@
                                     </a>
                                 </div>
                             </div>
+                            <?php $index++; ?>
                         <?php endforeach; ?>
                     <?php endif; ?>
 
