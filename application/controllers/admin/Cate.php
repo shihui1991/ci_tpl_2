@@ -157,11 +157,7 @@ class Cate extends Auth
             throw new Exception('文件不存在',EXIT_UNKNOWN_FILE);
         }
         // 逐行读取
-        $content='';
-        $handle = makeTextYield($file);
-        foreach($handle as $text){
-            $content .= $text;
-        }
+        $content = makeTextYield($file);
 
         $data=array(
             'Updated'=>filemtime($file),

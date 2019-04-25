@@ -1,5 +1,13 @@
 <body>
-
+<link rel="stylesheet" href="/layui/2.4.3/css/modules/code.css">
+<style>
+    ol li{
+        word-wrap: break-word;
+        list-style-type: decimal-leading-zero;
+        background-color: #fff;
+        margin-left: 50px;
+    }
+</style>
 <div class="layui-fluid">
     <div class="layui-row">
         <div class="layui-col-xs12">
@@ -25,9 +33,15 @@
                                 更新配置文件
                             </a>
                         </div>
-                        <pre class="layui-code" lay-title="conf.php - <?php echo date('Y-m-d H:i:s',$data['Updated']); ?>" lay-encode="true" lay-about="false">
-<?php echo htmlspecialchars($data['Content']); ?>
-                            </pre>
+
+                        <div class="layui-code layui-box layui-code-view">
+                            <h3 class="layui-code-h3">conf.php - <?php echo date('Y-m-d H:i:s',$data['Updated']); ?></h3>
+                            <ol class="layui-code-ol">
+                                <?php foreach($data['Content'] as $cont):?>
+                                    <li><?php echo $cont; ?></li>
+                                <?php endforeach;?>
+                            </ol>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -35,13 +49,3 @@
         </div>
     </div>
 </div>
-
-<script>
-    layui.use('code', function(){ //加载code模块
-        layui.code({
-            about:false
-            , encode:true
-        });
-    });
-
-</script>

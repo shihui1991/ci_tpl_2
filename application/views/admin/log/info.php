@@ -1,5 +1,13 @@
 <body>
-
+<link rel="stylesheet" href="/layui/2.4.3/css/modules/code.css">
+<style>
+    ol li{
+        word-wrap: break-word;
+        list-style-type: decimal-leading-zero;
+        background-color: #fff;
+        margin-left: 50px;
+    }
+</style>
 <div class="layui-fluid">
     <div class="layui-row">
         <div class="layui-col-xs12">
@@ -14,9 +22,14 @@
                 <div class="layui-tab-content">
                     <div class="layui-tab-item layui-show">
 
-                        <pre class="layui-code" lay-title="<?php echo $data['File']; ?>" lay-encode="true" lay-about="false">
-<?php echo htmlspecialchars($data['Content']); ?>
-                        </pre>
+                        <div class="layui-code layui-box layui-code-view">
+                            <h3 class="layui-code-h3"><?php echo $data['File']; ?></h3>
+                            <ol class="">
+                                <?php foreach($data['Content'] as $i => $cont):?>
+                                    <li style=""><?php echo $cont; ?></li>
+                                <?php endforeach;?>
+                            </ol>
+                        </div>
 
                     </div>
                 </div>
@@ -25,12 +38,3 @@
         </div>
     </div>
 </div>
-
-<script>
-    layui.use('code', function(){ //加载code模块
-        layui.code({
-            about:false
-            , encode:true
-        });
-    });
-</script>
