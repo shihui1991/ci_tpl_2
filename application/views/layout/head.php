@@ -27,6 +27,13 @@
             opacity: 0;
             -ms-filter: 'alpha(opacity=0)';
         }
+        .btn-remove-image{
+            color: red;
+            font-size: 30px;
+            position: absolute;
+            top: 0;
+            right: 0;
+        }
     </style>
 </head>
 
