@@ -12,6 +12,7 @@ class Base extends CI_Controller
     protected $outputData=array();  // 响应输出数据
     protected $requestUrl;          // 请求URL
     protected $clientIP;            // 客户端IP
+    protected $exception;           // 异常信息
 
     public function __construct()
     {
@@ -100,7 +101,8 @@ class Base extends CI_Controller
         $savePath=str_replace(' ','_',trim($savePath));
         $path='.'.$savePath;
         if(!file_exists($path)){
-            mkdir($path,DIR_WRITE_MODE,true);
+            mkdir($path,0777,true);
+            chmod($path,0777);
         }
         $config['upload_path'] = $path.'/';
 
@@ -176,46 +178,12 @@ class Base extends CI_Controller
      */
     protected function _response($data=array(),$code=EXIT_SUCCESS,$msg='请求成功',$url='', $tpls=array())
     {
-        // 结束计时
-        $this->benchmark->mark('app_end');
-        // 执行时间
-        $execTime = $this->benchmark->elapsed_time('app_start', 'app_end');
-
-        $datetime = date('Y-m-d H:i:s');
-        $reqUrl = $this->requestUrl;
-        $ip = $this->clientIP;
-        $get = json_encode($this->input->get(),JSON_UNESCAPED_UNICODE);
-        $post = json_encode($this->input->post(),JSON_UNESCAPED_UNICODE);
-        $stream = urldecode($this->input->raw_input_stream);
-        if('/admin/log/info' == $reqUrl){
-            $output = '';
-        }else{
-            $output = json_encode($data,JSON_UNESCAPED_UNICODE);
-        }
-        // 记录内容
-        $record=<<<"EEE"
-
-【记录时间】--> $datetime
-【访问 IP 】--> $ip
-【请求地址】--> $reqUrl
-【执行时间】--> $execTime
-【响应代码】--> $code
-【响应信息】--> $msg
-【请求数据】↓
-【  Get 】$get
-【 Post 】$post
-【Stream】$stream
-【响应数据】--> $output
--------------------------------------------------
-
-EEE;
-        recordLog($record,'R'.str_replace('/','_',$reqUrl),'response');
         // 响应数据
         $this->outputData=array(
-            'data' => $data,
-            'code' => $code,
-            'msg'  => (EXIT_ERROR == $code ? '' : $msg),
-            'url'  => $url,
+            'data'=>$data,
+            'code'=>$code,
+            'msg'=>(EXIT_ERROR == $code ? '' : $msg),
+            'url'=>$url,
         );
     }
 
@@ -227,47 +195,29 @@ EEE;
      */
     public function _recordException($type, $msg, $file, $line)
     {
-        $datetime = date('Y-m-d H:i:s');
-        $reqUrl = $this->requestUrl;
-        $ip = $this->clientIP;
-        $get = json_encode($this->input->get(),JSON_UNESCAPED_UNICODE);
-        $post = json_encode($this->input->post(),JSON_UNESCAPED_UNICODE);
-        $stream = urldecode($this->input->raw_input_stream);
-        // 记录内容
-        $record=<<<"EEE"
-        
-【产生时间】--> $datetime
-【访问 IP 】--> $ip
-【异常类型】--> $type
-【异常信息】--> $msg
-【异常文件】--> $file
-【异常行号】--> $line
-【请求地址】--> $reqUrl
-【请求数据】↓
-【  Get 】$get
-【 Post 】$post
-【Stream】$stream
--------------------------------------------------
-
-EEE;
-        recordLog($record,'E'.str_replace('/','_',$reqUrl),'exception');
-        $data = array();
-        $code = EXIT_ERROR;
-        $args = func_get_args();
-        if(isset($args[5])){
-            $code = $args[5];
-            $msg = $args[4];
-        }
+        $data=array();
+        $code=EXIT_ERROR;
+        $tpls=array();
         # 缓存重定向 URL
         $url = '';
         if(isset($_SESSION['redirect'])){
             $url = $_SESSION['redirect'];
             unset($_SESSION['redirect']);
         }
-        $tpls = array();
+
+        $args = func_get_args();
+        if(isset($args[5])){
+            $code = $args[5];
+            $msg = $args[4];
+        }
+        $this->exception = array(
+            'type' => $type,
+            'msg' => $msg,
+            'file' => $file,
+            'line' => $line,
+        );
 
         $this->_response($data,$code,$msg,$url,$tpls);
-        die();
     }
 
     /**
@@ -291,5 +241,68 @@ EEE;
         $file = $e->getFile();
         $line = $e->getLine();
         $this->_recordException($type, $msg, $file, $line,$msg,$type);
+    }
+
+    public function __destruct()
+    {
+        ini_set('display_errors', 0);
+        // 结束计时
+        $this->benchmark->mark('app_end');
+        // 执行时间
+        $execTime = $this->benchmark->elapsed_time('app_start', 'app_end');
+
+        $datetime=date('Y-m-d H:i:s');
+        $reqUrl = $this->requestUrl;
+        $ip = $this->clientIP;
+        $get=json_encode($this->input->get(),JSON_UNESCAPED_UNICODE);
+        $post=json_encode($this->input->post(),JSON_UNESCAPED_UNICODE);
+        $stream=urldecode($this->input->raw_input_stream);
+        if('/admin/log/info' == $reqUrl){
+            $output='';
+        }else{
+            $output=json_encode($this->outputData['data'],JSON_UNESCAPED_UNICODE);
+        }
+        # 异常日志
+        if($this->outputData['code']){
+            $record=<<<"EEE"
+        
+【产生时间】--> $datetime
+【访问 IP 】--> $ip
+【请求地址】--> $reqUrl
+【执行时间】--> $execTime
+【异常类型】--> {$this->exception['type']}
+【异常信息】--> {$this->exception['msg']}
+【异常文件】--> {$this->exception['file']}
+【异常行号】--> {$this->exception['line']}
+【请求数据】↓
+【  Get 】$get
+【 Post 】$post
+【Stream】$stream
+【响应数据】--> $output
+-------------------------------------------------
+
+EEE;
+            recordLog($record,'E'.str_replace('/','_',$reqUrl),'exception');
+        }
+        # 访问日志
+        else{
+            $record=<<<"EEE"
+
+【记录时间】--> $datetime
+【访问 IP 】--> $ip
+【请求地址】--> $reqUrl
+【执行时间】--> $execTime
+【响应代码】--> {$this->outputData['code']}
+【响应信息】--> {$this->outputData['msg']}
+【请求数据】↓
+【  Get 】$get
+【 Post 】$post
+【Stream】$stream
+【响应数据】--> $output
+-------------------------------------------------
+
+EEE;
+            recordLog($record,'R'.str_replace('/','_',$reqUrl),'response');
+        }
     }
 }

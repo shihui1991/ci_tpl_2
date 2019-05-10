@@ -230,12 +230,12 @@ class Excel
         }
         foreach(makeArrayIterator($list) as $k => $row){
             if(empty($fields)){
-                $fields=array_keys($row);
+                $fields = array_keys($row);
             }
-            foreach($fields as $index=>$field){
-                $pRow = $k+$rowStart;
-                $value=isset($row[$field])?$row[$field]:'';
-                $this->objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow($index, $pRow, $value);
+            $pRow = $k + $rowStart;
+            foreach($fields as $col => $field){
+                $value = isset($row[$field]) ? $row[$field] : '';
+                $this->objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow($col, $pRow, $value);
             }
         }
     }
@@ -252,14 +252,17 @@ class Excel
         $objWriter = \PHPExcel_IOFactory::createWriter($this->objPHPExcel, 'Excel5');
         $path= DOWNLOAD_DIR.'/excel';
         $realpath=FCPATH.$path;
+        if( ! file_exists($realpath)){
+            mkdir($realpath,0777,true);
+            chmod($realpath,0777);
+        }
         $fileName .= '_'.date('YmdHis');
         $file=$realpath.'/'.$fileName.'.xls';
         if($file){
-            $result='/'.$path.'/'.$fileName.'.xls';
             $objWriter->save($file);
         }
 
-        return $result;
+        return $file;
     }
 
     /**  直接输出

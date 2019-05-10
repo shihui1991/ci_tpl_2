@@ -60,7 +60,7 @@ class CI_Log {
 	 *
 	 * @var	int
 	 */
-	protected $_file_permissions = 0644;
+	protected $_file_permissions = 0777;
 
 	/**
 	 * Level of logging
@@ -128,7 +128,11 @@ class CI_Log {
 		$this->_file_ext = (isset($config['log_file_extension']) && $config['log_file_extension'] !== '')
 			? ltrim($config['log_file_extension'], '.') : 'php';
 
-		file_exists($this->_log_path) OR mkdir($this->_log_path, 0755, TRUE);
+//		file_exists($this->_log_path) OR mkdir($this->_log_path, 0777, TRUE);
+        if( !file_exists($this->_log_path)){
+            mkdir($this->_log_path, 0777, TRUE);
+            chmod($this->_log_path,0777); // 在linux系统中在创建文件/文件夹时有一个默认权限，此权限受 umask 设置影响
+        }
 
 		if ( ! is_dir($this->_log_path) OR ! is_really_writable($this->_log_path))
 		{

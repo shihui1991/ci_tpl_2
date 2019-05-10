@@ -487,10 +487,15 @@ if(!function_exists('recordLog')){
     {
         $path=APPPATH.'logs/'.date('Y_m_d').'/'.$dir;
         if(!file_exists($path)){
-            mkdir($path,DIR_WRITE_MODE,true);
+            mkdir($path,0777,true);
+            chmod($path,0777);
         }
         $file=$path.'/'.$fileName.'_'.date('Y_m_d');
+        $isNew = !file_exists($file);
         file_put_contents($file,$log,FILE_APPEND);
+        if($isNew){
+            chmod($file,0777);
+        }
     }
 }
 

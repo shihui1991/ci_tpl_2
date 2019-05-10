@@ -94,6 +94,7 @@ class Log extends Auth
         if(false == $file){
             throw new Exception('文件不存在',EXIT_UNKNOWN_FILE);
         }
+        ini_set('memory_limit','512M');
         // 逐行读取
         $content = makeTextYield($file);
 
