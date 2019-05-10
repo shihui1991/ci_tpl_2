@@ -1,123 +1,149 @@
-var layerMsgIcon = {
-    0 : '黄色叹号',
-    1 : '绿色勾',
-    2 : '红色叉',
-    3 : '黄色问号',
-    4 : '灰色锁',
-    5 : '红色难过',
-    6 : '绿色笑脸',
-};
-
-// 弹出提示消息
-function alertMsg(msg,icon) {
+/** 加载loading
+ * layer.load(icon, options)
+ *  0  三点转动
+ *  1  黑色粗菊
+ *  2  黑色细菊
+ */
+function openLoading(icon)
+{
     layui.use(['layer'], function(){
         var layer = layui.layer;
-
-        layer.msg(msg, {icon: icon});
-    });
-}
-// 开启加载层
-function showLoading() {
-    layui.use(['layer'], function(){
-        layui.layer.load();
-    });
-}
-
-// 关闭加载层
-function closeLoading() {
-    layui.use(['layer'], function(){
-        layui.layer.closeAll('loading');
+        layer.load(icon,{
+            zIndex: layer.zIndex //重点1
+            , success: function(layero){
+                layer.setTop(layero); //重点2
+            }
+        });
     });
 }
 
-// 关闭页面层
-function closePage() {
+/** 关闭所有层
+ * layer.closeAll(type)
+ *  undefined  所有
+ *  dialog     信息框
+ *  page       页面层
+ *  iframe     iframe层
+ *  loading    加载层
+ *  tips       tips层
+ */
+function closeLayer(type)
+{
     layui.use(['layer'], function(){
-        layui.layer.closeAll('page');
+        var layer = layui.layer;
+        layer.closeAll(type);
     });
 }
 
-// 关闭弹窗层
-function closeIframe() {
+// 关闭弹出层
+// layer.close(index)
+function closeLayerIndex(index)
+{
     layui.use(['layer'], function(){
-        layui.layer.closeAll('iframe');
+        var layer = layui.layer;
+        layer.close(index);
     });
 }
 
-// 关闭信息框
-function closeDialog() {
+/** 弹出提示
+ * layer.msg(content, options, end)
+ *  0  蓝色i
+ *  1  绿色勾
+ *  2  红色叉
+ *  3  蓝色问号
+ *  4  黑色锁
+ *  5  红色难过
+ *  6  红色笑脸
+ *  7  蓝色下载
+ */
+function alertMsg(msg,icon,time,callback)
+{
     layui.use(['layer'], function(){
-        layui.layer.closeAll('dialog');
+        var layer = layui.layer;
+        layer.msg(msg, {
+                icon: icon ,
+                time: (time ? time : 2000) ,
+                zIndex: layer.zIndex //重点1
+                , success: function(layero){
+                    layer.setTop(layero); //重点2
+                }
+            }
+            , callback);
     });
 }
 
-// 关闭所有层
-function closeAllLayer() {
+// 弹出询问
+// layer.confirm(content, options, yes, cancel)
+function alertConfirm(msg,yes,cancel,title) {
     layui.use(['layer'], function(){
-        layui.layer.closeAll();
+        var layer = layui.layer;
+        layer.confirm(msg, {
+            icon: 3 ,
+            title: (title ? title : '确认提示') ,
+            zIndex: layer.zIndex //重点1
+            , success: function(layero){
+                layer.setTop(layero); //重点2
+            }
+        }
+        , yes, cancel);
     });
 }
 
 // 常用元素初始化
-function renderElem(ele,filter) {
+function renderLayelem(ele,filter) {
     layui.use(['element'], function(){
-        layui.element.render(ele, filter);
+        var element = layui.element;
+        element.render(ele, filter);
     });
 }
 
-// 表单初始化
-function renderForm() {
-    var ele = arguments[0];
-    layui.use(['form'], function(){
-         layui.form.render(ele);
-    });
-}
-
-// 初始化 时间插件
-function renderDate() {
-    layui.use(['form','laydate'], function() {
-        var form = layui.form;
+// 初始化时间插件
+function renderLaydate() {
+    layui.use(['laydate'], function() {
+        var $ = layui.$; //重点处
         var laydate = layui.laydate;
 
-        var laydates = $('body').find('.laydate');
-        $.each(laydates, function (i, obj) {
-            var type = $(obj).data('type');
+        var dateObjs = $('body').find('.laydate');
+        $.each(dateObjs, function (i, dateDom) {
+            var obj = $(dateDom);
+            var type = obj.data('type');
             var index = $.inArray(type, ['time', 'date', 'datetime', 'month', 'year']);
-            if (index > -1) {
-                laydate.render({
-                    elem: obj
-                    , type: type
-                });
+            if(-1 === index){
+                return true;
             }
+            var range = obj.data('range'); //true，将默认采用 “ - ” 分割
+            var min = obj.data('min'); // min: '1900-1-1',如果值为整数类型，且数字＜86400000，则数字代表天数，如：min: -7，即代表最小日期在7天前，正数代表若干天后
+            var max = obj.data('max'); // max: '2099-12-31',如果值为整数类型，且数字 ≥ 86400000，则数字代表时间戳，如：max: 4073558400000，即代表最大日期在：公元3000年1月1日
+
+            var callDone = obj.data('done');
+            var callChange = obj.data('change');
+            var options = {
+                elem: dateDom ,
+                type: type
+            };
+            if(range){
+                options['range'] = range;
+            }
+            if(min){
+                options['min'] = min;
+            }
+            if(max){
+                options['max'] = max;
+            }
+            if(callDone){
+                options['done'] = window[callDone];
+            }
+            if(callDone){
+                options['change'] = window[callChange];
+            }
+            laydate.render(options);
         });
-        if(laydates.length){
-            form.render();
-        }
     });
 }
-
-// 加载code模块
-function renderCode() {
-    layui.use('code', function(){
-        layui.code({
-            about:false
-            , encode:true
-        });
-    });
-}
-
-// 监听表单提交
-layui.use(['form','layer'], function(){
-    var form = layui.form;
-
-    form.on('submit(btnFormSubmit)', function(data){
-        btnFormAjaxSubmit(data.elem);
-        return false;
-    });
-});
 
 // 打开弹窗
-function openLayer(options) {
+// layer.open(options)
+function openLayer(args) {
+    var $ = layui.$; //重点处
     var w = $(window).width();
     var h = $(window).height();
     var isFull = false;
@@ -125,36 +151,34 @@ function openLayer(options) {
     if(w < 600 || h < 400){
         isFull = true;
     }
-
-    var other = {
-        zIndex: layer.zIndex //重点1
-        , success: function(layero){
-            layer.setTop(layero); //重点2
-        }
-        , moveEnd:function (layero) {
-            var pos = layero.offset();
-            var index = layero.attr('times');
-            if(pos.top < -30){
-                layer.full(index);
-            }
-        }
-        , full:function (layero) {
-            layero.offset({top:0,left:0});
-        }
-        , restore:function (layero) {
-            var pos = layero.offset();
-            if(pos.top < -30){
-                layero.offset({top:0,left:pos.left});
-            }
-            if(isFull){
-                layero.offset({top:0,left:0});
-            }
-        }
-    };
-    $.extend(options,other);
-
     layui.use(['layer'], function() {
         var layer = layui.layer;
+        var options = {
+            zIndex: layer.zIndex //重点1
+            , success: function(layero){
+                layer.setTop(layero); //重点2
+            }
+            , moveEnd:function (layero) {
+                var pos = layero.offset();
+                var index = layero.attr('times');
+                if(pos.top < -30){
+                    layer.full(index);
+                }
+            }
+            , full:function (layero) {
+                layero.offset({top:0,left:0});
+            }
+            , restore:function (layero) {
+                var pos = layero.offset();
+                if(pos.top < -30){
+                    layero.offset({top:0,left:pos.left});
+                }
+                if(isFull){
+                    layero.offset({top:0,left:0});
+                }
+            }
+        };
+        $.extend(options,args);
 
         layer.ready(function () {
             var i = layer.open(options);
@@ -166,19 +190,19 @@ function openLayer(options) {
     });
 }
 
-// 打开一个弹窗
-function openIframe(title,url) {
+// 打开Iframe页面
+function openLayerIframe(title,url,args) {
+    var $ = layui.$; //重点处
     var w = $(window).width();
     var h = $(window).height();
-    var other = undefined !== arguments[2] ? arguments[2] : {} ;
-    var width = other['width'] ? other['width'] : 1000;
-    var height = other['height'] ? other['height'] : 600;
+    var width = args['width'] ? args['width'] : 1000;
+    var height = args['height'] ? args['height'] : 600;
     if(w < width || h < height){
         width = w;
         height = h;
     }
-    var offset = other['offset'] ? other['offset'] : [Math.random()*(h-height), Math.random()*(w-width)];
-    var shade = other['shade'] ? other['shade'] : 0 ;
+    var offset = args['offset'] ? args['offset'] : [Math.random()*(h-height), Math.random()*(w-width)];
+    var shade = args['shade'] ? args['shade'] : 0 ;
 
     var options = {
         type: 2
@@ -191,22 +215,21 @@ function openIframe(title,url) {
         , maxmin: true
         , moveOut: true
     };
-    $.extend(options,other);
+    $.extend(options,args);
     openLayer(options);
 }
 
-// 打开一个弹框
-function openDom(area,title,content) {
-    var other = undefined !== arguments[3] ? arguments[3] : {} ;
-
+// 打开弹层
+function openLayerDom(area,title,dom,args) {
+    var $ = layui.$; //重点处
     var options = {
         type: 1
         , skin: 'layui-layer-lan'
         , area: area
         , title: title
-        , content: content
+        , content: dom
         , maxmin: true
     };
-    $.extend(options,other);
+    $.extend(options,args);
     openLayer(options);
 }
