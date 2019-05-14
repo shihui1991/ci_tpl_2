@@ -9,34 +9,36 @@
 function lock()
 {
     $redis = new Redis();
-    $key = '';
+    $key = ''; # 加锁的key
+    $expire = 10; # 加锁超时时间
+    $sleep = 1; # 循环等待解锁时间
     while (true){
         $time = time();
-        $lockTime = $time + 10;
+        $expireAt = $time + $expire;
         $lockTime1 = $redis->get($key);
         # 有锁且未超时
         if($lockTime1 > $time){
-            sleep(1);
+            sleep($sleep);
             continue;
         }
         # 未锁或已超时
         else{
             # 未锁，加锁
             if(empty($lockTime1)){
-                $status = $redis->setnx($key,$lockTime);
+                $status = $redis->setnx($key,$expireAt);
             }
             # 超时，替换死锁
             else{
-                $lockTime2 = $redis->getSet($key,$lockTime);
+                $lockTime2 = $redis->getSet($key,$expireAt);
                 $status = $lockTime2 == $lockTime1;
             }
             if($status){
-                return $lockTime;
+                return $expireAt;
                 break;
             }
             # 未获得锁
             else{
-                sleep(1);
+                sleep($sleep);
                 continue;
             }
         }
@@ -48,12 +50,12 @@ function lock()
 /** 解锁
  * @param $lockTime
  */
-function unLock($lockTime)
+function unLock($expireAt)
 {
     $redis = new Redis();
     $key = '';
-    $lockTime1 = $redis->get($key);
-    if($lockTime1 == $lockTime){
+    $lockTime = $redis->get($key);
+    if($lockTime == $expireAt){
         $redis->del($key);
     }
 }
