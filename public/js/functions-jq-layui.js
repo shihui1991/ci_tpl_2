@@ -9,7 +9,7 @@ function comAjaxCallback(resp,obj)
         alertMsg(resp.msg,5);
         return false;
     }
-    alertMsg(resp.msg,0,1000,function () {
+    alertMsg(resp.msg,1,1000,function () {
         if(resp.url){
             location.href = resp.url;
         }else{

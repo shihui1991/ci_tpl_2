@@ -46,14 +46,13 @@ function closeLayerIndex(index)
 
 /** 弹出提示
  * layer.msg(content, options, end)
- *  0  蓝色i
+ *  0  黄色i
  *  1  绿色勾
  *  2  红色叉
- *  3  蓝色问号
+ *  3  黄色问号
  *  4  黑色锁
  *  5  红色难过
- *  6  红色笑脸
- *  7  蓝色下载
+ *  6  绿色笑脸
  */
 function alertMsg(msg,icon,time,callback)
 {
@@ -202,7 +201,7 @@ function openLayerIframe(title,url,args) {
         height = h;
     }
     var offset = args['offset'] ? args['offset'] : [Math.random()*(h-height), Math.random()*(w-width)];
-    var shade = args['shade'] ? args['shade'] : 0 ;
+    var shade = undefined === args['shade'] ? 0.3 : args['shade'];
 
     var options = {
         type: 2
