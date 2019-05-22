@@ -66,7 +66,7 @@ class Pay extends Base
         # 请求参数转为 xml
         $dataXml = arrayToSimpleXml($data,'<xml/>');
         # 查询订单
-        $resXml = curlHttp($this->orderQueryURL,$dataXml,true,2);
+        $resXml = $this->curlHttp($this->orderQueryURL,$dataXml,true,2);
         # 解析查询结果
         $result = simpleXmlToArray($resXml);
 

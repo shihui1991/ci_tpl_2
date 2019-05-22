@@ -65,7 +65,7 @@ class Mini extends Base
             'msgtype'      => $msgType,
             $msgType       => $content,
         );
-        $res = curlHttp($url, $data, true);
+        $res = $this->curlHttp($url, $data, true);
         $res = json_decode($res,true);
         if(isset($res['errcode']) && 0 != $res['errcode']){
             return false;

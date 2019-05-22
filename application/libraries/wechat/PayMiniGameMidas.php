@@ -96,7 +96,7 @@ class PayMiniGameMidas extends Base
         $data['access_token'] = $baseAccessToken;
         $data['mp_sig'] = $this->makeMidasPayMpSig($data, $uri, $sessionKey);
         # 请求
-        $res = curlHttp($url,$data,true,1);
+        $res = $this->curlHttp($url,$data,true,1);
         $res = json_decode($res,true);
         if(isset($res['errcode']) && 0 != $res['errcode']){
             return false;
