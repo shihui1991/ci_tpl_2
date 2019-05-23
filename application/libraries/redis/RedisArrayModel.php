@@ -29,7 +29,9 @@ class RedisArrayModel
 
     public function __construct()
     {
-        static::$redis = new \RedisArray($this->hosts,$this->options); # 生成 redis 实例
+        if(empty(static::$redis)){
+            static::$redis = new \RedisArray($this->hosts,$this->options); # 生成 redis 实例
+        }
     }
 
     /**

@@ -26,7 +26,9 @@ class RedisClusterModel
 
     public function __construct()
     {
-        static::$redis = new \RedisCluster($this->config['name'], $this->seeds, $this->config['timeout'], $this->config['read_timeout'], $this->config['persistent'], $this->config['auth']); # 生成 redis 实例
+        if(empty(static::$redis)){
+            static::$redis = new \RedisCluster($this->config['name'], $this->seeds, $this->config['timeout'], $this->config['read_timeout'], $this->config['persistent'], $this->config['auth']); # 生成 redis 实例
+        }
     }
 
     /**
