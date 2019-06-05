@@ -62,7 +62,7 @@ function btnFormAjaxRequest(btn)
 var uploadFileNum = 0;
 var uploadFilesURL = [];
 // 上传文件
-function uploadFile(input)
+function uploadFiles(input)
 {
     var files = input.files;
     if( ! files || 0 === files.length){
