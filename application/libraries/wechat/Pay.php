@@ -63,6 +63,7 @@ class Pay extends Base
         # 生成 MD5 签名
         $data = $this->filterEmptyData($data);
         $data['sign'] = $this->makeMd5Sign($data);
+        $data['sign_type'] = 'MD5';
         # 请求参数转为 xml
         $dataXml = arrayToSimpleXml($data,'<xml/>');
         # 查询订单

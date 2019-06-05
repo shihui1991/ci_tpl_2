@@ -127,7 +127,9 @@ class Init extends Base
                 unset($_SESSION['Master']);
                 throw new \Exception('等待超时，请重新登录！',EXIT_CONFIG);
             }
-            $_SESSION['Master']['Timeout']=time()+(int)OPERAT_WAIT_TIME;
+            $master = $_SESSION['Master'];
+            $master['Timeout']=time()+(int)OPERAT_WAIT_TIME;
+            $_SESSION['Master'] = $master;
         }
         $this->master=$_SESSION['Master'];
         unset($_SESSION['redirect']);

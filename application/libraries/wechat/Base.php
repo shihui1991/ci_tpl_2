@@ -37,6 +37,10 @@ abstract class Base
      * 验证请求是否来自微信
      *
      * @param array $input
+     * @param string signature  微信加密签名，signature结合了开发者填写的token参数和请求中的timestamp参数、nonce参数
+     * @param int timestamp 时间戳
+     * @param string nonce 随机数
+     * @param string echostr 随机字符串
      * @return bool|string
      */
     public function valiRequestFromWeChat($input = array())
@@ -68,7 +72,11 @@ abstract class Base
     # 获取全局调用凭证的接口地址
     # https请求方式: GET
     # https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=APPID&secret=APPSECRET
-
+    # 【返回参数】
+    # string access_token  获取到的凭证
+    # int expires_in  凭证有效时间，单位：秒
+    # int errcode  返回码 0 请求成功
+    # string errmsg  错误信息
     public $baseAccessTokenURL = 'https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=%s&secret=%s';
 
     /**
@@ -92,6 +100,8 @@ abstract class Base
     # 获取微信服务器IP地址的接口地址
     # http请求方式: GET
     # https://api.weixin.qq.com/cgi-bin/getcallbackip?access_token=ACCESS_TOKEN
+    # 【返回参数】
+    # array ip_list  微信服务器IP地址列表
     public $serverIPsURL = 'https://api.weixin.qq.com/cgi-bin/getcallbackip?access_token=%s';
 
     /**
@@ -116,8 +126,18 @@ abstract class Base
     # 网络检测的接口地址
     # HTTP Post请求：
     # https://api.weixin.qq.com/cgi-bin/callback/check?access_token=ACCESS_TOKEN
-    # 必须 action 	        执行的检测动作，允许的值：dns（做域名解析）、ping（做ping检测）、all（dns和ping都做）
-    # 必须 check_operator 	指定平台从某个运营商进行检测，允许的值：CHINANET（电信出口）、UNICOM（联通出口）、CAP（腾讯自建出口）、DEFAULT（根据ip来选择运营商）
+    # 【请求参数】
+    # 必须  action 	        执行的检测动作，允许的值：dns（做域名解析）、ping（做ping检测）、all（dns和ping都做）
+    # 必须  check_operator 	指定平台从某个运营商进行检测，允许的值：CHINANET（电信出口）、UNICOM（联通出口）、CAP（腾讯自建出口）、DEFAULT（根据ip来选择运营商）
+    # 【返回参数】
+    # array dns  dns结果列表
+    # string dns.ip  解析出来的ip
+    # string dns.real_operator  ip对应的运营商
+    # array ping  ping结果列表
+    # string ping.ip  ping的ip，执行命令为ping ip –c 1-w 1 -q
+    # string ping.from_operator  ping的源头的运营商，由请求中的check_operator控制
+    # string ping.package_loss  ping的丢包率，0%表示无丢包，100%表示全部丢包。因为目前仅发送一个ping包，因此取值仅有0%或者100%两种可能
+    # string ping.time  ping的耗时，取ping结果的avg耗时
     public $checkNetURL = 'https://api.weixin.qq.com/cgi-bin/callback/check?access_token=%s';
 
     /**

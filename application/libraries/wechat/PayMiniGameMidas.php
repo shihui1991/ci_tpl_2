@@ -8,11 +8,8 @@
 namespace libraries\wechat;
 
 
-class PayMiniGameMidas extends Base
+class PayMiniGameMidas extends Mini
 {
-
-    public $appid;
-    public $appkey;
     public $offerid; # 米大师应用ID
     public $offerKey; # 米大师密钥 正式环境
     public $offerSandboxKey; # 米大师密钥 沙箱环境
