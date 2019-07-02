@@ -3,6 +3,25 @@ $('head').append(
     '<script src="/treetable/jquery.treetable.min.js"></script>'
 );
 
+// 所有选项 默认值
+// branchAttr          ttBranch
+// clickableNodeNames  false
+// column              0
+// columnElType        td
+// expandable          false
+// expanderTemplate    <a href="#">&nbsp;</a>
+// indent              19
+// indenterTemplate    <span class="indenter"></span>
+// initialState        collapsed | expanded
+// nodeIdAttr          ttId
+// parentIdAttr        ttParentId
+// stringCollapse      Collapse
+// stringExpand        Expand
+// 所有事件
+// onInitialized      树初始化完毕后的回调函数
+// onNodeCollapse     节点折叠时的回调函数
+// onNodeExpand       节点展开时的回调函数
+// onNodeInitialized  节点初始化完毕后的回调函数
 function makeTreeTable(treeTableObj,args)
 {
     var options = {
