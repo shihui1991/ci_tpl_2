@@ -235,7 +235,7 @@ if(!function_exists('batchUpdateSql')){
         //数据字段
         $sql_inserts=array();
         foreach ($inserts as $insert){
-            $sql_inserts[]=" $insert ";
+            $sql_inserts[]=" `$insert` ";
         }
         $sql_inserts=implode(',',$sql_inserts);
         /* ++++++++++ 创建虚拟表 ++++++++++ */
@@ -268,21 +268,21 @@ if(!function_exists('batchUpdateSql')){
         /* ++++++++++ 批量更新 ++++++++++ */
         //更新字段
         if(is_string($updates)){
-            $sql_updates= " `$table`.`$updates` = `$temp_table`.`$updates` ";
+            $sql_updates= " `$table`.`$updates` = $temp_table.`$updates` ";
         }else{
             $sql_updates=array();
             foreach ($updates as $update){
-                $sql_updates[] = " `$table`.`$update` = `$temp_table`.`$update` ";
+                $sql_updates[] = " `$table`.`$update` = $temp_table.`$update` ";
             }
             $sql_updates=implode(',',$sql_updates);
         }
         //条件字段
         if(is_string($wheres)){
-            $sql_wheres= " `$table`.`$wheres` = `$temp_table`.`$wheres` ";
+            $sql_wheres= " `$table`.`$wheres` = $temp_table.`$wheres` ";
         }else{
             $sql_wheres=array();
             foreach ($wheres as $where){
-                $sql_wheres[] = " `$table`.`$where` = `$temp_table`.`$where` ";
+                $sql_wheres[] = " `$table`.`$where` = $temp_table.`$where` ";
             }
             $sql_wheres=implode(' and ',$sql_wheres);
         }
