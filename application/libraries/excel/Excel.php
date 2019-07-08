@@ -7,6 +7,7 @@
 
 namespace libraries;
 
+use ArrayObject;
 
 class Excel
 {
@@ -83,7 +84,7 @@ class Excel
         }
         $this->phpExcel = \PHPExcel_IOFactory::load($realPath);
         $sheets = $this->phpExcel->getAllSheets();
-        if(absEmpty($sheets)){
+        if(empty($sheets)){
             throw new \Exception('文件为空',EXIT_USER_INPUT);
         }
 
@@ -103,10 +104,10 @@ class Excel
     {
         $this->phpExcel = new \PHPExcel();
         $i = 0;
-        if(absEmpty($list)){
+        if(empty($list)){
             goto result;
         }
-        foreach(makeArrayIterator($list) as $name => $data){
+        foreach($this->makeArrayIterator($list) as $name => $data){
             # 创建工作表
             $this->createSheet($i, $name);
             # 将数据写入工作表
@@ -127,7 +128,7 @@ class Excel
      */
     public function createSheet($index = 0, $name = '')
     {
-        $name = absEmpty($name) ? 'sheet'.$index : $name;
+        $name = empty($name) ? 'sheet'.$index : $name;
         # 创建工作表
         $this->phpExcel->createSheet($index);
         # 设置为活跃工作表
@@ -144,13 +145,13 @@ class Excel
      */
     public function putListToActiveSheet(array $list)
     {
-        if(absEmpty($list)){
+        if(empty($list)){
             return true;
         }
         $row = 1;
-        foreach(makeArrayIterator($list) as $data){
+        foreach($this->makeArrayIterator($list) as $data){
             $col = 0;
-            foreach(makeArrayIterator($data) as $val){
+            foreach($this->makeArrayIterator($data) as $val){
                 $val = sprintf('%s',$val);
                 $this->phpExcel->getActiveSheet()->setCellValueByColumnAndRow($col, $row, $val);
                 $col ++ ;
@@ -180,11 +181,47 @@ class Excel
             $writer->save($file);
         }else{
             # 文件输出头
-            outputHeaderForFile($file);
+            $this->outputHeaderForFile($file);
             # 输出文件
             $writer->save('php://output');
         }
 
         return $file;
+    }
+
+     /**
+     * 文件输出头
+     */
+    public function outputHeaderForFile($name, $size = 0)
+    {
+        // Redirect output to a client’s web browser (Excel5)
+        header ( "Content-Type: application/octet-stream" );
+        header ( "Content-Transfer-Encoding: binary" );
+        Header ( "Accept-Ranges: bytes ");
+        header ('Content-Disposition: attachment;filename="'.$name.'"');
+        if($size > 0){
+            header ( 'Content-Length: ' . $size);
+        }
+
+        // If you're serving to IE over SSL, then the following may be needed
+        header ('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
+        header ('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT'); // always modified
+        header ('Cache-Control: cache, must-revalidate'); // HTTP/1.1
+        header ('Pragma: public'); // HTTP/1.0
+        header ('Cache-Control: max-age=0');
+        // If you're serving to IE 9, then the following may be needed
+        header ('Cache-Control: max-age=1');
+        header ( "Cache-Control: must-revalidate, post-check=0, pre-check=0 ");
+    }
+
+    /** 生成数组迭代器
+     * @return mixed
+     */
+    public function makeArrayIterator($array = array())
+    {
+        $obj = new ArrayObject($array);
+        $iterator = $obj->getIterator();
+
+        return $iterator;
     }
 }
