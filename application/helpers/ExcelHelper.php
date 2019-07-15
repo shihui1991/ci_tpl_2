@@ -106,7 +106,7 @@ class ExcelHelper
         if(empty($list)){
             goto result;
         }
-        foreach($this->makeArrayIterator($list) as $name => $data){
+        foreach($this->getArrIterator($list) as $name => $data){
             # 创建工作表
             $this->createSheet($i, $name);
             # 将数据写入工作表
@@ -148,9 +148,9 @@ class ExcelHelper
             return true;
         }
         $row = 1;
-        foreach($this->makeArrayIterator($list) as $data){
+        foreach($this->getArrIterator($list) as $data){
             $col = 0;
-            foreach($this->makeArrayIterator($data) as $val){
+            foreach($this->getArrIterator($data) as $val){
                 $val = sprintf('%s',$val);
                 $this->phpExcel->getActiveSheet()->setCellValueByColumnAndRow($col, $row, $val);
                 $col ++ ;
@@ -216,11 +216,8 @@ class ExcelHelper
     /** 生成数组迭代器
      * @return mixed
      */
-    public function makeArrayIterator($array = array())
+    public function getArrIterator($array = array())
     {
-        $obj = new ArrayObject($array);
-        $iterator = $obj->getIterator();
-
-        return $iterator;
+        return (new \ArrayObject($array))->getIterator();
     }
 }

@@ -1,8 +1,5 @@
 <?php
-
-
 namespace app\helpers;
-
 
 class ArrHelper
 {

@@ -1,10 +1,8 @@
 <?php
-
 namespace app\helpers;
 
 class HtmlHelper
 {
-
     /**
      * 生成树形结构
      *
