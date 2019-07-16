@@ -150,7 +150,7 @@ class MysqlHelper
         # 虚拟表
         $tempTable = $table.'_temp';
         $inserts = implode(',', static::handleFields($insertFields));
-        $tableSql = "CREATE TEMPORARY TABLE `{$tempTable}` AS (SELECT {$inserts}) FROM `{$table}` WHERE 1<>1";
+        $tableSql = "CREATE TEMPORARY TABLE `{$tempTable}` AS (SELECT {$inserts} FROM `{$table}` WHERE 1<>1 )";
         # 批量插入数据的 sqls
         $sqls = static::batchInsertOrUpdateSqls($tempTable,$list,[],[],$insertFields,$num);
         array_unshift($sqls, $tableSql);

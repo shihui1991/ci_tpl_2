@@ -18,7 +18,6 @@ class AceHelper
      */
     static public function makeNav(array $list, $parentId = 0 , $level = 1, $currentId = 0, $parentsIds = [], $idKey = 'id', $pKey = 'parent_id')
     {
-        $li = '';
         if(empty($list)){
             return '';
         }
@@ -26,6 +25,7 @@ class AceHelper
         if(empty($group['children'])){
             return '';
         }
+        $li = '';
         foreach($group['children'] as $row){
             $name = (1 == $level) ? '<span class="menu-text">'. $row['name'] .'</span>' : $row['name'];
             $icon = (2 == $level) ? '<i class="menu-icon fa fa-caret-right"></i>' : $row['icon']; # 第二级菜单图标改为箭头
@@ -65,123 +65,244 @@ html;
     }
 
     /**
-     * 生成表单输入框
+     * 生成表单字段输入域
      *
-     * @param $model
-     * @param $field
-     * @param string $default
-     * @param string $type
+     * @param $label
+     * @param $content
      * @param array $params
      * @return string
      */
-    static public function formInput($model, $field, $default = null, $type = 'text', $params = [])
+    static public function formFieldDom($label, $content, $params = [])
     {
-        $label = $model->getFieldLabel($field);
+        $groupClass = isset($params['groupClass']) ? $params['groupClass'] : 'form-group';
+        $labelClass = isset($params['labelClass']) ? $params['labelClass'] : 'col-sm-3 control-label no-padding-right';
+        $divClass = isset($params['divClass']) ? $params['divClass'] : 'col-sm-9';
+
+        return <<<dom
+<div class="{$groupClass}">
+	<label class="{$labelClass}" for="{$params['id']}"> {$label} </label>
+	<div class="{$divClass}">
+		{$content}
+	</div>
+</div>
+dom;
+
+    }
+
+    /**
+     * 生成表单输入框
+     *
+     * @param $label
+     * @param $field
+     * @param null $value
+     * @param string $type
+     * @param array $params
+     * @param array $others
+     * @return string
+     */
+    static public function formInput($label, $field, $value = null, $type = 'text', $params = [], $others = [])
+    {
+        # 基本参数
         $params['type'] = $type;
-        $params['value'] = old($field, isset($model->$field) ? $model->$field : $default);
+        $params['value'] = htmlspecialchars($value);
         $args = [
             'id' => 'field-'.$field,
             'name' => $field,
             'class' => 'col-xs-10 col-sm-5',
         ];
         $params = array_merge($args, $params);
-
+        # 输入框
         $input = '<input ';
         foreach($params as $attr => $val){
             $input .= $attr . '="'. $val .'" ';
         }
         $input .= ' >';
+        $others['id'] = $params['id'];
 
-        return <<<dom
-<div class="form-group">
-	<label class="col-sm-3 control-label no-padding-right" for="{$params['id']}"> {$label} </label>
-	<div class="col-sm-9">
-		{$input}
-	</div>
-</div>
-dom;
+        return static::formFieldDom($label, $input, $others);
+    }
 
+    /**
+     * 生成表单选项
+     *
+     * @param $type
+     * @param $label
+     * @param $name
+     * @param array $valsDesc
+     * @param null $value
+     * @param array $others
+     * @return string
+     */
+    static public function formCheckboxOrRadio($type, $label, $name, array $valsDesc, $value = null, $others = [])
+    {
+        $inputs = '';
+        foreach($valsDesc as $val => $title){
+            $checked = '';
+            if('radio' == $type && $val == $value){
+                $checked = 'checked';
+            }elseif('checkbox' == $type &&  in_array($val, $value)){
+                $checked = 'checked';
+            }
+            $inputs .= <<<inputs
+<label>
+	<input name="{$name}" value="{$val}" {$checked} type="{$type}" class="ace">
+	<span class="lbl"> {$title} </span>
+</label>
+inputs;
+
+        }
+        $others['id'] = '';
+        $others['divClass'] = isset($others['divClass']) ? $others['divClass'] : "col-sm-9 {$type}";
+
+        return static::formFieldDom($label, $inputs, $others);
     }
 
     /**
      * 生成表单单选项
      *
-     * @param $model
+     * @param $label
      * @param $field
-     * @param string $default
+     * @param array $valsDesc
+     * @param null $value
      * @param array $params
+     * @param array $others
      * @return string
      */
-    static public function formRadio($model, $field, $default = null, $params = [])
+    static public function formRadio($label, $field, array $valsDesc, $value = null, $params = [], $others = [])
     {
-        $label = $model->getFieldLabel($field);
-        $descArr = $model->getValueDesc($field);
         $name = isset($params['name']) ? $params['name'] : $field;
-        $value = old($field, isset($model->$field) ? $model->$field : $default);
 
-        $radios = '';
-        foreach($descArr as $val => $title){
-            $checked = $val == $value ? ' checked ' : '';
-            $radios .= <<<radio
-<label>
-	<input name="{$name}" value="{$val}" {$checked} type="radio" class="ace">
-	<span class="lbl"> {$title} </span>
-</label>
-radio;
-
-        }
-
-        return <<<dom
-<div class="form-group">
-	<label class="col-sm-3 control-label no-padding-right"> {$label} </label>
-	<div class="col-sm-9 radio">
-		{$radios}
-	</div>
-</div>
-dom;
-
+        return static::formCheckboxOrRadio('radio', $label, $name, $valsDesc, $value, $others);
     }
 
     /**
      * 生成表单复选项
      *
-     * @param $model
+     * @param $label
      * @param $field
-     * @param string $default
+     * @param array $valsDesc
+     * @param null $values
      * @param array $params
+     * @param array $others
      * @return string
      */
-    static public function formCheckbox($model, $field, $default = null, $params = [])
+    static public function formCheckbox($label, $field, array $valsDesc, $values = null, $params = [], $others = [])
     {
-        $label = $model->getFieldLabel($field);
-        $descArr = $model->getValueDesc($field);
         $name = isset($params['name']) ? $params['name'] : $field.'[]';
-        $values = old($field, isset($model->$field) ? $model->$field : $default);
         if(is_string($values)){
             $values = json_decode($values,true);
         }
         $values = $values ? $values : [];
 
-        $checkboxes = '';
-        foreach($descArr as $val => $title){
-            $checked = in_array($val,$values) ? ' checked ' : '';
-            $checkboxes .= <<<checkbox
-<label>
-	<input name="{$name}" value="{$val}" {$checked} type="checkbox" class="ace">
-	<span class="lbl"> {$title} </span>
-</label>
-checkbox;
+        return static::formCheckboxOrRadio('checkbox', $label, $name, $valsDesc, $values, $others);
 
+    }
+
+    /**
+     * 生成普通表单日期输入框
+     *
+     * @param $model
+     * @param $field
+     * @param string $type
+     * @param array $params
+     * @param array $others
+     * @return string
+     */
+    static public function formDate($label, $field, $value = null, $params = [], $others = [])
+    {
+        $args = [
+            'class' => 'col-xs-10 col-sm-5 date-picker',
+            'data-date-format' => 'yyyy-mm-dd',
+        ];
+        $params = array_merge($args, $params);
+
+        return static::formInput($label, $field, $value, 'text', $params, $others);
+    }
+
+    /**
+     * 生成普通表单文本域
+     *
+     * @param $label
+     * @param $field
+     * @param null $value
+     * @param array $params
+     * @param array $others
+     * @return string
+     */
+    static public function formTextarea($label, $field, $value = null, $params = [], $others = [])
+    {
+        # 基本参数
+        $args = [
+            'id'    => 'field-'.$field,
+            'name'  => $field,
+            'class' => 'col-xs-10 col-sm-5',
+        ];
+        $params = array_merge($args, $params);
+        # 文本域
+        $textarea = '<textarea ';
+        foreach($params as $attr => $val){
+            $textarea .= ' '.$attr.'="'.$val.'" ';
+        }
+        $textarea .= '>' . htmlspecialchars($value) . '</textarea>';
+        $others['id'] = $params['id'];
+
+        return static::formFieldDom($label, $textarea, $others);
+    }
+
+    /**
+     * 生成普通表单选项框
+     *
+     * @param $label
+     * @param $field
+     * @param $options
+     * @param array $params
+     * @param array $others
+     * @return string
+     */
+    static public function formSelect($label, $field, $options, $params = [], $others = [])
+    {
+        # 基本参数
+        $args = [
+            'id'    => 'field-'.$field,
+            'name'  => $field,
+            'class' => 'col-xs-10 col-sm-5',
+        ];
+        $params = array_merge($args, $params);
+        # 选择框
+        $select = '<select ';
+        foreach($params as $attr => $val){
+            $select .= $attr . '="'. $val .'" ';
+        }
+        $select .= ' >' . $options . '</select>';
+        $others['id'] = $params['id'];
+
+        return static::formFieldDom($label, $select, $others);
+    }
+
+    /**
+     * 生成普通表单简单选项框
+     *
+     * @param $label
+     * @param $field
+     * @param $valsDesc
+     * @param null $value
+     * @param array $params
+     * @param array $others
+     * @return string
+     */
+    static public function formSimpleSelect($label, $field, $valsDesc, $value = null, $params = [], $others = [])
+    {
+        if(is_string($value)){
+            $value = json_decode($value,true);
+        }
+        $value = $value ? $value : [];
+        # 选项
+        $options = '';
+        foreach($valsDesc as $val => $title){
+            $selected = in_array($val, $value) ? 'selected' : '';
+            $options .= '<option value="'.$val.'" '.$selected.'>'.$title.'</option>';
         }
 
-        return <<<dom
-<div class="form-group">
-	<label class="col-sm-3 control-label no-padding-right"> {$label} </label>
-	<div class="col-sm-9 checkbox">
-		{$checkboxes}
-	</div>
-</div>
-dom;
-
+        return static::formSelect($label, $field, $options, $params, $others);
     }
 }
