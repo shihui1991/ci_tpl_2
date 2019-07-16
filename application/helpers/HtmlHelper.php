@@ -45,7 +45,7 @@ class HtmlHelper
                 $space .= ($i == $count) ? $icons[2] : $icons[1];
             }
             @ extract($row);
-            eval("\$tree .= \"$tpl\"");
+            eval("\$tree .= \"$tpl\";");
             $tree .= static::makeTree($group['others'], $tpl, $row[$idKey], $level + 1, $icons, $nbsp, $idKey, $pKey);
             $i ++ ;
         }
