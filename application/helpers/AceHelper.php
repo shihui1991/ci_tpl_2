@@ -72,7 +72,7 @@ html;
      * @param array $params
      * @return string
      */
-    static public function formFieldDom($label, $content, $params = [])
+    static public function formFieldDom($label, $content, array $params)
     {
         $groupClass = isset($params['groupClass']) ? $params['groupClass'] : 'form-group';
         $labelClass = isset($params['labelClass']) ? $params['labelClass'] : 'col-sm-3 control-label no-padding-right';
