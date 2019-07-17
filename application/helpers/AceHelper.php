@@ -75,14 +75,17 @@ html;
     static public function formFieldDom($label, $content, array $params)
     {
         $groupClass = isset($params['groupClass']) ? $params['groupClass'] : 'form-group';
-        $labelClass = isset($params['labelClass']) ? $params['labelClass'] : 'col-sm-3 control-label no-padding-right';
+        $errorClass = isset($params['error']) ? 'has-error' : '';
+        $error = isset($params['error']) ? $params['error'] : '';
         $divClass = isset($params['divClass']) ? $params['divClass'] : 'col-sm-9';
+        $labelClass = isset($params['labelClass']) ? $params['labelClass'] : 'col-sm-3 control-label no-padding-right';
 
         return <<<dom
-<div class="{$groupClass}">
+<div class="{$groupClass} {$errorClass}">
 	<label class="{$labelClass}" for="{$params['id']}"> {$label} </label>
 	<div class="{$divClass}">
 		{$content}
+		<div class="help-block col-xs-12 col-sm-reset inline">{$error}</div>
 	</div>
 </div>
 dom;
@@ -138,9 +141,10 @@ dom;
         $inputs = '';
         foreach($valsDesc as $val => $title){
             $checked = '';
-            if('radio' == $type && $val == $value){
-                $checked = 'checked';
-            }elseif('checkbox' == $type &&  in_array($val, $value)){
+            if( !is_null($value)
+                && (('radio' == $type && $val == $value)
+                    || ('checkbox' == $type && in_array($val, $value)))
+            ){
                 $checked = 'checked';
             }
             $inputs .= <<<inputs
