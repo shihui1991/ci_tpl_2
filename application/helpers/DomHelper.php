@@ -20,16 +20,13 @@ class DomHelper
     {
         $label = $model->getFieldLabel($field);
         $value = isset($model->$field) ? $model->$field : $value;
-        $valsDesc = $model->getValueDesc($field);
+        $valsDesc = isset($params['valsDesc']) ? $params['valsDesc'] : $model->getValueDesc($field);
+        unset($params['valsDesc']);
 
         switch ($method){
             case 'formRadio':
             case 'formCheckbox':
-                return AceHelper::$method($label, $field, $valsDesc, $value, $params, $others);
-                break;
             case 'formSimpleSelect':
-                $valsDesc = $params['valsDesc'];
-                unset($params['valsDesc']);
                 return AceHelper::$method($label, $field, $valsDesc, $value, $params, $others);
                 break;
             case 'formSelect':
