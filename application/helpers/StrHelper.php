@@ -154,4 +154,36 @@ class StrHelper
         header ('Cache-Control: max-age=1');
         header ( "Cache-Control: must-revalidate, post-check=0, pre-check=0 ");
     }
+
+    /**
+     * 下划线转驼峰
+     *
+     * @param $value
+     * @return mixed|string
+     */
+    static public function camel($value)
+    {
+        $value = ucwords(str_replace('_',' ',$value));
+        $value = str_replace(' ','',$value);
+        $value = lcfirst($value);
+
+        return $value;
+    }
+
+    /**
+     * 驼峰转下划线
+     *
+     * @param $value
+     * @return string|string[]|null
+     */
+    static public function snake($value)
+    {
+        if (! ctype_lower($value)) {
+            $value = preg_replace('/\s+/u', '', ucwords($value));
+            $value = preg_replace('/(.)(?=[A-Z])/u', '$1'.'_', $value);
+            $value = mb_strtolower($value,'UTF-8');
+        }
+
+        return $value;
+    }
 }
